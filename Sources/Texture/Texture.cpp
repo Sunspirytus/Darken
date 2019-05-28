@@ -1,8 +1,6 @@
 #include "GlobalPram.h"
 #include <glfw3.h>
-#include <glew.h>
 //#include <stb_image.h>
-#include "Framebuffer2D.h"
 #include "Texture.h"
 
 Texture::Texture()

@@ -1,8 +1,6 @@
 #include "Camera.h"
 #include "Quaternion.h"
 #include "Util.h"
-#include <glew.h>
-#include <glfw3.h>
 
 Camera::Camera()
 {

@@ -1,7 +1,6 @@
 #pragma once
 #include "MaterialInstance.h"
 #include "Camera.h"
-#include <glew.h>
 #include <map>
 
 #define MODEL_UNIFORM_BLOCK_NAME "Model"

@@ -25,7 +25,7 @@ void Animation::SetPlaySpeed(Float32 speed)
 void Animation::SetAttitudeMatrixes(const Float32 * matrixData, Int32 numFrames)
 {
 	AttitudeMatrixes.resize(numFrames);
-	memcpy(&AttitudeMatrixes[0][0].x, matrixData, 16 * numFrames * sizeof(Float32));
+	memcpy(&AttitudeMatrixes[0][0].x, matrixData, (UInt64)16 * numFrames * sizeof(Float32));
 	NumFrames = numFrames;
 }
 

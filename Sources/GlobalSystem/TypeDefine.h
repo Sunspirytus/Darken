@@ -2,6 +2,7 @@
 
 #include "glm.hpp"
 #include "half.hpp"
+#include "glew.h"
 
 using half_float::half;
 

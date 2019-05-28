@@ -1,6 +1,5 @@
 #include "SystemTextures.h"
 #include "Util.h"
-#include "glew.h"
 #include "TypeDefine.h"
 
 #ifndef PI

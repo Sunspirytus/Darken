@@ -5,9 +5,6 @@
 #include <string>
 #include <typeinfo>
 #include <memory>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
-#include <glew.h>
 #include <map>
 #include "TypeDefine.h"
 

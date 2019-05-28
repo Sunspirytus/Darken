@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <vector>
 #include "glm.hpp"
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -35,7 +37,9 @@ struct Math
 
 	static Int32 Floor(const Float32 &A)
 	{
-		return (Int32) glm::floor(A);
+		return (Int32) 
+			
+			::floor(A);
 	}
 
 	static Int32 Ceil(const Float32 &A)

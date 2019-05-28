@@ -1,8 +1,6 @@
 #include "DeferRenderPipeline.h"
 #include "Model.h"
 #include "GlobalPram.h"
-#include <glew.h>
-#include <glfw3.h>
 
 #define TAASingleTex
 

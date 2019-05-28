@@ -13,126 +13,171 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\Lights">
+      <UniqueIdentifier>{6651a1d0-4a4b-4f0d-81d9-d18bf3122393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Math">
+      <UniqueIdentifier>{e1a84bef-1f3b-4abf-8244-5aafe98a51aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Camera">
+      <UniqueIdentifier>{73d45c57-cad3-45b4-9780-317f368a651c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Animation">
+      <UniqueIdentifier>{67a6a92f-3f56-47c1-bfec-68628124b0b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Base">
+      <UniqueIdentifier>{b0e43530-163a-4452-b600-439528a945c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\GlobalSystem">
+      <UniqueIdentifier>{a913a74f-a53e-464f-8c08-76df002c6782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Material">
+      <UniqueIdentifier>{9eab6dac-360a-4cc7-80a2-1abb9165e55b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Manager">
+      <UniqueIdentifier>{7998a0da-8710-40a7-99d0-71da899ea46c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Model">
+      <UniqueIdentifier>{e3d8a7ff-f82d-4421-8218-89f2792c11b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ReflectionCapture">
+      <UniqueIdentifier>{5e4c8040-e04d-4523-9e91-8ee6a5c15411}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\PostProcess">
+      <UniqueIdentifier>{b257c81d-ce19-492b-b391-fdf6bfccb4fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\SurroundBox">
+      <UniqueIdentifier>{ef1e3e08-46f5-4988-a9fc-18a302859df8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\RenderPipeline">
+      <UniqueIdentifier>{9eaaafa5-eaa2-4cb8-9d10-573e4efb4afb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Texture">
+      <UniqueIdentifier>{6a3fc097-f7a6-43d5-a1d5-e700a5becf49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\UI">
+      <UniqueIdentifier>{5ac7d730-0839-4d3b-b0d6-b3095c027de2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConstructScene.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Animation.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Animation\Animation.h">
+      <Filter>源文件\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\BufferManager.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Base\Object.h">
+      <Filter>源文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Camera.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Base\Transform.h">
+      <Filter>源文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\DeferRenderPipeline.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Camera\Camera.h">
+      <Filter>源文件\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\GlobalPram.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\GlobalSystem\GlobalPram.h">
+      <Filter>源文件\GlobalSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Light.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\GlobalSystem\SystemTextures.h">
+      <Filter>源文件\GlobalSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Material.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\GlobalSystem\TypeDefine.h">
+      <Filter>源文件\GlobalSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\MaterialInstance.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Manager\BufferManager.h">
+      <Filter>源文件\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Model.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Manager\SceneManager.h">
+      <Filter>源文件\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Object.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Material\Material.h">
+      <Filter>源文件\Material</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Quaternion.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Material\MaterialInstance.h">
+      <Filter>源文件\Material</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\RectBufferObject.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Lights\Light.h">
+      <Filter>源文件\Lights</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\ReflectionCapture.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Math\Quaternion.h">
+      <Filter>源文件\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\SceneManager.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Math\Util.h">
+      <Filter>源文件\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\SurroundBox.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Model\Model.h">
+      <Filter>源文件\Model</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\SystemTextures.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\PostProcess\RectBufferObject.h">
+      <Filter>源文件\PostProcess</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Texture.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\ReflectionCapture\ReflectionCapture.h">
+      <Filter>源文件\ReflectionCapture</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Transform.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\RenderPipeline\DeferRenderPipeline.h">
+      <Filter>源文件\RenderPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\Util.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\SurroundBox\SurroundBox.h">
+      <Filter>源文件\SurroundBox</Filter>
     </ClInclude>
-    <ClInclude Include="..\mFunctionTools\Include\TypeDefine.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\Sources\Texture\Texture.h">
+      <Filter>源文件\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\Animation.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Animation\Animation.cpp">
+      <Filter>源文件\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\BufferManager.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Base\Object.cpp">
+      <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\Camera.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Base\Transform.cpp">
+      <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\DeferRenderPipeline.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Camera\Camera.cpp">
+      <Filter>源文件\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\Light.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\GlobalSystem\SystemTextures.cpp">
+      <Filter>源文件\GlobalSystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\Material.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Manager\BufferManager.cpp">
+      <Filter>源文件\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\MaterialInstance.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Manager\SceneManager.cpp">
+      <Filter>源文件\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\Model.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Material\Material.cpp">
+      <Filter>源文件\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\Object.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Material\MaterialInstance.cpp">
+      <Filter>源文件\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\Quaternion.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Lights\Light.cpp">
+      <Filter>源文件\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\RectBufferObject.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Math\Quaternion.cpp">
+      <Filter>源文件\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\ReflectionCapture.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Model\Model.cpp">
+      <Filter>源文件\Model</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\SceneManager.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\PostProcess\RectBufferObject.cpp">
+      <Filter>源文件\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\SurroundBox.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\ReflectionCapture\ReflectionCapture.cpp">
+      <Filter>源文件\ReflectionCapture</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\SystemTextures.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\RenderPipeline\DeferRenderPipeline.cpp">
+      <Filter>源文件\RenderPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\Texture.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\SurroundBox\SurroundBox.cpp">
+      <Filter>源文件\SurroundBox</Filter>
     </ClCompile>
-    <ClCompile Include="..\mFunctionTools\Source\Transform.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\Sources\Texture\Texture.cpp">
+      <Filter>源文件\Texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

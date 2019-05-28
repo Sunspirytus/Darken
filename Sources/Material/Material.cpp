@@ -1,8 +1,6 @@
 #include "Material.h"
 #include "GlobalPram.h"
 #include "BufferManager.h"
-#include <glew.h>
-#include <glfw3.h>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
