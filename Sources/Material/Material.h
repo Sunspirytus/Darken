@@ -1,12 +1,13 @@
 #pragma once
 
+#include "TypeDefine.h"
 #include <unordered_map>
 #include <vector>
 #include <string>
 #include <typeinfo>
 #include <memory>
 #include <map>
-#include "TypeDefine.h"
+
 
 enum ShaderType
 {

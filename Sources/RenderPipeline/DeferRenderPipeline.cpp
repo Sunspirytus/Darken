@@ -12,27 +12,22 @@ DeferRenderPipeline::~DeferRenderPipeline()
 {
 }
 
-void DeferRenderPipeline::Init()
+void DeferRenderPipeline::Init(std::shared_ptr<SceneManager> scene)
 {
+	SceneWaitRender = scene;
 	PPObj = std::shared_ptr<RectBufferObject>(new RectBufferObject());
-	PPModelMatrix = Mat4f(1.0);
-	PPViewMatrix = CameraUtil::LookAt(Vector3f(0.0, 0.0, 1.0), Vector3f(0.0, 0.0, 0.0), Vector3f(0.0, 1.0, 0.0));
-	PPProjectMatrix = CameraUtil::Perspective(_Scene->GetCamera(CameraIndex::MainCamera)->GetFOVinRadians(), _Scene->GetCamera(CameraIndex::MainCamera)->GetAspect(), _Scene->GetCamera(CameraIndex::MainCamera)->GetNearClipPlaneDis(), _Scene->GetCamera(CameraIndex::MainCamera)->GetFarClipPlaneDis());
 
 	SortSceneLights();
 
 	//ShadowMapping
-	ShadowMappingPass = std::shared_ptr<ShadowDepth>(new ShadowDepth(Lights));
+	ShadowMappingPass = std::shared_ptr<ShadowDepth>(new ShadowDepth(SceneWaitRender, Lights));
 
 	//Lighting
-	LightingPass = std::shared_ptr<Lighting>(new Lighting(Lights));
+	LightingPass = std::shared_ptr<Lighting>(new Lighting(SceneWaitRender, Lights));
 	LightingPass->ShadowMappingPass = ShadowMappingPass;
 
-	//ReflectionEnvironment
-	ReflectionPass = std::shared_ptr<ReflectionEnvironment>(new ReflectionEnvironment());
-
 	//SubSurfaceShading
-	SSSPass = std::shared_ptr<SubSurfaceShading>(new SubSurfaceShading());
+	SSSPass = std::shared_ptr<SubSurfaceShading>(new SubSurfaceShading(SceneWaitRender->GetCamera(CameraIndex::MainCamera)));
 	SSSPass->SSSSetupMaterialInst->SetTextureID("PostprocessInput0", LightingPass->Lighting_Tex);
 	SSSPass->SSSSetupMaterialInst->SetTextureID("PostprocessInput1", LightingPass->CustomData_Tex);
 	SSSPass->SSSSetupMaterialInst->SetTextureID("PostprocessInput2", LightingPass->ScreenDepthZ_Tex);
@@ -45,7 +40,7 @@ void DeferRenderPipeline::Init()
 	SSSPass->SSSRecombineMaterialInst->SetTextureID("PostprocessInput3", LightingPass->CustomData_Tex);
 
 	//TAAPass
-	TAAPass = std::shared_ptr<UE4TemporalAA>(new UE4TemporalAA());
+	TAAPass = std::shared_ptr<UE4TemporalAA>(new UE4TemporalAA(SceneWaitRender->GetCamera(CameraIndex::MainCamera)));
 	TAAPass->TAAPassMaterialInst->SetTextureID("DepthTex", LightingPass->ScreenDepthZ_Tex);
 	TAAPass->TAAPassMaterialInst->SetTextureID("CurrentFrame", SSSPass->SSSRecombine_TexOut);
 	//TAAPass->TAAPassMaterialInst->SetTextureID("CurrentFrame", LightingPass->Lighting_Tex);
@@ -62,11 +57,32 @@ void DeferRenderPipeline::Init()
 
 void DeferRenderPipeline::SortSceneLights()
 {
-	std::vector<std::shared_ptr<Light>> LightsGroup = _Scene->GetAllLights();
+	std::vector<std::shared_ptr<Light>> LightsGroup = SceneWaitRender->GetAllLights();
 	for (UInt32 LightIndex = 0; LightIndex < LightsGroup.size(); LightIndex++)
 	{
 		Lights.push_back(LightsGroup[LightIndex].get());
 	}
+}
+
+void DeferRenderPipeline::Render()
+{
+	TAAPass->UpdateJitter();
+
+	SceneWaitRender->PrepareShadowDepthMaterial();
+	RenderShadowDepthPass(StaticMesh | DynamicMesh);
+
+	SceneWaitRender->PrepareLightingMaterial();
+	RenderLightingPass(StaticMesh | DynamicMesh);
+
+	RenderSSSPass();
+
+	ExecuteTemporalAA();
+	glBindFramebuffer(GL_FRAMEBUFFER, 37);
+	ExecuteToneMapping();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	SceneWaitRender->UpdatePreFrameData();
+	TAAPass->RemoveJitter();
 }
 
 void DeferRenderPipeline::RenderShadowDepthPass(UInt32 typeFlags)
@@ -94,10 +110,11 @@ void DeferRenderPipeline::ExecuteToneMapping()
 	ToneMappingPass->Execute(PPObj->VAO, PPObj->NumFaces, PPObj->IndexType);
 }
 
-ShadowDepth::ShadowDepth(std::vector<Light*> lights) :
+ShadowDepth::ShadowDepth(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights) :
 	ShadowDepthTexWidth(2048),
 	ShadowDepthTexHeight(2048)
 {
+	Scene = scene;
 	Lights = lights;
 	CreateShadowDepthResources();
 	CalculateLightsVPMatrix();
@@ -199,7 +216,7 @@ void ShadowDepth::CalculateLightsVPMatrix()
 		{
 			DirectLight* DL = dynamic_cast<DirectLight*>(Lights[LightIndex]);
 			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(DL->GetTransform()->GetPosition(), DL->GetTransform()->GetEulerAngle(), 180.0f, 1.0f, 0.1f, 100.0f, Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
-			_Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
+			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
 		}
 		else if (Lights[LightIndex]->Type == LightType::Point)
 		{
@@ -217,13 +234,13 @@ void ShadowDepth::CalculateLightsVPMatrix()
 			LCamera2->SetNextCamera(LCamera3);
 			LCamera3->SetNextCamera(LCamera4);
 			LCamera4->SetNextCamera(LCamera5);
-			_Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera0);			
+			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera0);			
 		}
 		else if (Lights[LightIndex]->Type == LightType::Spot)
 		{
 			SpotLight* SL = dynamic_cast<SpotLight*>(Lights[LightIndex]);
 			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(SL->GetTransform()->GetPosition(), SL->GetTransform()->GetEulerAngle(), Math::Radians(SL->GetOutConeAngle() / 2.0f), 1.0f, 2.0f, SL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
-			_Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
+			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
 		}
 	}
 }
@@ -231,7 +248,7 @@ void ShadowDepth::CalculateLightsVPMatrix()
 void ShadowDepth::Render(unsigned typeFlags)
 {
 	glViewport(0, 0, ShadowDepthTexWidth, ShadowDepthTexHeight);
-	const std::vector<std::shared_ptr<Object>> &Objects = _Scene->GetObjects(typeFlags);
+	const std::vector<std::shared_ptr<Object>> &Objects = Scene->GetObjects(typeFlags);
 	for (UInt32 LightIndex = 0; LightIndex < Lights.size(); LightIndex++)
 	{
 		switch (Lights[LightIndex]->Type)
@@ -243,12 +260,12 @@ void ShadowDepth::Render(unsigned typeFlags)
 			break;
 		}
 	}
-	_Scene->GetCamera(MainCamera)->ActiveViewPort();
+	Scene->GetCamera(MainCamera)->ActiveViewPort();
 }
 
 void ShadowDepth::RenderDirectLightDepth(Int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects)
 {
-	std::shared_ptr<Camera> LCamera = _Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
+	std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
 	for (UInt32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
 	{
 		Model* Modelptr = dynamic_cast<Model*>(Objects[ObjectIndex].get());
@@ -261,7 +278,7 @@ void ShadowDepth::RenderDirectLightDepth(Int32 LightIndex, const std::vector<std
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	_Scene->Render(LCamera);
+	Scene->Render(LCamera);
 	glDisable(GL_DEPTH_TEST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -271,7 +288,7 @@ void ShadowDepth::RenderPointLightDepth(Int32 LightIndex, const std::vector<std:
 	glBindFramebuffer(GL_FRAMEBUFFER, ShadowDepthFrameBuffers[LightIndex]);
 
 	glEnable(GL_DEPTH_TEST);
-	std::shared_ptr<Camera> LCamera = _Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
+	std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
 	for (Int32 FaceIndex = 0; FaceIndex < 6; FaceIndex++)
 	{
 		for (UInt32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
@@ -287,7 +304,7 @@ void ShadowDepth::RenderPointLightDepth(Int32 LightIndex, const std::vector<std:
 		glClearColor(1.0, 1.0, 1.0, 1.0);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-		_Scene->Render(LCamera);
+		Scene->Render(LCamera);
 
 		glBindTexture(GL_TEXTURE_CUBE_MAP, ShadowDepth_TexsCube[LightIndex]);
 		glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + FaceIndex, 0, GL_R32F, 0, 0, ShadowDepthTexWidth, ShadowDepthTexHeight, 0);
@@ -300,7 +317,7 @@ void ShadowDepth::RenderPointLightDepth(Int32 LightIndex, const std::vector<std:
 
 void ShadowDepth::RenderSpotLightDepth(Int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects)
 {
-	std::shared_ptr<Camera> LCamera = _Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
+	std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
 	for (UInt32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
 	{
 		Model* Modelptr = dynamic_cast<Model*>(Objects[ObjectIndex].get());
@@ -314,13 +331,14 @@ void ShadowDepth::RenderSpotLightDepth(Int32 LightIndex, const std::vector<std::
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	_Scene->Render(LCamera);
+	Scene->Render(LCamera);
 	glDisable(GL_DEPTH_TEST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-Lighting::Lighting(std::vector<Light*> lights)
+Lighting::Lighting(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights)
 {
+	Scene = scene;
 	Lights = lights;
 	MaterialDataIDs = std::shared_ptr<LightingMaterialDataIDs>(new LightingMaterialDataIDs());
 	CreateLightingPassResources();
@@ -427,7 +445,7 @@ void Lighting::Render(UInt32 typeFlags)
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 
-	std::vector<std::shared_ptr<Object>> Objects = _Scene->GetObjects(typeFlags);
+	std::vector<std::shared_ptr<Object>> Objects = Scene->GetObjects(typeFlags);
 	if (Objects.empty()) return;
 	for (UInt32 LightIndex = 0; LightIndex < Lights.size(); LightIndex++)
 	{
@@ -443,10 +461,10 @@ void Lighting::Render(UInt32 typeFlags)
 
 		ShadowData ShadowBuffer;
 
-		ShadowBuffer.LightSpaceVPMatrix = _Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex)->GetVPMatrix();// ShadowMappingPass->LightCameras[LightIndex]->VPMatrix[0];
+		ShadowBuffer.LightSpaceVPMatrix = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex)->GetVPMatrix();// ShadowMappingPass->LightCameras[LightIndex]->VPMatrix[0];
 		ShadowBuffer.ShadowBufferSize = Vector4f(ShadowMappingPass->ShadowDepthTexWidth, ShadowMappingPass->ShadowDepthTexHeight, 1.0f / ShadowMappingPass->ShadowDepthTexWidth, 1.0f / ShadowMappingPass->ShadowDepthTexHeight);
 
-		std::shared_ptr<Camera> LCamera = _Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
+		std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
 		Float32 Near = LCamera->GetNearClipPlaneDis();
 		Float32 Far = LCamera->GetFarClipPlaneDis();
 		Float32 FOV = LCamera->GetFOVinRadians();
@@ -491,7 +509,7 @@ void Lighting::Render(UInt32 typeFlags)
 			if (Lights[LightIndex]->Type == LightType::Point)
 			{
 				LightingPassMaterialInst->SetTextureID(MaterialDataIDs->ShadowDepth_TexCubeID, ShadowMappingPass->ShadowDepth_TexsCube[LightIndex]);
-				Camera * LCamera = _Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex).get();
+				Camera * LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex).get();
 				Mat4f PL_VPMarixes[6] = { LCamera[0].GetVPMatrix(), 
 					LCamera[1].GetVPMatrix(), 
 					LCamera[2].GetVPMatrix(), 
@@ -506,7 +524,7 @@ void Lighting::Render(UInt32 typeFlags)
 			}
 		}
 		
-		_Scene->Render(_Scene->GetCamera(CameraIndex::MainCamera), typeFlags);
+		Scene->Render(Scene->GetCamera(CameraIndex::MainCamera), typeFlags);
 		Int32 a = glGetError(); // if we don't use point light, and we dont use cube map shadow depth textur. But shader need compile Cube map, there is a glerror but no influence.
 	}
 
@@ -515,22 +533,9 @@ void Lighting::Render(UInt32 typeFlags)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-ReflectionEnvironment::ReflectionEnvironment()
+SubSurfaceShading::SubSurfaceShading(std::shared_ptr<Camera> camera)
 {
-	CreateReflectionEnvResources();
-}
-
-ReflectionEnvironment::~ReflectionEnvironment()
-{
-}
-
-void ReflectionEnvironment::CreateReflectionEnvResources()
-{
-	
-}
-
-SubSurfaceShading::SubSurfaceShading()
-{
+	ViewCamera = camera;
 	CreateResources();
 	InitSubsurfaceProfileEntries();
 
@@ -543,7 +548,6 @@ SubSurfaceShading::SubSurfaceShading()
 	std::shared_ptr<Material> SSSRecombineMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> {"DrawRectVertShader.vsh", "SubsurfaceRecombine.fsh"}));
 	SSSRecombineMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SSSRecombineMaterial));
 
-	std::shared_ptr<Camera> ViewCamera = _Scene->GetCamera(CameraIndex::MainCamera);
 	SSSSetupMaterialInst->SetUniform<Vector2f>("CameraNearFar", Vector2f(ViewCamera->GetNearClipPlaneDis(), ViewCamera->GetFarClipPlaneDis()));
 
 	Float32 distanceToProjectionWindow = 1.0f / tan(0.5f * ViewCamera->GetFOVinRadians() /*have been radiance*/);
@@ -953,13 +957,14 @@ void SubSurfaceShading::Render(UInt32 VAO, Int32 NumFaces, IndexSizeType indexTy
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-UE4TemporalAA::UE4TemporalAA()
+UE4TemporalAA::UE4TemporalAA(std::shared_ptr<Camera> camera)
 {
+	ViewCamera = camera;
 	CreateTAAPassMaterial();
 	CreateTAAPassResources();
 	TAAPassMaterialInst->SetTextureID("PreFrame", TAAHistoryFrame_Tex);
 	TAAPassMaterialInst->SetUniform<Vector2f>("ScreenSize", Vector2f(_ScreenWidth, _ScreenHeight));
-	TAAPassMaterialInst->SetUniform<Vector4f>("ViewCamera_ZBufferParams", Vector4f(_Scene->GetCamera(CameraIndex::MainCamera)->GetNearClipPlaneDis(), _Scene->GetCamera(CameraIndex::MainCamera)->GetFarClipPlaneDis(), _Scene->GetCamera(CameraIndex::MainCamera)->GetFOVinRadians(), _Scene->GetCamera(CameraIndex::MainCamera)->GetAspect()));
+	TAAPassMaterialInst->SetUniform<Vector4f>("ViewCamera_ZBufferParams", Vector4f(ViewCamera->GetNearClipPlaneDis(), ViewCamera->GetFarClipPlaneDis(), ViewCamera->GetFOVinRadians(), ViewCamera->GetAspect()));
 	TAAPixelUniformData = std::shared_ptr<TemporalAAPixelUniformData>(new TemporalAAPixelUniformData());
 
 	InitUE4SampleType4();
@@ -1073,10 +1078,10 @@ void UE4TemporalAA::UpdateJitter()
 
 void UE4TemporalAA::HackUpdateCameraProjectMatrix(Float32 sampleOffsetX, Float32 sampleOffsetY)
 {
-	JitterProjectMatrix = _Scene->GetCamera(CameraIndex::MainCamera)->GetProjectMatrix();
+	JitterProjectMatrix = ViewCamera->GetProjectMatrix();
 	JitterProjectMatrix[2][0] += sampleOffsetX * (2.0f) / _ScreenWidth;
 	JitterProjectMatrix[2][1] += sampleOffsetY * (-2.0f) / _ScreenHeight;
-	_Scene->GetCamera(CameraIndex::MainCamera)->SetProjectMatrix(JitterProjectMatrix);
+	ViewCamera->SetProjectMatrix(JitterProjectMatrix);
 }
 
 void UE4TemporalAA::RemoveJitter()
@@ -1086,16 +1091,16 @@ void UE4TemporalAA::RemoveJitter()
 
 void UE4TemporalAA::HackRemoveCameraProjectMatrix(Float32 sampleOffsetX, Float32 sampleOffsetY)
 {
-	JitterProjectMatrix = _Scene->GetCamera(CameraIndex::MainCamera)->GetProjectMatrix();
+	JitterProjectMatrix = ViewCamera->GetProjectMatrix();
 	JitterProjectMatrix[2][0] -= sampleOffsetX * (2.0f) / _ScreenWidth;
 	JitterProjectMatrix[2][1] -= sampleOffsetY * (-2.0f) / _ScreenHeight;
-	_Scene->GetCamera(CameraIndex::MainCamera)->SetProjectMatrix(JitterProjectMatrix);
+	ViewCamera->SetProjectMatrix(JitterProjectMatrix);
 }
 
 void UE4TemporalAA::UpdateCameraProjectMatrix(Float32 sampleOffsetX, Float32 sampleOffsetY)
 {
-	Float32 oneExtentY = Math::Tan(0.5f * _Scene->GetCamera(CameraIndex::MainCamera)->GetFOVinRadians());
-	Float32 oneExtentX = oneExtentY * _Scene->GetCamera(CameraIndex::MainCamera)->GetAspect();
+	Float32 oneExtentY = Math::Tan(0.5f * ViewCamera->GetFOVinRadians());
+	Float32 oneExtentX = oneExtentY * ViewCamera->GetAspect();
 	Float32 texelSizeX = oneExtentX / (0.5f * _ScreenWidth);
 	Float32 texelSizeY = oneExtentY / (0.5f * _ScreenHeight);
 	Float32 oneJitterX = texelSizeX * sampleOffsetX;
@@ -1103,8 +1108,8 @@ void UE4TemporalAA::UpdateCameraProjectMatrix(Float32 sampleOffsetX, Float32 sam
 
 	Vector4f extents = Vector4f(oneExtentX, oneExtentY, oneJitterX, oneJitterY);// xy = frustum extents at distance 1, zw = jitter at distance 1
 
-	Float32 cf = _Scene->GetCamera(CameraIndex::MainCamera)->GetFarClipPlaneDis();
-	Float32 cn = _Scene->GetCamera(CameraIndex::MainCamera)->GetNearClipPlaneDis();
+	Float32 cf = ViewCamera->GetFarClipPlaneDis();
+	Float32 cn = ViewCamera->GetNearClipPlaneDis();
 	Float32 xm = extents.z - extents.x;
 	Float32 xp = extents.z + extents.x;
 	Float32 ym = extents.w - extents.y;
@@ -1112,10 +1117,10 @@ void UE4TemporalAA::UpdateCameraProjectMatrix(Float32 sampleOffsetX, Float32 sam
 
 	JitterProjectMatrix = CameraUtil::Frustum(xm * cn, xp * cn, ym * cn, yp * cn, cn, cf);
 
-	JitterProjectMatrix = _Scene->GetCamera(CameraIndex::MainCamera)->GetProjectMatrix();
+	JitterProjectMatrix = ViewCamera->GetProjectMatrix();
 	JitterProjectMatrix[2][0] += sampleOffsetX * (2.0f) / _ScreenWidth;
 	JitterProjectMatrix[2][1] += sampleOffsetX * (-2.0f) / _ScreenHeight;
-	_Scene->GetCamera(CameraIndex::MainCamera)->SetProjectMatrix(JitterProjectMatrix);
+	ViewCamera->SetProjectMatrix(JitterProjectMatrix);
 }
 
 void UE4TemporalAA::CreateTAAPassResources()
@@ -1223,6 +1228,8 @@ void ToneMapping::GenerateLUTTexture(std::shared_ptr<RectBufferObject> pPObj)
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	Int32 ViewPortSize[4];
+	glGetIntegerv(GL_VIEWPORT, ViewPortSize);
 
 	glViewport(0, 0, LUT_TEX_Size, LUT_TEX_Size);
 	for (Int32 FrameBufferIndex = 0; FrameBufferIndex < LUT_TEX_Size; FrameBufferIndex++)
@@ -1234,7 +1241,7 @@ void ToneMapping::GenerateLUTTexture(std::shared_ptr<RectBufferObject> pPObj)
 		LUTMaterialInst->GetParent()->Draw(pPObj->VAO, pPObj->NumFaces, pPObj->IndexType);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-	_Scene->GetCamera(CameraIndex::MainCamera)->ActiveViewPort();
+	glViewport(ViewPortSize[0], ViewPortSize[1], ViewPortSize[2], ViewPortSize[3]);
 }
 
 Vector2f ToneMapping::GrainRandomFromFrame(Int32 FrameCountMode8)

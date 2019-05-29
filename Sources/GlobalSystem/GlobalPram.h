@@ -1,13 +1,13 @@
 #pragma once
+#include "TypeDefine.h"
 #include "SceneManager.h"
 #include "BufferManager.h"
 #include "SystemTextures.h"
-#include "TypeDefine.h"
 #include "SystemTextures.h"
 
 using namespace dk;
 
-extern std::shared_ptr<SceneManager> _Scene;
+//extern std::shared_ptr<SceneManager> _Scene;
 extern std::shared_ptr<BufferManager> _GPUBuffers;
 extern std::shared_ptr<SystemTextureFactory> GlobalTextures;
 extern const UInt32 _ScreenWidth;

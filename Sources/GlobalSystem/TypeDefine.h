@@ -33,7 +33,7 @@ namespace dk
 	typedef glm::dvec2 Vector2d;
 	typedef glm::dvec3 Vector3d;
 	typedef glm::dvec4 Vector4d;
-
+	
 	typedef glm::i32vec2 Vector2i;
 	typedef glm::i32vec3 Vector3i;
 	typedef glm::i32vec4 Vector4i;

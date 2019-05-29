@@ -58,6 +58,9 @@
     <Filter Include="源文件\UI">
       <UniqueIdentifier>{5ac7d730-0839-4d3b-b0d6-b3095c027de2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\ViewPort">
+      <UniqueIdentifier>{a8a5f11b-fa9c-406b-b806-f86f26358e65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConstructScene.h">
@@ -123,6 +126,18 @@
     <ClInclude Include="..\Sources\Texture\Texture.h">
       <Filter>源文件\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\GlobalSystem\SystemContext.h">
+      <Filter>源文件\GlobalSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ViewPort\MainViewPort.h">
+      <Filter>源文件\ViewPort</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ViewPort\ViewPortBase.h">
+      <Filter>源文件\ViewPort</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\RenderPipeline\RenderPipelineBase.h">
+      <Filter>源文件\RenderPipeline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -179,5 +194,33 @@
     <ClCompile Include="..\Sources\Texture\Texture.cpp">
       <Filter>源文件\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\UI\DarkenUI.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\OpenGLViewWidget.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ViewPort\MainViewPort.cpp">
+      <Filter>源文件\ViewPort</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ViewPort\ViewPortBase.cpp">
+      <Filter>源文件\ViewPort</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\RenderPipeline\RenderPipelineBase.cpp">
+      <Filter>源文件\RenderPipeline</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\Sources\UI\DarkenUI.h">
+      <Filter>源文件\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="..\Sources\UI\OpenGLViewWidget.h">
+      <Filter>源文件\UI</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="..\Sources\UI\DarkenUI.ui">
+      <Filter>源文件\UI</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

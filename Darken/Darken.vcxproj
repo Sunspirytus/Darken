@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
+    <Keyword>Qt4VSv1.0</Keyword>
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{F908493E-B804-497A-9CAA-3CC2B26B9B92}</ProjectGuid>
     <RootNamespace>Darken</RootNamespace>
@@ -52,6 +53,15 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">
+    <QtMsBuild>$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
+    <Import Project="$(QtMsBuild)\qt.props" />
+  </ImportGroup>
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
@@ -70,31 +80,56 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <QtMoc>
+      <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
+      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
+      <Define>_MBCS;%(PreprocessorDefinitions)</Define>
+      <IncludePath>.\GeneratedFiles;%(AdditionalIncludeDirectories)</IncludePath>
+    </QtMoc>
+    <QtRcc>
+      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
+    </QtRcc>
+    <QtUic>
+      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>NOMINMAX;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>E:\Darken\3rdParty\Glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <QtMoc />
+    <QtRcc />
+    <QtUic />
+    <QtMoc />
+    <QtUic />
+    <QtMoc>
+      <IncludePath>.\GeneratedFiles;%(AdditionalIncludeDirectories)</IncludePath>
+    </QtMoc>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -104,12 +139,28 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <QtMoc>
+      <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
+      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
+      <Define>_MBCS;%(PreprocessorDefinitions)</Define>
+      <IncludePath>.\GeneratedFiles;%(AdditionalIncludeDirectories)</IncludePath>
+    </QtMoc>
+    <QtRcc>
+      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
+    </QtRcc>
+    <QtUic>
+      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -119,12 +170,28 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <QtMoc>
+      <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
+      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
+      <Define>_MBCS;%(PreprocessorDefinitions)</Define>
+      <IncludePath>.\GeneratedFiles;%(AdditionalIncludeDirectories)</IncludePath>
+    </QtMoc>
+    <QtRcc>
+      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
+    </QtRcc>
+    <QtUic>
+      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Animation\Animation.h" />
@@ -132,6 +199,7 @@
     <ClInclude Include="..\Sources\Base\Transform.h" />
     <ClInclude Include="..\Sources\Camera\Camera.h" />
     <ClInclude Include="..\Sources\GlobalSystem\GlobalPram.h" />
+    <ClInclude Include="..\Sources\GlobalSystem\SystemContext.h" />
     <ClInclude Include="..\Sources\GlobalSystem\SystemTextures.h" />
     <ClInclude Include="..\Sources\GlobalSystem\TypeDefine.h" />
     <ClInclude Include="..\Sources\Lights\Light.h" />
@@ -145,8 +213,20 @@
     <ClInclude Include="..\Sources\PostProcess\RectBufferObject.h" />
     <ClInclude Include="..\Sources\ReflectionCapture\ReflectionCapture.h" />
     <ClInclude Include="..\Sources\RenderPipeline\DeferRenderPipeline.h" />
+    <ClInclude Include="..\Sources\RenderPipeline\RenderPipelineBase.h" />
     <ClInclude Include="..\Sources\SurroundBox\SurroundBox.h" />
     <ClInclude Include="..\Sources\Texture\Texture.h" />
+    <QtMoc Include="..\Sources\UI\DarkenUI.h" />
+    <QtMoc Include="..\Sources\UI\OpenGLViewWidget.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles</IncludePath>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;$(SolutionDir)Darken;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(SolutionDir)Sources\UI\QtOutput;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(SolutionDir)Sources\UI;$(SolutionDir)Sources\Texture;$(SolutionDir)Sources\SurroundBox;$(SolutionDir)Sources\RenderPipeline;$(SolutionDir)Sources\ReflectionCapture;$(SolutionDir)Sources\PostProcess;$(SolutionDir)Sources\Material;$(SolutionDir)Sources\Model;$(SolutionDir)Sources\Math;$(SolutionDir)Sources\Manager;$(SolutionDir)Sources\Lights;$(SolutionDir)Sources\GlobalSystem;$(SolutionDir)Sources\Camera;$(SolutionDir)Sources\Base;$(SolutionDir)Sources\ViewPort;$(SolutionDir)Sources\Animation;$(SolutionDir)3rdParty\half-1.12.0\include;$(SolutionDir)3rdParty\freeimage\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\Glew\include;$(SolutionDir)3rdParty\GLFW\include;$(SolutionDir)3rdParty</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NOMINMAX;_MBCS;%(PreprocessorDefinitions)</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles</IncludePath>
+    </QtMoc>
+    <ClInclude Include="..\Sources\ViewPort\MainViewPort.h" />
+    <ClInclude Include="..\Sources\ViewPort\ViewPortBase.h" />
     <ClInclude Include="ConstructScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -165,11 +245,27 @@
     <ClCompile Include="..\Sources\PostProcess\RectBufferObject.cpp" />
     <ClCompile Include="..\Sources\ReflectionCapture\ReflectionCapture.cpp" />
     <ClCompile Include="..\Sources\RenderPipeline\DeferRenderPipeline.cpp" />
+    <ClCompile Include="..\Sources\RenderPipeline\RenderPipelineBase.cpp" />
     <ClCompile Include="..\Sources\SurroundBox\SurroundBox.cpp" />
     <ClCompile Include="..\Sources\Texture\Texture.cpp" />
+    <ClCompile Include="..\Sources\UI\DarkenUI.cpp" />
+    <ClCompile Include="..\Sources\UI\OpenGLViewWidget.cpp" />
+    <ClCompile Include="..\Sources\ViewPort\MainViewPort.cpp" />
+    <ClCompile Include="..\Sources\ViewPort\ViewPortBase.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="..\Sources\UI\DarkenUI.ui" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Qt5Version_x0020_x64="msvc2017_64" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

@@ -62,7 +62,7 @@ private:
 class LightGroup
 {
 public:
-	LightGroup(){
+	LightGroup(std::shared_ptr<SceneManager> Scene){
 		Intensity = 120000.0f;
 		Color = Vector3f(1.0, 0.98, 0.975);
 		FocalAngleOuter = 8.0f;
@@ -254,7 +254,7 @@ public:
 		SpotLightKey10->SetSoftSourceRadius(SoftRadius);
 		SpotLightKey10->SetShadowBias(ShadowBias);
 
-		_Scene->AddLight(SpotLightKey0);
+		Scene->AddLight(SpotLightKey0);
 		/*_Scene->AddLight(SpotLightKey1);
 		_Scene->AddLight(SpotLightKey2);
 		_Scene->AddLight(SpotLightKey3);

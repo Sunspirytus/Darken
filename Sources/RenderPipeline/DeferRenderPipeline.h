@@ -4,6 +4,7 @@
 #include "Light.h"
 #include "Object.h"
 #include "RectBufferObject.h"
+#include "RenderPipelineBase.h"
 #include <vector>
 
 class ShadowDepth;
@@ -13,7 +14,7 @@ class SubSurfaceShading;
 class UE4TemporalAA;
 class ToneMapping;
 
-class DeferRenderPipeline
+class DeferRenderPipeline : public RenderPipelineBase
 {
 public:
 	DeferRenderPipeline();
@@ -23,8 +24,6 @@ public:
 	void RenderSSSPass();
 	void ExecuteTemporalAA();
 	void ExecuteToneMapping();
-
-	void Init();
 
 	//ShadowMapping
 	std::shared_ptr<ShadowDepth> ShadowMappingPass;
@@ -39,10 +38,10 @@ public:
 	//ToneMapping
 	std::shared_ptr<ToneMapping> ToneMappingPass;
 
+	virtual void Init(std::shared_ptr<SceneManager> Scene) final;
+	virtual void Render() final;
+
 private:
-	Mat4f PPModelMatrix;
-	Mat4f PPViewMatrix;
-	Mat4f PPProjectMatrix;
 	std::shared_ptr<RectBufferObject> PPObj;
 
 	void SortSceneLights();
@@ -66,7 +65,7 @@ struct ShadowDepthMaterialDataIDs
 class ShadowDepth
 {
 public:
-	ShadowDepth(std::vector<Light*> lights);
+	ShadowDepth(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights);
 	~ShadowDepth();
 	std::vector<UInt32> ShadowDepth_Texs2D;
 	std::vector<UInt32> ShadowDepth_TexsCube;
@@ -86,6 +85,8 @@ private:
 	void RenderDirectLightDepth(Int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects);
 	void RenderPointLightDepth(Int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects);
 	void RenderSpotLightDepth(Int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects);
+
+	std::shared_ptr<SceneManager> Scene;
 };
 
 struct LightingMaterialDataIDs
@@ -123,11 +124,11 @@ struct LightingMaterialDataIDs
 class Lighting
 {
 public:
-	Lighting(std::vector<Light*> lights);
+	Lighting(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights);
 	~Lighting();
 
 	std::vector<Light*> Lights;
-	void Render(unsigned typeFlags);
+	void Render(UInt32 typeFlags);
 	std::shared_ptr<MaterialInstance> LightingPassMaterialInst;
 	UInt32 ScreenDepthZ_Tex;
 	UInt32 Lighting_Tex;
@@ -145,16 +146,7 @@ private:
 	void CreateLightingPassResources();
 	
 	std::shared_ptr<LightingMaterialDataIDs> MaterialDataIDs;
-};
-
-class ReflectionEnvironment
-{
-public:
-	ReflectionEnvironment();
-	~ReflectionEnvironment();
-
-private:
-	void CreateReflectionEnvResources();
+	std::shared_ptr<SceneManager> Scene;
 };
 
 
@@ -176,7 +168,7 @@ private:
 class SubSurfaceShading
 {
 public:
-	SubSurfaceShading();
+	SubSurfaceShading(std::shared_ptr<Camera> camera);
 	~SubSurfaceShading();
 
 	void ComputeTransmissionProfile(Vector4f* TargetBuffer, UInt32 TargetBufferSize, Vector4f SubsurfaceColor, Vector4f FalloffColor, Float32 ExtinctionScale);
@@ -230,6 +222,8 @@ private:
 	void CreateResources();
 	void InitSSSSProfilekernelParams(std::string const & _prefix, Int32 index);
 	UInt32 SSSFrameBuffer;
+
+	std::shared_ptr<Camera> ViewCamera;
 };
 
 struct TemporalAAPixelUniformData
@@ -248,7 +242,7 @@ struct TemporalAAPixelUniformData
 class UE4TemporalAA
 {
 public:
-	UE4TemporalAA();
+	UE4TemporalAA(std::shared_ptr<Camera> camera);
 	~UE4TemporalAA();
 	void UpdateJitter();
 	void RemoveJitter();
@@ -278,6 +272,7 @@ private:
 private:
 	void CreateTAAPassMaterial();
 	void CreateTAAPassResources();
+	std::shared_ptr<Camera> ViewCamera;
 };
 
 struct ToneMappingPixelShaderUniformData

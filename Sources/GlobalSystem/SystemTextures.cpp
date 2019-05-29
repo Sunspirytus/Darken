@@ -1,6 +1,5 @@
 #include "SystemTextures.h"
 #include "Util.h"
-#include "TypeDefine.h"
 
 #ifndef PI
 #define PI 3.1415926535897932384626433832795028841968f

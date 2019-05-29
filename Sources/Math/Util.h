@@ -1,15 +1,16 @@
 #pragma once
+#include "TypeDefine.h"
 #include "MaterialInstance.h"
 #include "RectBufferObject.h"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
 #include <unordered_map>
 #include <vector>
-#include "glm.hpp"
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include "TypeDefine.h"
+
 
 
 struct Math

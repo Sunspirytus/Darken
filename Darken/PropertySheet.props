@@ -2,15 +2,41 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Sources\UI;$(SolutionDir)\Sources\Texture;$(SolutionDir)\Sources\SurroundBox;$(SolutionDir)\Sources\RenderPipeline;$(SolutionDir)\Sources\ReflectionCapture;$(SolutionDir)\Sources\PostProcess;$(SolutionDir)\Sources\Material;$(SolutionDir)\Sources\Model;$(SolutionDir)\Sources\Math;$(SolutionDir)\Sources\Manager;$(SolutionDir)\Sources\Lights;$(SolutionDir)\Sources\GlobalSystem;$(SolutionDir)\Sources\Camera;$(SolutionDir)\Sources\Base;$(SolutionDir)\Sources\Animation;$(SolutionDir)\3rdParty\half-1.12.0\include;$(SolutionDir)\3rdParty\freeimage\include;$(SolutionDir)\3rdParty\glm;$(SolutionDir)\mFunctionTools\Include;$(SolutionDir)\3rdParty\Glew\include;$(SolutionDir)\3rdParty\GLFW\include;$(SolutionDir)\3rdParty\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Darken;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(SolutionDir)Sources\UI\QtOutput;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(SolutionDir)Sources\UI;$(SolutionDir)Sources\Texture;$(SolutionDir)Sources\SurroundBox;$(SolutionDir)Sources\RenderPipeline;$(SolutionDir)Sources\ReflectionCapture;$(SolutionDir)Sources\PostProcess;$(SolutionDir)Sources\Material;$(SolutionDir)Sources\Model;$(SolutionDir)Sources\Math;$(SolutionDir)Sources\Manager;$(SolutionDir)Sources\Lights;$(SolutionDir)Sources\GlobalSystem;$(SolutionDir)Sources\Camera;$(SolutionDir)Sources\Base;$(SolutionDir)Sources\ViewPort;$(SolutionDir)Sources\Animation;$(SolutionDir)3rdParty\half-1.12.0\include;$(SolutionDir)3rdParty\freeimage\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\Glew\include;$(SolutionDir)3rdParty\GLFW\include;$(SolutionDir)3rdParty\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)\3rdParty\freeimage\lib;$(SolutionDir)\3rdParty\Glew\lib;$(SolutionDir)\3rdParty\GLFW\lib;$(SolutionDir)\3rdParty\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;FreeImage.lib;assimp-vc140-mt.lib;glfw3.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(SolutionDir)3rdParty\freeimage\lib;$(SolutionDir)3rdParty\Glew\lib;$(SolutionDir)3rdParty\GLFW\lib;$(SolutionDir)3rdParty\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;opengl32.lib;FreeImage.lib;assimp-vc140-mt.lib;glfw3.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <QtMoc>
+      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
+    </QtMoc>
+    <QtMoc>
+      <OutputFile>$(SolutionDir)Sources\UI\QtOutput\$(Configuration)\moc_%(Filename).cpp</OutputFile>
+    </QtMoc>
+    <QtMoc>
+      <IncludePath>$(SolutionDir)Sources\UI\QtOutput;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories);%(IncludePath)</IncludePath>
+    </QtMoc>
+    <QtMoc>
+      <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions);%(Define)</Define>
+    </QtMoc>
+    <QtRcc>
+      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
+    </QtRcc>
+    <QtRcc>
+      <OutputFile>$(SolutionDir)Sources\UI\QtOutput\qrc_%(Filename).cpp</OutputFile>
+    </QtRcc>
+    <QtUic>
+      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
+    </QtUic>
+    <QtUic>
+      <OutputFile>$(SolutionDir)Sources\UI\QtOutput\ui_%(Filename).h</OutputFile>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

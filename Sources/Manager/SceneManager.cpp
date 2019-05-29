@@ -139,8 +139,8 @@ void SceneManager::UpdatePreFrameData()
 		Model* M = dynamic_cast<Model*>(ObjectIterator->second.get());
 		M->UpdatePreFrameModelMatrix();
 	}
-	_Scene->GetCamera(CameraIndex::MainCamera)->SetViewMatrix_PreFrame(_Scene->GetCamera(CameraIndex::MainCamera)->GetViewMatrix());
-	_Scene->GetCamera(CameraIndex::MainCamera)->SetProjectMatrix_PreFrame(_Scene->GetCamera(CameraIndex::MainCamera)->GetProjectMatrix());
+	GetCamera(CameraIndex::MainCamera)->SetViewMatrix_PreFrame(GetCamera(CameraIndex::MainCamera)->GetViewMatrix());
+	GetCamera(CameraIndex::MainCamera)->SetProjectMatrix_PreFrame(GetCamera(CameraIndex::MainCamera)->GetProjectMatrix());
 }
 
 void SceneManager::PrepareShadowDepthMaterial()

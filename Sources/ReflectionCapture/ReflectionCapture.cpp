@@ -2,7 +2,7 @@
 #include "ReflectionCapture.h"
 #include "DeferRenderPipeline.h"
 
-SphereReflectionCapture::SphereReflectionCapture(const Vector3f &position, const Float32 &radius, const Float32& brightness) :
+SphereReflectionCapture::SphereReflectionCapture(std::shared_ptr<SceneManager> Scene, const Vector3f &position, const Float32 &radius, const Float32& brightness) :
 	InfluenceRadius(radius),
 	Brightness(brightness),
 	CaptureTexSize(512)
@@ -11,7 +11,7 @@ SphereReflectionCapture::SphereReflectionCapture(const Vector3f &position, const
 	CreateCaptureResources();
 
 	Int32 Count = 0;
-	std::vector<std::shared_ptr<Object>> AbstractActors = _Scene->GetObjects(ObjectType::AbstractActor);
+	std::vector<std::shared_ptr<Object>> AbstractActors = Scene->GetObjects(ObjectType::AbstractActor);
 	for(Int32 Index = 0; Index < AbstractActors.size(); Index++)
 	{
 		if(dynamic_cast<SphereReflectionCapture*>(AbstractActors[Index].get()) != nullptr)
@@ -20,7 +20,7 @@ SphereReflectionCapture::SphereReflectionCapture(const Vector3f &position, const
 		}
 	}
 	Create6FacesCameraList();
-	_Scene->AddCamera(CameraIndex::ReflectionCaptureCamera + Count, CaptureCamera);
+	Scene->AddCamera(CameraIndex::ReflectionCaptureCamera + Count, CaptureCamera);
 }
 
 SphereReflectionCapture::~SphereReflectionCapture()
@@ -75,7 +75,7 @@ void SphereReflectionCapture::Create6FacesCameraList()
 	CaptureCamera = LCamera0;
 }
 
-void SphereReflectionCapture::CaptureWithPipeLine(std::shared_ptr<DeferRenderPipeline> Pipeline)
+void SphereReflectionCapture::CaptureWithPipeLine(DeferRenderPipeline* Pipeline)
 {
 	Camera * C = CaptureCamera.get();
 	for(Int32 FaceIndex = 0; FaceIndex < 6; FaceIndex++)
@@ -83,10 +83,10 @@ void SphereReflectionCapture::CaptureWithPipeLine(std::shared_ptr<DeferRenderPip
 		_GPUBuffers->UpdateViewBuffer(C);
 		_GPUBuffers->UpdateCustomBufferData();
 
-		_Scene->PrepareShadowDepthMaterial();
+		Pipeline->SceneWaitRender->PrepareShadowDepthMaterial();
 		Pipeline->RenderShadowDepthPass(StaticMesh);
 
-		_Scene->PrepareLightingMaterial();
+		Pipeline->SceneWaitRender->PrepareLightingMaterial();
 		Pipeline->RenderLightingPass(StaticMesh);
 		Pipeline->RenderSSSPass();
 

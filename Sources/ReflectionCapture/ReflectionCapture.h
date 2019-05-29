@@ -6,7 +6,7 @@
 class SphereReflectionCapture : public Object
 {
 public:
-	SphereReflectionCapture(const Vector3f &position, const Float32 &radius, const Float32& brightness);
+	SphereReflectionCapture(std::shared_ptr<SceneManager> Scene, const Vector3f &position, const Float32 &radius, const Float32& brightness);
 	~SphereReflectionCapture();
 
 	virtual void Start() {};
@@ -16,7 +16,7 @@ public:
 	virtual void Draw() {};
 	virtual void CheckWhetherNeedClip(std::shared_ptr<Camera> camera) {};
 
-	void CaptureWithPipeLine(std::shared_ptr<DeferRenderPipeline> Pipeline);
+	void CaptureWithPipeLine(DeferRenderPipeline* Pipeline);
 	void CalReflectionCubeTexAvgBrightness();
 
 	void CreateCaptureResources();
