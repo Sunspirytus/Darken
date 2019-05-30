@@ -1,44 +1,7 @@
 #include "SystemContext.h"
 #include "OpenGLViewWidget.h"
-
-dkQOpenGLViewWidget::dkQOpenGLViewWidget(QWidget * parent, Qt::WindowFlags f)
-{
-	QOpenGLWidget(parent, f);
-	QSurfaceFormat format;
-	format.setSwapInterval(0);
-	format.setVersion(4, 3);
-	format.setSamples(4);
-	format.setSwapBehavior(QSurfaceFormat::SwapBehavior::SingleBuffer);
-	format.setProfile(QSurfaceFormat::CoreProfile);
-	this->setFormat(format);
-
-	this->grabKeyboard();
-	View = std::shared_ptr<MainViewPort>(new MainViewPort());
-}
-
-dkQOpenGLViewWidget::~dkQOpenGLViewWidget()
-{
-}
-
-void dkQOpenGLViewWidget::initializeGL()
-{
-	OpenGLContext::Init();
-	View->InitScene();
-}
-
-int a = 0;
-void dkQOpenGLViewWidget::paintGL()
-{ 
-	View->TickScene();
-	View->RenderScene();	
-	
-	QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
-}
-
-void dkQOpenGLViewWidget::resizeGL(int w, int h)
-{
-
-}
+#include <conio.h>
+#include <thread>
 
 void CameraRotateLeftPlus(std::shared_ptr<SceneManager> _Scene)
 {
@@ -102,6 +65,44 @@ void CameraTranslateForwardMinus(std::shared_ptr<SceneManager> _Scene)
 	//forward.z = 0.0f;
 	Vector3f position = camera->GetPosition();
 	camera->SetPosition(position - forward * 0.2f);
+
+}
+
+dkQOpenGLViewWidget::dkQOpenGLViewWidget(QWidget * parent, Qt::WindowFlags f)
+{
+	QOpenGLWidget(parent, f);
+	QSurfaceFormat format;
+	format.setSwapInterval(0);
+	format.setVersion(4, 3);
+	format.setSamples(4);
+	format.setSwapBehavior(QSurfaceFormat::SwapBehavior::SingleBuffer);
+	format.setProfile(QSurfaceFormat::CoreProfile);
+	this->setFormat(format);
+
+	this->grabKeyboard();
+	View = std::shared_ptr<MainViewPort>(new MainViewPort());
+}
+
+dkQOpenGLViewWidget::~dkQOpenGLViewWidget()
+{
+}
+
+void dkQOpenGLViewWidget::initializeGL()
+{
+	OpenGLContext::Init();
+	View->InitScene();
+}
+
+void dkQOpenGLViewWidget::paintGL()
+{ 
+	View->TickScene();
+	View->RenderScene();
+	QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
+}
+
+void dkQOpenGLViewWidget::resizeGL(int w, int h)
+{
+
 }
 
 void dkQOpenGLViewWidget::keyPressEvent(QKeyEvent* ev)
@@ -122,6 +123,7 @@ void dkQOpenGLViewWidget::keyPressEvent(QKeyEvent* ev)
 		CameraRotateUpPlus(View->Scene);
 	else if (ev->key() == Qt::Key_Down && ev->isAutoRepeat())
 		CameraRotateUpMinus(View->Scene);
+	update();
 }
 void dkQOpenGLViewWidget::keyReleaseEvent(QKeyEvent* ev)
 {

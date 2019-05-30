@@ -12,6 +12,7 @@
 #include "DarkenUI.h"
 #include <QtWidgets/QApplication>
 #include <thread>
+#include <conio.h>
 //#include <QtOpenGL/QGLFormat>
 
 void framebuffer_size_callback(GLFWwindow* window, Int32 width, Int32 height);
@@ -392,11 +393,6 @@ void Render()
 	std::cout << APP_FrameCount++ << std::endl;
 }
 
-void CreateUI()
-{
-
-}
-
 Int32 main(int argc, char* argv[])
 {
 	//QApplication a(argc, argv);
@@ -418,7 +414,6 @@ Int32 main(int argc, char* argv[])
 	//}
 	//
 	//return a.exec();
-
 
 	QApplication a(argc, argv);
 	DarkenUI w;
