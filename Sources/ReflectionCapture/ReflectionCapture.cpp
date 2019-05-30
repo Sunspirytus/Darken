@@ -71,23 +71,23 @@ void SphereReflectionCapture::Create6FacesCameraList()
 	LCamera2->SetNextCamera(LCamera3);
 	LCamera3->SetNextCamera(LCamera4);
 	LCamera4->SetNextCamera(LCamera5);
+	LCamera5->SetNextCamera(LCamera0);
 
 	CaptureCamera = LCamera0;
 }
 
 void SphereReflectionCapture::CaptureWithPipeLine(DeferRenderPipeline* Pipeline)
 {
-	Camera * C = CaptureCamera.get();
 	for(Int32 FaceIndex = 0; FaceIndex < 6; FaceIndex++)
 	{
-		_GPUBuffers->UpdateViewBuffer(C);
+		_GPUBuffers->UpdateViewBuffer(CaptureCamera.get());
 		_GPUBuffers->UpdateCustomBufferData();
 
 		Pipeline->SceneWaitRender->PrepareShadowDepthMaterial();
 		Pipeline->RenderShadowDepthPass(StaticMesh);
 
 		Pipeline->SceneWaitRender->PrepareLightingMaterial();
-		Pipeline->RenderLightingPass(StaticMesh);
+		Pipeline->RenderLightingPass(CaptureCamera, StaticMesh);
 		Pipeline->RenderSSSPass();
 
 		Pipeline->ExecuteTemporalAA();
@@ -98,9 +98,7 @@ void SphereReflectionCapture::CaptureWithPipeLine(DeferRenderPipeline* Pipeline)
 
 		Util::CopyTex2DToCubeFace_Once(CaptureTex2D, CaptureTexCube, GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT, CaptureTexSize, CaptureTexSize, FaceIndex);
 				
-		
-
-		C = C->GetNextCamera().get();
+		CaptureCamera = CaptureCamera->GetNextCamera();
 	}
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, CaptureTexCube);

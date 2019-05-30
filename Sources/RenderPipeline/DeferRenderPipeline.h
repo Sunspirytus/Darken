@@ -20,7 +20,7 @@ public:
 	DeferRenderPipeline();
 	~DeferRenderPipeline();
 	void RenderShadowDepthPass(UInt32 typeFlags);
-	void RenderLightingPass(UInt32 typeFlags);
+	void RenderLightingPass(std::shared_ptr<Camera> camera, UInt32 typeFlags);
 	void RenderSSSPass();
 	void ExecuteTemporalAA();
 	void ExecuteToneMapping();
@@ -39,7 +39,7 @@ public:
 	std::shared_ptr<ToneMapping> ToneMappingPass;
 
 	virtual void Init(std::shared_ptr<SceneManager> Scene) final;
-	virtual void Render() final;
+	virtual void Render(std::shared_ptr<Camera> camera) final;
 
 private:
 	std::shared_ptr<RectBufferObject> PPObj;
@@ -128,7 +128,7 @@ public:
 	~Lighting();
 
 	std::vector<Light*> Lights;
-	void Render(UInt32 typeFlags);
+	void Render(std::shared_ptr<Camera> camera, UInt32 typeFlags);
 	std::shared_ptr<MaterialInstance> LightingPassMaterialInst;
 	UInt32 ScreenDepthZ_Tex;
 	UInt32 Lighting_Tex;

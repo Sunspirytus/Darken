@@ -2,7 +2,8 @@
 
 #include "glm.hpp"
 #include "half.hpp"
-#include "glew.h"
+#include "glad.h"
+#include "glfw3.h"
 
 using half_float::half;
 

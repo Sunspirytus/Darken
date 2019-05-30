@@ -9,7 +9,7 @@ public:
 	~RenderPipelineBase();
 
 	virtual void Init(std::shared_ptr<SceneManager> Scene) = 0;
-	virtual void Render() = 0;
+	virtual void Render(std::shared_ptr<Camera> camera) = 0;
 
 public:
 	std::shared_ptr<SceneManager> SceneWaitRender;

@@ -64,15 +64,18 @@ void DeferRenderPipeline::SortSceneLights()
 	}
 }
 
-void DeferRenderPipeline::Render()
+void DeferRenderPipeline::Render(std::shared_ptr<Camera> camera)
 {
 	TAAPass->UpdateJitter();
+
+	_GPUBuffers->UpdateViewBuffer(SceneWaitRender->GetCamera(CameraIndex::MainCamera).get());
+	_GPUBuffers->UpdateCustomBufferData();
 
 	SceneWaitRender->PrepareShadowDepthMaterial();
 	RenderShadowDepthPass(StaticMesh | DynamicMesh);
 
 	SceneWaitRender->PrepareLightingMaterial();
-	RenderLightingPass(StaticMesh | DynamicMesh);
+	RenderLightingPass(camera, StaticMesh | DynamicMesh);
 
 	RenderSSSPass();
 
@@ -90,9 +93,9 @@ void DeferRenderPipeline::RenderShadowDepthPass(UInt32 typeFlags)
 	ShadowMappingPass->Render(typeFlags);
 }
 
-void DeferRenderPipeline::RenderLightingPass(UInt32 typeFlags)
+void DeferRenderPipeline::RenderLightingPass(std::shared_ptr<Camera> camera, UInt32 typeFlags)
 {
-	LightingPass->Render(typeFlags);
+	LightingPass->Render(camera, typeFlags);
 }
 
 void DeferRenderPipeline::RenderSSSPass()
@@ -426,7 +429,7 @@ void Lighting::CreateLightingPassResources()
 //	LightingPassMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(LightingPassMaterial));
 //}
 
-void Lighting::Render(UInt32 typeFlags)
+void Lighting::Render(std::shared_ptr<Camera> camera, UInt32 typeFlags)
 {
 	static const Float32 DefalutBackGroundColor[] = { 0.0f, 0.67f, 0.7f, 1.0f };
 	static const Float32 WhiteColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -524,7 +527,7 @@ void Lighting::Render(UInt32 typeFlags)
 			}
 		}
 		
-		Scene->Render(Scene->GetCamera(CameraIndex::MainCamera), typeFlags);
+		Scene->Render(camera, typeFlags);
 		Int32 a = glGetError(); // if we don't use point light, and we dont use cube map shadow depth textur. But shader need compile Cube map, there is a glerror but no influence.
 	}
 

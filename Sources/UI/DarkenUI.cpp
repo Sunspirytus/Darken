@@ -1,4 +1,5 @@
 #include "DarkenUI.h"
+#include "SystemContext.h"
 
 
 DarkenUI::DarkenUI(QWidget *parent)
@@ -7,11 +8,7 @@ DarkenUI::DarkenUI(QWidget *parent)
 	ui.setupUi(this);
 	
 	OpenGLViewPort = std::shared_ptr<dkQOpenGLViewWidget>(new dkQOpenGLViewWidget(ui.CentralWidget));
-	QSurfaceFormat format;
-	format.setSwapInterval(1);
-	OpenGLViewPort->setFormat(format);
-	ui.gridLayout_2->addWidget(OpenGLViewPort.get());
-	
+	ui.gridLayout_2->addWidget(OpenGLViewPort.get());	
 }
 
 

@@ -7,11 +7,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Darken;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(SolutionDir)Sources\UI\QtOutput;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(SolutionDir)Sources\UI;$(SolutionDir)Sources\Texture;$(SolutionDir)Sources\SurroundBox;$(SolutionDir)Sources\RenderPipeline;$(SolutionDir)Sources\ReflectionCapture;$(SolutionDir)Sources\PostProcess;$(SolutionDir)Sources\Material;$(SolutionDir)Sources\Model;$(SolutionDir)Sources\Math;$(SolutionDir)Sources\Manager;$(SolutionDir)Sources\Lights;$(SolutionDir)Sources\GlobalSystem;$(SolutionDir)Sources\Camera;$(SolutionDir)Sources\Base;$(SolutionDir)Sources\ViewPort;$(SolutionDir)Sources\Animation;$(SolutionDir)3rdParty\half-1.12.0\include;$(SolutionDir)3rdParty\freeimage\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\Glew\include;$(SolutionDir)3rdParty\GLFW\include;$(SolutionDir)3rdParty\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Darken;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(SolutionDir)Sources\UI\QtOutput;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(SolutionDir)Sources\UI;$(SolutionDir)Sources\Texture;$(SolutionDir)Sources\SurroundBox;$(SolutionDir)Sources\RenderPipeline;$(SolutionDir)Sources\ReflectionCapture;$(SolutionDir)Sources\PostProcess;$(SolutionDir)Sources\Material;$(SolutionDir)Sources\Model;$(SolutionDir)Sources\Math;$(SolutionDir)Sources\Manager;$(SolutionDir)Sources\Lights;$(SolutionDir)Sources\GlobalSystem;$(SolutionDir)Sources\Camera;$(SolutionDir)Sources\Base;$(SolutionDir)Sources\ViewPort;$(SolutionDir)Sources\Animation;$(SolutionDir)3rdParty\half-1.12.0\include;$(SolutionDir)3rdParty\freeimage\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\Glad\include;$(SolutionDir)3rdParty\GLFW\include;$(SolutionDir)3rdParty\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(SolutionDir)3rdParty\freeimage\lib;$(SolutionDir)3rdParty\Glew\lib;$(SolutionDir)3rdParty\GLFW\lib;$(SolutionDir)3rdParty\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;opengl32.lib;FreeImage.lib;assimp-vc140-mt.lib;glfw3.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(SolutionDir)3rdParty\freeimage\lib;$(SolutionDir)3rdParty\Glew\lib;$(SolutionDir)3rdParty\Glad\lib;$(SolutionDir)3rdParty\GLFW\lib;$(SolutionDir)3rdParty\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;opengl32.lib;FreeImage.lib;assimp-vc140-mt.lib;glfw3.lib;glew32.lib;glad.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <QtMoc>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
@@ -20,7 +20,7 @@
       <OutputFile>$(SolutionDir)Sources\UI\QtOutput\$(Configuration)\moc_%(Filename).cpp</OutputFile>
     </QtMoc>
     <QtMoc>
-      <IncludePath>$(SolutionDir)Sources\UI\QtOutput;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories);%(IncludePath)</IncludePath>
+      <IncludePath>$(SolutionDir)Sources\UI\QtOutput;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;%(IncludePath)</IncludePath>
     </QtMoc>
     <QtMoc>
       <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions);%(Define)</Define>

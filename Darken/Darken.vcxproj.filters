@@ -138,6 +138,12 @@
     <ClInclude Include="..\Sources\RenderPipeline\RenderPipelineBase.h">
       <Filter>源文件\RenderPipeline</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\GlobalSystem\glad.h">
+      <Filter>源文件\GlobalSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\GlobalSystem\khrplatform.h">
+      <Filter>源文件\GlobalSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -208,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\RenderPipeline\RenderPipelineBase.cpp">
       <Filter>源文件\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\GlobalSystem\glad.c">
+      <Filter>源文件\GlobalSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

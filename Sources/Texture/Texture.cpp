@@ -425,9 +425,9 @@ static GLuint gOGLTextureInternalFormat[TF_QUANTITY] =
 	GL_RGB5,                            // TF_R5G6B5
 	GL_RGB5_A1,                         // TF_A1R5G5B5
 	GL_RGBA4,                           // TF_A4R4G4B4
-	GL_ALPHA8,                          // TF_A8
-	GL_LUMINANCE8,                      // TF_UL8
-	GL_LUMINANCE8_ALPHA8,               // TF_A8L8
+	//GL_ALPHA8,                          // TF_A8
+	//GL_LUMINANCE8,                      // TF_UL8
+	//GL_LUMINANCE8_ALPHA8,               // TF_A8L8
 	GL_RGB8,                            // TF_R8G8B8
 	GL_RGBA8,                           // TF_A8R8G8B8
 	GL_RGBA8,                           // TF_A8B8G8R8
@@ -468,8 +468,8 @@ static GLuint gOGLTextureFormat[TF_QUANTITY] =
 	GL_RGBA,                            // TF_A1R5G5B5
 	GL_RGBA,                            // TF_A4R4G4B4
 	GL_ALPHA,                           // TF_A8
-	GL_LUMINANCE,                       // TF_L8
-	GL_LUMINANCE_ALPHA,                 // TF_A8L8
+	//GL_LUMINANCE,                       // TF_L8
+	//GL_LUMINANCE_ALPHA,                 // TF_A8L8
 	GL_BGR,                             // TF_R8G8B8
 	GL_BGRA,                            // TF_A8R8G8B8
 	GL_RGBA,                            // TF_A8B8G8R8

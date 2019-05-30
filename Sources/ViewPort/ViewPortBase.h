@@ -12,9 +12,9 @@ public:
 	virtual void InitScene() = 0;
 	virtual void TickScene() = 0;
 	virtual void RenderScene() = 0;
-
-protected:
 	std::shared_ptr<SceneManager> Scene;
+protected:
+	
 	std::shared_ptr<RenderPipelineBase> RenderPipeline;
 };
 

@@ -160,7 +160,7 @@ void MainViewPort::InitScene()
 	std::shared_ptr<SphereReflectionCapture> ReflectionActor = std::shared_ptr<SphereReflectionCapture>(new SphereReflectionCapture(Scene, Vector3f(0.0, 0.0, 5.0), 1000.0, 1.0));
 	Scene->AddObj(ObjectType::AbstractActor, ReflectionActor);
 	
-	std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(Vector3f(0.0, 30.0, 10.0), Vector3f(0.0, 0.0, -90.0), Math::Radians(60.0), (Float32)_ScreenWidth / (Float32)_ScreenHeight, 0.1f, 100.0f, Vector2i(_ScreenWidth, _ScreenHeight)));
+	std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(Vector3f(0.0, 5.0, 10.0), Vector3f(0.0, 0.0, -90.0), Math::Radians(60.0), (Float32)_ScreenWidth / (Float32)_ScreenHeight, 0.1f, 100.0f, Vector2i(_ScreenWidth, _ScreenHeight)));
 
 	Scene->AddCamera(CameraIndex::MainCamera, ViewCamera);
 
@@ -179,7 +179,8 @@ void MainViewPort::InitScene()
 			Capture->CalReflectionCubeTexAvgBrightness();
 		}
 	}
-	
+	GlobalTextures = std::shared_ptr<SystemTextureFactory>(new SystemTextureFactory());
+	GlobalTextures->GeneratePreIntegratedGFTexture();
 	SimpleObjectMaterialInst->SetTextureID("ReflectionTex", ReflectionActor->GetReflectionTextureID());
 	SimpleObjectMaterialInst->SetTextureID("PreIntegratedGF", GlobalTextures->GetPreIntegratedGF_Tex());
 	SimpleObjectMaterialInst->SetUniform<Float32>("AverageBrightness", ReflectionActor->GetAverageBrightness());
@@ -199,11 +200,6 @@ void MainViewPort::TickScene()
 void MainViewPort::RenderScene()
 {
 	Scene->GetCamera(CameraIndex::MainCamera)->ActiveViewPort();
-	_GPUBuffers->UpdateViewBuffer(Scene->GetCamera(CameraIndex::MainCamera).get());
-	_GPUBuffers->UpdateCustomBufferData();
-
-	RenderPipeline->Render();
-
-	/*glClearColor(1.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
+	RenderPipeline->Render(Scene->GetCamera(CameraIndex::MainCamera));
+	//glFlush();
 }

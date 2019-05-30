@@ -198,7 +198,9 @@
     <ClInclude Include="..\Sources\Base\Object.h" />
     <ClInclude Include="..\Sources\Base\Transform.h" />
     <ClInclude Include="..\Sources\Camera\Camera.h" />
+    <ClInclude Include="..\Sources\GlobalSystem\glad.h" />
     <ClInclude Include="..\Sources\GlobalSystem\GlobalPram.h" />
+    <ClInclude Include="..\Sources\GlobalSystem\khrplatform.h" />
     <ClInclude Include="..\Sources\GlobalSystem\SystemContext.h" />
     <ClInclude Include="..\Sources\GlobalSystem\SystemTextures.h" />
     <ClInclude Include="..\Sources\GlobalSystem\TypeDefine.h" />
@@ -216,12 +218,11 @@
     <ClInclude Include="..\Sources\RenderPipeline\RenderPipelineBase.h" />
     <ClInclude Include="..\Sources\SurroundBox\SurroundBox.h" />
     <ClInclude Include="..\Sources\Texture\Texture.h" />
-    <QtMoc Include="..\Sources\UI\DarkenUI.h" />
+    <QtMoc Include="..\Sources\UI\DarkenUI.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(IncludePath)</IncludePath>
+    </QtMoc>
     <QtMoc Include="..\Sources\UI\OpenGLViewWidget.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles</IncludePath>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;$(SolutionDir)Darken;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(SolutionDir)Sources\UI\QtOutput;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(SolutionDir)Sources\UI;$(SolutionDir)Sources\Texture;$(SolutionDir)Sources\SurroundBox;$(SolutionDir)Sources\RenderPipeline;$(SolutionDir)Sources\ReflectionCapture;$(SolutionDir)Sources\PostProcess;$(SolutionDir)Sources\Material;$(SolutionDir)Sources\Model;$(SolutionDir)Sources\Math;$(SolutionDir)Sources\Manager;$(SolutionDir)Sources\Lights;$(SolutionDir)Sources\GlobalSystem;$(SolutionDir)Sources\Camera;$(SolutionDir)Sources\Base;$(SolutionDir)Sources\ViewPort;$(SolutionDir)Sources\Animation;$(SolutionDir)3rdParty\half-1.12.0\include;$(SolutionDir)3rdParty\freeimage\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\Glew\include;$(SolutionDir)3rdParty\GLFW\include;$(SolutionDir)3rdParty</IncludePath>
-      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NOMINMAX;_MBCS;%(PreprocessorDefinitions)</Define>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles</IncludePath>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles</IncludePath>
     </QtMoc>
@@ -234,6 +235,7 @@
     <ClCompile Include="..\Sources\Base\Object.cpp" />
     <ClCompile Include="..\Sources\Base\Transform.cpp" />
     <ClCompile Include="..\Sources\Camera\Camera.cpp" />
+    <ClCompile Include="..\Sources\GlobalSystem\glad.c" />
     <ClCompile Include="..\Sources\GlobalSystem\SystemTextures.cpp" />
     <ClCompile Include="..\Sources\Lights\Light.cpp" />
     <ClCompile Include="..\Sources\Manager\BufferManager.cpp" />

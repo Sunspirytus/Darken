@@ -1,6 +1,6 @@
 #version 440 core
 
-precision mediump float;
+precision highp float;
 
 uniform vec3 ColorTest;
 uniform int bReflect;

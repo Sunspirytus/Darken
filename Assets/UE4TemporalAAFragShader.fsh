@@ -3,6 +3,8 @@
 
 #define TAASingleTex
 
+precision highp float;
+
 const float CurrentFrameWeight = 0.04;
 
 uniform sampler2D ShadowDepth_Tex;
