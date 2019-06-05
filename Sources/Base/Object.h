@@ -1,9 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-=======
-//34
-////
->>>>>>> 03252ba3da3824d6aaf78cf5ac65b3cba99202fd
 #include "Transform.h"
 #include "SurroundBox.h"
 #include "GlobalPram.h"
