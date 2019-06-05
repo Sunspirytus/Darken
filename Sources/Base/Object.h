@@ -1,5 +1,5 @@
 #pragma once
-//////
+//////23
 #include "Transform.h"
 #include "SurroundBox.h"
 #include "GlobalPram.h"
@@ -22,7 +22,7 @@ public:
 	virtual void FixUpdate() = 0;
 	virtual void Draw() = 0;
 private:
-	
+	//2
 };
 
 
