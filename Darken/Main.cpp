@@ -10,7 +10,7 @@
 #include "ReflectionCapture.h"
 #include "SystemTextures.h"
 #include "DarkenUI.h"
-#include <QtWidgets/QApplication>
+#include "DarkenApplication.h"
 #include <thread>
 #include <conio.h>
 //#include <QtOpenGL/QGLFormat>
@@ -395,27 +395,11 @@ void Render()
 
 Int32 main(int argc, char* argv[])
 {
-	//QApplication a(argc, argv);
 
-	//// Specify an OpenGL 3.3 format using the Core profile.
-	// // That is, no old-school fixed pipeline functionality
-	//QGLFormat glFormat;
-	//glFormat.setVersion(3, 3);
-	//glFormat.setProfile(QGLFormat::CoreProfile); // Requires >=Qt-4.8.0
-	//glFormat.setSampleBuffers(true);
+	
 
-	//// Create a GLWidget requesting our format
-	//QGLWidget w(glFormat);
-	//w.show();
-	//if (!gladLoadGL())
-	//{
-	//	std::cout << "Failed to initialize glew" << std::endl;
-	//	return 0;
-	//}
-	//
-	//return a.exec();
-
-	QApplication a(argc, argv);
+		
+	dkApplication a(argc, argv);
 	DarkenUI w;
 	w.show();
 	return a.exec();

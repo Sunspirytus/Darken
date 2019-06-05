@@ -17,6 +17,7 @@ public:
 
 private:
 	std::shared_ptr<MainViewPort> View;
+	void SetOpenGLContext();
 
 protected:
 	virtual void keyPressEvent(QKeyEvent* ev);

@@ -8,7 +8,8 @@ DarkenUI::DarkenUI(QWidget *parent)
 	ui.setupUi(this);
 	
 	OpenGLViewPort = std::shared_ptr<dkQOpenGLViewWidget>(new dkQOpenGLViewWidget(ui.CentralWidget));
-	ui.gridLayout_2->addWidget(OpenGLViewPort.get());	
+	ui.verticalLayout->addWidget(OpenGLViewPort.get());
+
 }
 
 
