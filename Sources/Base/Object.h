@@ -1,6 +1,4 @@
 #pragma once
-//222
-//111
 #include "Transform.h"
 #include "SurroundBox.h"
 #include "GlobalPram.h"
