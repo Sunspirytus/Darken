@@ -80,7 +80,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)bin</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -129,7 +131,15 @@
     <QtUic />
     <QtMoc>
       <IncludePath>.\GeneratedFiles;%(AdditionalIncludeDirectories)</IncludePath>
+      <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
+      <Define>NOMINMAX;_MBCS;%(PreprocessorDefinitions)</Define>
     </QtMoc>
+    <QtRcc>
+      <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
+    </QtRcc>
+    <QtUic>
+      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -194,82 +204,77 @@
     </QtUic>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Sources\Animation\Animation.h" />
-    <ClInclude Include="..\Sources\Base\Object.h" />
-    <ClInclude Include="..\Sources\Base\Transform.h" />
-    <ClInclude Include="..\Sources\Camera\Camera.h" />
-    <ClInclude Include="..\Sources\GlobalSystem\glad.h" />
-    <ClInclude Include="..\Sources\GlobalSystem\GlobalPram.h" />
-    <ClInclude Include="..\Sources\GlobalSystem\khrplatform.h" />
-    <ClInclude Include="..\Sources\GlobalSystem\SystemContext.h" />
-    <ClInclude Include="..\Sources\GlobalSystem\SystemTextures.h" />
-    <ClInclude Include="..\Sources\GlobalSystem\TypeDefine.h" />
-    <ClInclude Include="..\Sources\Input\InputBase.h" />
-    <ClInclude Include="..\Sources\Input\InputInterface.h" />
-    <ClInclude Include="..\Sources\Lights\Light.h" />
-    <ClInclude Include="..\Sources\Manager\BufferManager.h" />
-    <ClInclude Include="..\Sources\Manager\SceneManager.h" />
-    <ClInclude Include="..\Sources\Material\Material.h" />
-    <ClInclude Include="..\Sources\Material\MaterialInstance.h" />
-    <ClInclude Include="..\Sources\Math\Quaternion.h" />
-    <ClInclude Include="..\Sources\Math\Util.h" />
-    <ClInclude Include="..\Sources\Model\Model.h" />
-    <ClInclude Include="..\Sources\PostProcess\RectBufferObject.h" />
-    <ClInclude Include="..\Sources\ReflectionCapture\ReflectionCapture.h" />
-    <ClInclude Include="..\Sources\RenderPipeline\DeferRenderPipeline.h" />
-    <ClInclude Include="..\Sources\RenderPipeline\RenderPipelineBase.h" />
-    <ClInclude Include="..\Sources\SurroundBox\SurroundBox.h" />
-    <ClInclude Include="..\Sources\Texture\Texture.h" />
-    <QtMoc Include="..\Sources\UI\DarkenUI.h">
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(IncludePath)</IncludePath>
-    </QtMoc>
-    <QtMoc Include="..\Sources\UI\OpenGLViewWidget.h">
+    <QtMoc Include="..\Sources\Editor\MainWindow\Application.h" />
+    <QtMoc Include="..\Sources\Editor\MainWindow\MainWindow.h" />
+    <QtMoc Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;$(SolutionDir)Sources\Editor\MainWindow;$(SolutionDir)Darken;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(SolutionDir)Sources\UI\QtOutput;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(SolutionDir)\Sources\Runtime\UI;$(SolutionDir)\Sources\Runtime\Texture;$(SolutionDir)\Sources\Runtime\SurroundBox;$(SolutionDir)\Sources\Runtime\RenderPipeline;$(SolutionDir)\Sources\Runtime\ReflectionCapture;$(SolutionDir)\Sources\Runtime\PostProcess;$(SolutionDir)\Sources\Runtime\Material;$(SolutionDir)\Sources\Runtime\Model;$(SolutionDir)\Sources\Runtime\Math;$(SolutionDir)\Sources\Runtime\Manager;$(SolutionDir)\Sources\Runtime\Lights;$(SolutionDir)\Sources\Runtime\GlobalSystem;$(SolutionDir)\Sources\Runtime\Camera;$(SolutionDir)\Sources\Runtime\Base;$(SolutionDir)\Sources\Runtime\ViewPort;$(SolutionDir)\Sources\Runtime\Animation;F:\Darken\3rdParty\include;F:\Darken\3rdParty\include\SOIL;F:\Darken\3rdParty\include\half-1.12.0;F:\Darken\3rdParty\include\glm;F:\Darken\3rdParty\include\GLFW;F:\Darken\3rdParty\include\Glad;F:\Darken\3rdParty\include\freeimage;F:\Darken\3rdParty\include\Assimp</IncludePath>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles</IncludePath>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles</IncludePath>
     </QtMoc>
-    <QtMoc Include="..\Sources\UI\DarkenApplication.h">
+    <QtMoc Include="..\Sources\Editor\MainWindow\WorldComponentWidget.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles</IncludePath>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;$(SolutionDir)Darken;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(SolutionDir)Sources\UI\QtOutput;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(SolutionDir)Sources\UI;$(SolutionDir)Sources\Texture;$(SolutionDir)Sources\SurroundBox;$(SolutionDir)Sources\RenderPipeline;$(SolutionDir)Sources\ReflectionCapture;$(SolutionDir)Sources\PostProcess;$(SolutionDir)Sources\Material;$(SolutionDir)Sources\Model;$(SolutionDir)Sources\Math;$(SolutionDir)Sources\Manager;$(SolutionDir)Sources\Lights;$(SolutionDir)Sources\GlobalSystem;$(SolutionDir)Sources\Camera;$(SolutionDir)Sources\Base;$(SolutionDir)Sources\ViewPort;$(SolutionDir)Sources\Animation;$(SolutionDir)3rdParty\half-1.12.0\include;$(SolutionDir)3rdParty\freeimage\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\Glad\include;$(SolutionDir)3rdParty\GLFW\include;$(SolutionDir)3rdParty</IncludePath>
-      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NOMINMAX;_MBCS;%(PreprocessorDefinitions)</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;$(SolutionDir)Sources\Editor\MainWindow;$(SolutionDir)Darken;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(SolutionDir)Sources\UI\QtOutput;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(SolutionDir)\Sources\Runtime\UI;$(SolutionDir)\Sources\Runtime\Texture;$(SolutionDir)\Sources\Runtime\SurroundBox;$(SolutionDir)\Sources\Runtime\RenderPipeline;$(SolutionDir)\Sources\Runtime\ReflectionCapture;$(SolutionDir)\Sources\Runtime\PostProcess;$(SolutionDir)\Sources\Runtime\Material;$(SolutionDir)\Sources\Runtime\Model;$(SolutionDir)\Sources\Runtime\Math;$(SolutionDir)\Sources\Runtime\Manager;$(SolutionDir)\Sources\Runtime\Lights;$(SolutionDir)\Sources\Runtime\GlobalSystem;$(SolutionDir)\Sources\Runtime\Camera;$(SolutionDir)\Sources\Runtime\Base;$(SolutionDir)\Sources\Runtime\ViewPort;$(SolutionDir)\Sources\Runtime\Animation;F:\Darken\3rdParty\include;F:\Darken\3rdParty\include\SOIL;F:\Darken\3rdParty\include\half-1.12.0;F:\Darken\3rdParty\include\glm;F:\Darken\3rdParty\include\GLFW;F:\Darken\3rdParty\include\Glad;F:\Darken\3rdParty\include\freeimage;F:\Darken\3rdParty\include\Assimp</IncludePath>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles</IncludePath>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles</IncludePath>
     </QtMoc>
-    <ClInclude Include="..\Sources\ViewPort\MainViewPort.h" />
-    <ClInclude Include="..\Sources\ViewPort\ViewPortBase.h" />
+    <ClInclude Include="..\Sources\Runtime\Animation\Animation.h" />
+    <ClInclude Include="..\Sources\Runtime\Base\Object.h" />
+    <ClInclude Include="..\Sources\Runtime\Base\Transform.h" />
+    <ClInclude Include="..\Sources\Runtime\Camera\Camera.h" />
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\GlobalPram.h" />
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\SystemContext.h" />
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\SystemTextures.h" />
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\TypeDefine.h" />
+    <ClInclude Include="..\Sources\Runtime\Input\InputBase.h" />
+    <ClInclude Include="..\Sources\Runtime\Input\InputInterface.h" />
+    <ClInclude Include="..\Sources\Runtime\Lights\Light.h" />
+    <ClInclude Include="..\Sources\Runtime\Manager\BufferManager.h" />
+    <ClInclude Include="..\Sources\Runtime\Manager\SceneManager.h" />
+    <ClInclude Include="..\Sources\Runtime\Material\Material.h" />
+    <ClInclude Include="..\Sources\Runtime\Material\MaterialInstance.h" />
+    <ClInclude Include="..\Sources\Runtime\Math\Quaternion.h" />
+    <ClInclude Include="..\Sources\Runtime\Math\Util.h" />
+    <ClInclude Include="..\Sources\Runtime\Model\Model.h" />
+    <ClInclude Include="..\Sources\Runtime\PostProcess\RectBufferObject.h" />
+    <ClInclude Include="..\Sources\Runtime\ReflectionCapture\ReflectionCapture.h" />
+    <ClInclude Include="..\Sources\Runtime\RenderPipeline\DeferRenderPipeline.h" />
+    <ClInclude Include="..\Sources\Runtime\RenderPipeline\RenderPipelineBase.h" />
+    <ClInclude Include="..\Sources\Runtime\SurroundBox\SurroundBox.h" />
+    <ClInclude Include="..\Sources\Runtime\Texture\Texture.h" />
+    <ClInclude Include="..\Sources\Runtime\ViewPort\MainViewPort.h" />
+    <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPort.h" />
+    <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPortBase.h" />
     <ClInclude Include="ConstructScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Sources\Animation\Animation.cpp" />
-    <ClCompile Include="..\Sources\Base\Object.cpp" />
-    <ClCompile Include="..\Sources\Base\Transform.cpp" />
-    <ClCompile Include="..\Sources\Camera\Camera.cpp" />
-    <ClCompile Include="..\Sources\GlobalSystem\glad.c" />
-    <ClCompile Include="..\Sources\GlobalSystem\SystemTextures.cpp" />
-    <ClCompile Include="..\Sources\Input\InputBase.cpp" />
-    <ClCompile Include="..\Sources\Lights\Light.cpp" />
-    <ClCompile Include="..\Sources\Manager\BufferManager.cpp" />
-    <ClCompile Include="..\Sources\Manager\SceneManager.cpp" />
-    <ClCompile Include="..\Sources\Material\Material.cpp" />
-    <ClCompile Include="..\Sources\Material\MaterialInstance.cpp" />
-    <ClCompile Include="..\Sources\Math\Quaternion.cpp" />
-    <ClCompile Include="..\Sources\Model\Model.cpp" />
-    <ClCompile Include="..\Sources\PostProcess\RectBufferObject.cpp" />
-    <ClCompile Include="..\Sources\ReflectionCapture\ReflectionCapture.cpp" />
-    <ClCompile Include="..\Sources\RenderPipeline\DeferRenderPipeline.cpp" />
-    <ClCompile Include="..\Sources\RenderPipeline\RenderPipelineBase.cpp" />
-    <ClCompile Include="..\Sources\SurroundBox\SurroundBox.cpp" />
-    <ClCompile Include="..\Sources\Texture\Texture.cpp" />
-    <ClCompile Include="..\Sources\UI\DarkenApplication.cpp" />
-    <ClCompile Include="..\Sources\UI\DarkenUI.cpp" />
-    <ClCompile Include="..\Sources\UI\OpenGLViewWidget.cpp" />
-    <ClCompile Include="..\Sources\ViewPort\MainViewPort.cpp" />
-    <ClCompile Include="..\Sources\ViewPort\ViewPortBase.cpp" />
+    <ClCompile Include="..\Sources\Editor\MainWindow\Application.cpp" />
+    <ClCompile Include="..\Sources\Editor\MainWindow\MainWindow.cpp" />
+    <ClCompile Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.cpp" />
+    <ClCompile Include="..\Sources\Editor\MainWindow\WorldComponentWidget.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Animation\Animation.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Base\Object.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Base\Transform.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Camera\Camera.cpp" />
+    <ClCompile Include="..\Sources\Runtime\GlobalSystem\glad.c" />
+    <ClCompile Include="..\Sources\Runtime\GlobalSystem\SystemTextures.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Input\InputBase.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Lights\Light.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Manager\BufferManager.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Manager\SceneManager.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Material\Material.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Material\MaterialInstance.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Math\Quaternion.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Model\Model.cpp" />
+    <ClCompile Include="..\Sources\Runtime\PostProcess\RectBufferObject.cpp" />
+    <ClCompile Include="..\Sources\Runtime\ReflectionCapture\ReflectionCapture.cpp" />
+    <ClCompile Include="..\Sources\Runtime\RenderPipeline\DeferRenderPipeline.cpp" />
+    <ClCompile Include="..\Sources\Runtime\RenderPipeline\RenderPipelineBase.cpp" />
+    <ClCompile Include="..\Sources\Runtime\SurroundBox\SurroundBox.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Texture\Texture.cpp" />
+    <ClCompile Include="..\Sources\Runtime\ViewPort\MainViewPort.cpp" />
+    <ClCompile Include="..\Sources\Runtime\ViewPort\ViewPortBase.cpp" />
     <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="..\Sources\UI\DarkenUI.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

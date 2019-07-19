@@ -37,7 +37,7 @@ public:
 	};
 	~DigitalHuman() {};
 
-	Float32 step = 0.005f;
+	float32 step = 0.005f;
 	virtual void Start(){};
 	virtual void Update()
 	{
@@ -281,10 +281,10 @@ public:
 	~LightGroup(){};
 
 private:
-	Float32 GetSourceRadius()
+	float32 GetSourceRadius()
 	{
-		Float32 SampleSquared = (Float32) max(LightSamplesSquared, 1);
-		Float32 Length = min(LightLength, LightWidth);
+		float32 SampleSquared = (float32) max(LightSamplesSquared, 1);
+		float32 Length = min(LightLength, LightWidth);
 		Length /= SampleSquared;
 		if(LightSamplesSquared != 0)
 		{
@@ -294,39 +294,39 @@ private:
 			Length *= 0.0f;
 		}
 		Length /= 2.0f;
-		Float32 SourceRadius1 = Length * SourceRadiusMult;
-		Int32 SampleSquaredInt = Math::Clamp((Int32)LightSamplesSquared, 0, 1);
+		float32 SourceRadius1 = Length * SourceRadiusMult;
+		int32 SampleSquaredInt = Math::Clamp((int32)LightSamplesSquared, 0, 1);
 		SourceRadius1 *= SampleSquaredInt;
 		SampleSquaredInt = 1 - SampleSquaredInt;
-		Float32 SourceRadius2 = min(LightLength, LightWidth) * SourceRadiusMult;
+		float32 SourceRadius2 = min(LightLength, LightWidth) * SourceRadiusMult;
 		SourceRadius2 *= SampleSquaredInt;
-		Float32 SourceRadius = SourceRadius1 + SourceRadius2;
+		float32 SourceRadius = SourceRadius1 + SourceRadius2;
 		return SourceRadius;
 	}
 
-	Float32 GetIntensity()
+	float32 GetIntensity()
 	{
-		Float32 SampleSquared = (Float32)(LightSamplesSquared + 1);
+		float32 SampleSquared = (float32)(LightSamplesSquared + 1);
 		return Intensity / Math::Pow(SampleSquared, 2.0f);
 	}
 
-	Float32 GetSourceLength()
+	float32 GetSourceLength()
 	{
 		return (max(LightLength, LightWidth) / min(LightLength, LightWidth) - 1.0f) * GetSourceRadius() * 2.0f;
 	}
 
-	Float32 Intensity;
+	float32 Intensity;
 	Vector3f Color;
-	Float32 FocalAngleOuter;
-	Float32 FocalAngleInner;
-	Float32 AttenuationDistance;
-	Float32 LightWidth;
-	Float32 LightLength ;
-	Bool CastShadows;
-	Int32 LightSamplesSquared;
-	Float32 SourceRadiusMult;
-	Float32 CenterOfInterestLength;
-	Bool SetEnabled;
-	Float32 SoftRadius;
-	Float32 ShadowBias;
+	float32 FocalAngleOuter;
+	float32 FocalAngleInner;
+	float32 AttenuationDistance;
+	float32 LightWidth;
+	float32 LightLength ;
+	bool CastShadows;
+	int32 LightSamplesSquared;
+	float32 SourceRadiusMult;
+	float32 CenterOfInterestLength;
+	bool SetEnabled;
+	float32 SoftRadius;
+	float32 ShadowBias;
 };

@@ -9,13 +9,12 @@
 #include "BufferManager.h"
 #include "ReflectionCapture.h"
 #include "SystemTextures.h"
-#include "DarkenUI.h"
-#include "DarkenApplication.h"
+#include "Application.h"
 #include <thread>
 #include <conio.h>
 //#include <QtOpenGL/QGLFormat>
 
-void framebuffer_size_callback(GLFWwindow* window, Int32 width, Int32 height);
+void framebuffer_size_callback(GLFWwindow* window, int32 width, int32 height);
 void processInput(GLFWwindow *window);
 
 // settings
@@ -25,10 +24,10 @@ std::string AssetFolderPath = "..\\Assets\\";
 std::shared_ptr<BufferManager> _GPUBuffers;
 std::shared_ptr<SystemTextureFactory> GlobalTextures;
 
-const UInt32 _ScreenWidth = 1200;
-const UInt32 _ScreenHeight = 900;
+const uint32 _ScreenWidth = 1200;
+const uint32 _ScreenHeight = 900;
 
-UInt32 APP_DeltaTime = 0;
+uint32 APP_DeltaTime = 0;
 unsigned long APP_FrameCount = 0;
 
 Bool bPause = false;
@@ -147,7 +146,7 @@ void InitSimpleObjects()
 	std::shared_ptr<Material> SimpleObjectShadowDepthMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string>{ "ShadowDepthVertShader.vsh", "ShadowDepthFragShader.fsh" }));
 	std::shared_ptr<MaterialInstance> SimpleObjectShadowDepthMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectShadowDepthMaterial));
 	
-	Float32 Scale = 1.5f;
+	float32 Scale = 1.5f;
 	{
 		std::shared_ptr<Material> SimpleObjectMaterial00 = std::shared_ptr<Material>(new Material(std::vector<std::string> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst00 = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectMaterial00));
@@ -292,7 +291,7 @@ void InitSimpleObjects()
 void CaptureReflection()
 {
 	std::vector<std::shared_ptr<Object>> AbstractActors = _Scene->GetObjects(ObjectType::AbstractActor);
-	for (Int32 Index = 0; Index < AbstractActors.size(); Index++)
+	for (int32 Index = 0; Index < AbstractActors.size(); Index++)
 	{
 		SphereReflectionCapture * Capture = dynamic_cast<SphereReflectionCapture*>(AbstractActors[Index].get());
 		if (Capture != nullptr)
@@ -314,8 +313,8 @@ void InitView()
 	_Scene = std::shared_ptr<SceneManager>(new SceneManager());
 	_GPUBuffers = std::shared_ptr<BufferManager>(new BufferManager());
 	_Scene->SetCurrentEditMode(ModeState::EditMode::CameraTranslation);
-	std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(Vector3f(0.0, 10.0, 10.0), Vector3f(0.0, 0.0, -90.0), Math::Radians(60.0), (Float32)_ScreenWidth / (Float32)_ScreenHeight, 0.1f, 100.0f, Vector2i(_ScreenWidth, _ScreenHeight)));
-	//std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(Vector3f(0, 0.0, 50.0), Vector3f(0.0, -90.0, 0.0), Math::Radians(60.0), (Float32)_ScreenWidth / (Float32)_ScreenHeight, 0.10f, 100.0f, Vector2i(_ScreenWidth, _ScreenHeight)));
+	std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(Vector3f(0.0, 10.0, 10.0), Vector3f(0.0, 0.0, -90.0), Math::Radians(60.0), (float32)_ScreenWidth / (float32)_ScreenHeight, 0.1f, 100.0f, Vector2i(_ScreenWidth, _ScreenHeight)));
+	//std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(Vector3f(0, 0.0, 50.0), Vector3f(0.0, -90.0, 0.0), Math::Radians(60.0), (float32)_ScreenWidth / (float32)_ScreenHeight, 0.10f, 100.0f, Vector2i(_ScreenWidth, _ScreenHeight)));
 
 	_Scene->AddCamera(CameraIndex::MainCamera, ViewCamera);
 
@@ -329,17 +328,17 @@ void InitView()
 	CaptureReflection();
 	SimpleObjectMaterialInst->SetTextureID("ReflectionTex", ReflectionActor->GetReflectionTextureID());
 	SimpleObjectMaterialInst->SetTextureID("PreIntegratedGF", GlobalTextures->GetPreIntegratedGF_Tex());
-	SimpleObjectMaterialInst->SetUniform<Float32>("AverageBrightness", ReflectionActor->GetAverageBrightness());
-	SimpleObjectMaterialInst->SetUniform<Float32>("Brightness", ReflectionActor->GetBrightness());
+	SimpleObjectMaterialInst->SetUniform<float32>("AverageBrightness", ReflectionActor->GetAverageBrightness());
+	SimpleObjectMaterialInst->SetUniform<float32>("Brightness", ReflectionActor->GetBrightness());
 	SimpleObjectMaterialInst->SetUniform<Vector4f>("CapturePositionAndInfluenceRadius", Vector4f(ReflectionActor->ObjectTransform.GetPosition(), ReflectionActor->GetInfluenceRaidus()));
-	SimpleObjectMaterialInst->SetUniform<Int32>("bReflect", 1);
+	SimpleObjectMaterialInst->SetUniform<int32>("bReflect", 1);
 
 	_Scene->GetCamera(CameraIndex::MainCamera)->ActiveViewPort();
 }
 
 
-Float32 angle = 0.0f;
-Float32 R = 15.0f;
+float32 angle = 0.0f;
+float32 R = 15.0f;
 
 void Render()
 {
@@ -393,15 +392,13 @@ void Render()
 	std::cout << APP_FrameCount++ << std::endl;
 }
 
-Int32 main(int argc, char* argv[])
+int32 main(int argc, char* argv[])
 {
 
 	
 
 		
 	dkApplication a(argc, argv);
-	DarkenUI w;
-	w.show();
 	return a.exec();
 
 	GLFWwindow* Window = InitWindow();
@@ -428,7 +425,7 @@ Int32 main(int argc, char* argv[])
 	 // -------------------------------------------------------------------------------
 		if (bPause)
 		{
-			Int32 a = 0;
+			int32 a = 0;
 		}
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
@@ -534,7 +531,7 @@ void processInput(GLFWwindow *window)
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, Int32 width, Int32 height)
+void framebuffer_size_callback(GLFWwindow* window, int32 width, int32 height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.

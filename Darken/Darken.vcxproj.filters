@@ -13,241 +13,245 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="源文件\Lights">
-      <UniqueIdentifier>{6651a1d0-4a4b-4f0d-81d9-d18bf3122393}</UniqueIdentifier>
+    <Filter Include="源文件\Runtime">
+      <UniqueIdentifier>{bc37e330-8371-4b94-98d9-0733b89bd705}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Math">
-      <UniqueIdentifier>{e1a84bef-1f3b-4abf-8244-5aafe98a51aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Camera">
-      <UniqueIdentifier>{73d45c57-cad3-45b4-9780-317f368a651c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Animation">
-      <UniqueIdentifier>{67a6a92f-3f56-47c1-bfec-68628124b0b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Base">
+    <Filter Include="源文件\Runtime\Base">
       <UniqueIdentifier>{b0e43530-163a-4452-b600-439528a945c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\GlobalSystem">
+    <Filter Include="源文件\Runtime\Camera">
+      <UniqueIdentifier>{73d45c57-cad3-45b4-9780-317f368a651c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Runtime\GlobalSystem">
       <UniqueIdentifier>{a913a74f-a53e-464f-8c08-76df002c6782}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Material">
-      <UniqueIdentifier>{9eab6dac-360a-4cc7-80a2-1abb9165e55b}</UniqueIdentifier>
+    <Filter Include="源文件\Runtime\Input">
+      <UniqueIdentifier>{3f27e042-0fbe-4d8e-a828-bd4d43bd2fb6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Manager">
+    <Filter Include="源文件\Runtime\Lights">
+      <UniqueIdentifier>{6651a1d0-4a4b-4f0d-81d9-d18bf3122393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Runtime\Manager">
       <UniqueIdentifier>{7998a0da-8710-40a7-99d0-71da899ea46c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Model">
+    <Filter Include="源文件\Runtime\Material">
+      <UniqueIdentifier>{9eab6dac-360a-4cc7-80a2-1abb9165e55b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Runtime\Math">
+      <UniqueIdentifier>{e1a84bef-1f3b-4abf-8244-5aafe98a51aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Runtime\Model">
       <UniqueIdentifier>{e3d8a7ff-f82d-4421-8218-89f2792c11b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\ReflectionCapture">
-      <UniqueIdentifier>{5e4c8040-e04d-4523-9e91-8ee6a5c15411}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\PostProcess">
+    <Filter Include="源文件\Runtime\PostProcess">
       <UniqueIdentifier>{b257c81d-ce19-492b-b391-fdf6bfccb4fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\SurroundBox">
-      <UniqueIdentifier>{ef1e3e08-46f5-4988-a9fc-18a302859df8}</UniqueIdentifier>
+    <Filter Include="源文件\Runtime\ReflectionCapture">
+      <UniqueIdentifier>{5e4c8040-e04d-4523-9e91-8ee6a5c15411}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\RenderPipeline">
+    <Filter Include="源文件\Runtime\RenderPipeline">
       <UniqueIdentifier>{9eaaafa5-eaa2-4cb8-9d10-573e4efb4afb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Texture">
+    <Filter Include="源文件\Runtime\SurroundBox">
+      <UniqueIdentifier>{ef1e3e08-46f5-4988-a9fc-18a302859df8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Runtime\Texture">
       <UniqueIdentifier>{6a3fc097-f7a6-43d5-a1d5-e700a5becf49}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\UI">
-      <UniqueIdentifier>{5ac7d730-0839-4d3b-b0d6-b3095c027de2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\ViewPort">
+    <Filter Include="源文件\Runtime\ViewPort">
       <UniqueIdentifier>{a8a5f11b-fa9c-406b-b806-f86f26358e65}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Input">
-      <UniqueIdentifier>{3f27e042-0fbe-4d8e-a828-bd4d43bd2fb6}</UniqueIdentifier>
+    <Filter Include="源文件\Runtime\Animation">
+      <UniqueIdentifier>{67a6a92f-3f56-47c1-bfec-68628124b0b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Editor">
+      <UniqueIdentifier>{9f1cd76f-dce5-40ff-8b15-2b20a7a94d7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Editor\MainWindow">
+      <UniqueIdentifier>{627bc0e4-8e70-474a-a39e-41b24187c31a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConstructScene.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Animation\Animation.h">
-      <Filter>源文件\Animation</Filter>
+    <ClInclude Include="..\Sources\Runtime\Animation\Animation.h">
+      <Filter>源文件\Runtime\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Base\Object.h">
-      <Filter>源文件\Base</Filter>
+    <ClInclude Include="..\Sources\Runtime\Base\Object.h">
+      <Filter>源文件\Runtime\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Base\Transform.h">
-      <Filter>源文件\Base</Filter>
+    <ClInclude Include="..\Sources\Runtime\Base\Transform.h">
+      <Filter>源文件\Runtime\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Camera\Camera.h">
-      <Filter>源文件\Camera</Filter>
+    <ClInclude Include="..\Sources\Runtime\Camera\Camera.h">
+      <Filter>源文件\Runtime\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\GlobalSystem\GlobalPram.h">
-      <Filter>源文件\GlobalSystem</Filter>
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\GlobalPram.h">
+      <Filter>源文件\Runtime\GlobalSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\GlobalSystem\SystemTextures.h">
-      <Filter>源文件\GlobalSystem</Filter>
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\SystemContext.h">
+      <Filter>源文件\Runtime\GlobalSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\GlobalSystem\TypeDefine.h">
-      <Filter>源文件\GlobalSystem</Filter>
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\SystemTextures.h">
+      <Filter>源文件\Runtime\GlobalSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Manager\BufferManager.h">
-      <Filter>源文件\Manager</Filter>
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\TypeDefine.h">
+      <Filter>源文件\Runtime\GlobalSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Manager\SceneManager.h">
-      <Filter>源文件\Manager</Filter>
+    <ClInclude Include="..\Sources\Runtime\Input\InputBase.h">
+      <Filter>源文件\Runtime\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Material\Material.h">
-      <Filter>源文件\Material</Filter>
+    <ClInclude Include="..\Sources\Runtime\Input\InputInterface.h">
+      <Filter>源文件\Runtime\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Material\MaterialInstance.h">
-      <Filter>源文件\Material</Filter>
+    <ClInclude Include="..\Sources\Runtime\Lights\Light.h">
+      <Filter>源文件\Runtime\Lights</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Lights\Light.h">
-      <Filter>源文件\Lights</Filter>
+    <ClInclude Include="..\Sources\Runtime\Manager\BufferManager.h">
+      <Filter>源文件\Runtime\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Math\Quaternion.h">
-      <Filter>源文件\Math</Filter>
+    <ClInclude Include="..\Sources\Runtime\Manager\SceneManager.h">
+      <Filter>源文件\Runtime\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Math\Util.h">
-      <Filter>源文件\Math</Filter>
+    <ClInclude Include="..\Sources\Runtime\Material\Material.h">
+      <Filter>源文件\Runtime\Material</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Model\Model.h">
-      <Filter>源文件\Model</Filter>
+    <ClInclude Include="..\Sources\Runtime\Material\MaterialInstance.h">
+      <Filter>源文件\Runtime\Material</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\PostProcess\RectBufferObject.h">
-      <Filter>源文件\PostProcess</Filter>
+    <ClInclude Include="..\Sources\Runtime\Math\Quaternion.h">
+      <Filter>源文件\Runtime\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\ReflectionCapture\ReflectionCapture.h">
-      <Filter>源文件\ReflectionCapture</Filter>
+    <ClInclude Include="..\Sources\Runtime\Math\Util.h">
+      <Filter>源文件\Runtime\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\RenderPipeline\DeferRenderPipeline.h">
-      <Filter>源文件\RenderPipeline</Filter>
+    <ClInclude Include="..\Sources\Runtime\Model\Model.h">
+      <Filter>源文件\Runtime\Model</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\SurroundBox\SurroundBox.h">
-      <Filter>源文件\SurroundBox</Filter>
+    <ClInclude Include="..\Sources\Runtime\PostProcess\RectBufferObject.h">
+      <Filter>源文件\Runtime\PostProcess</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Texture\Texture.h">
-      <Filter>源文件\Texture</Filter>
+    <ClInclude Include="..\Sources\Runtime\ReflectionCapture\ReflectionCapture.h">
+      <Filter>源文件\Runtime\ReflectionCapture</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\GlobalSystem\SystemContext.h">
-      <Filter>源文件\GlobalSystem</Filter>
+    <ClInclude Include="..\Sources\Runtime\RenderPipeline\DeferRenderPipeline.h">
+      <Filter>源文件\Runtime\RenderPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\ViewPort\MainViewPort.h">
-      <Filter>源文件\ViewPort</Filter>
+    <ClInclude Include="..\Sources\Runtime\RenderPipeline\RenderPipelineBase.h">
+      <Filter>源文件\Runtime\RenderPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\ViewPort\ViewPortBase.h">
-      <Filter>源文件\ViewPort</Filter>
+    <ClInclude Include="..\Sources\Runtime\SurroundBox\SurroundBox.h">
+      <Filter>源文件\Runtime\SurroundBox</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\RenderPipeline\RenderPipelineBase.h">
-      <Filter>源文件\RenderPipeline</Filter>
+    <ClInclude Include="..\Sources\Runtime\Texture\Texture.h">
+      <Filter>源文件\Runtime\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\GlobalSystem\glad.h">
-      <Filter>源文件\GlobalSystem</Filter>
+    <ClInclude Include="..\Sources\Runtime\ViewPort\MainViewPort.h">
+      <Filter>源文件\Runtime\ViewPort</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\GlobalSystem\khrplatform.h">
-      <Filter>源文件\GlobalSystem</Filter>
+    <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPort.h">
+      <Filter>源文件\Runtime\ViewPort</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Input\InputBase.h">
-      <Filter>源文件\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Input\InputInterface.h">
-      <Filter>源文件\Input</Filter>
+    <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPortBase.h">
+      <Filter>源文件\Runtime\ViewPort</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Animation\Animation.cpp">
-      <Filter>源文件\Animation</Filter>
+    <ClCompile Include="..\Sources\Runtime\Animation\Animation.cpp">
+      <Filter>源文件\Runtime\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Base\Object.cpp">
-      <Filter>源文件\Base</Filter>
+    <ClCompile Include="..\Sources\Runtime\Base\Object.cpp">
+      <Filter>源文件\Runtime\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Base\Transform.cpp">
-      <Filter>源文件\Base</Filter>
+    <ClCompile Include="..\Sources\Runtime\Base\Transform.cpp">
+      <Filter>源文件\Runtime\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Camera\Camera.cpp">
-      <Filter>源文件\Camera</Filter>
+    <ClCompile Include="..\Sources\Runtime\Camera\Camera.cpp">
+      <Filter>源文件\Runtime\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\GlobalSystem\SystemTextures.cpp">
-      <Filter>源文件\GlobalSystem</Filter>
+    <ClCompile Include="..\Sources\Runtime\GlobalSystem\SystemTextures.cpp">
+      <Filter>源文件\Runtime\GlobalSystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Manager\BufferManager.cpp">
-      <Filter>源文件\Manager</Filter>
+    <ClCompile Include="..\Sources\Runtime\Input\InputBase.cpp">
+      <Filter>源文件\Runtime\Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Manager\SceneManager.cpp">
-      <Filter>源文件\Manager</Filter>
+    <ClCompile Include="..\Sources\Runtime\Lights\Light.cpp">
+      <Filter>源文件\Runtime\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Material\Material.cpp">
-      <Filter>源文件\Material</Filter>
+    <ClCompile Include="..\Sources\Runtime\Manager\BufferManager.cpp">
+      <Filter>源文件\Runtime\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Material\MaterialInstance.cpp">
-      <Filter>源文件\Material</Filter>
+    <ClCompile Include="..\Sources\Runtime\Manager\SceneManager.cpp">
+      <Filter>源文件\Runtime\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Lights\Light.cpp">
-      <Filter>源文件\Lights</Filter>
+    <ClCompile Include="..\Sources\Runtime\Material\Material.cpp">
+      <Filter>源文件\Runtime\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Math\Quaternion.cpp">
-      <Filter>源文件\Math</Filter>
+    <ClCompile Include="..\Sources\Runtime\Material\MaterialInstance.cpp">
+      <Filter>源文件\Runtime\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Model\Model.cpp">
-      <Filter>源文件\Model</Filter>
+    <ClCompile Include="..\Sources\Runtime\Math\Quaternion.cpp">
+      <Filter>源文件\Runtime\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\PostProcess\RectBufferObject.cpp">
-      <Filter>源文件\PostProcess</Filter>
+    <ClCompile Include="..\Sources\Runtime\Model\Model.cpp">
+      <Filter>源文件\Runtime\Model</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\ReflectionCapture\ReflectionCapture.cpp">
-      <Filter>源文件\ReflectionCapture</Filter>
+    <ClCompile Include="..\Sources\Runtime\PostProcess\RectBufferObject.cpp">
+      <Filter>源文件\Runtime\PostProcess</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\RenderPipeline\DeferRenderPipeline.cpp">
-      <Filter>源文件\RenderPipeline</Filter>
+    <ClCompile Include="..\Sources\Runtime\ReflectionCapture\ReflectionCapture.cpp">
+      <Filter>源文件\Runtime\ReflectionCapture</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\SurroundBox\SurroundBox.cpp">
-      <Filter>源文件\SurroundBox</Filter>
+    <ClCompile Include="..\Sources\Runtime\RenderPipeline\DeferRenderPipeline.cpp">
+      <Filter>源文件\Runtime\RenderPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Texture\Texture.cpp">
-      <Filter>源文件\Texture</Filter>
+    <ClCompile Include="..\Sources\Runtime\RenderPipeline\RenderPipelineBase.cpp">
+      <Filter>源文件\Runtime\RenderPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\DarkenUI.cpp">
-      <Filter>源文件\UI</Filter>
+    <ClCompile Include="..\Sources\Runtime\SurroundBox\SurroundBox.cpp">
+      <Filter>源文件\Runtime\SurroundBox</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\OpenGLViewWidget.cpp">
-      <Filter>源文件\UI</Filter>
+    <ClCompile Include="..\Sources\Runtime\Texture\Texture.cpp">
+      <Filter>源文件\Runtime\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\ViewPort\MainViewPort.cpp">
-      <Filter>源文件\ViewPort</Filter>
+    <ClCompile Include="..\Sources\Runtime\ViewPort\MainViewPort.cpp">
+      <Filter>源文件\Runtime\ViewPort</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\ViewPort\ViewPortBase.cpp">
-      <Filter>源文件\ViewPort</Filter>
+    <ClCompile Include="..\Sources\Runtime\ViewPort\ViewPortBase.cpp">
+      <Filter>源文件\Runtime\ViewPort</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\RenderPipeline\RenderPipelineBase.cpp">
-      <Filter>源文件\RenderPipeline</Filter>
+    <ClCompile Include="..\Sources\Runtime\GlobalSystem\glad.c">
+      <Filter>源文件\Runtime\GlobalSystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\GlobalSystem\glad.c">
-      <Filter>源文件\GlobalSystem</Filter>
+    <ClCompile Include="..\Sources\Editor\MainWindow\Application.cpp">
+      <Filter>源文件\Editor\MainWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\DarkenApplication.cpp">
-      <Filter>源文件\UI</Filter>
+    <ClCompile Include="..\Sources\Editor\MainWindow\MainWindow.cpp">
+      <Filter>源文件\Editor\MainWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Input\InputBase.cpp">
-      <Filter>源文件\Input</Filter>
+    <ClCompile Include="..\Sources\Editor\MainWindow\WorldComponentWidget.cpp">
+      <Filter>源文件\Editor\MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.cpp">
+      <Filter>源文件\Editor\MainWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="..\Sources\UI\DarkenUI.h">
-      <Filter>源文件\UI</Filter>
+    <QtMoc Include="..\Sources\Editor\MainWindow\MainWindow.h">
+      <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
-    <QtMoc Include="..\Sources\UI\OpenGLViewWidget.h">
-      <Filter>源文件\UI</Filter>
+    <QtMoc Include="..\Sources\Editor\MainWindow\Application.h">
+      <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
-    <QtMoc Include="..\Sources\UI\DarkenApplication.h">
-      <Filter>源文件\UI</Filter>
+    <QtMoc Include="..\Sources\Editor\MainWindow\WorldComponentWidget.h">
+      <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="..\Sources\UI\DarkenUI.ui">
-      <Filter>源文件\UI</Filter>
-    </QtUic>
+    <QtMoc Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.h">
+      <Filter>源文件\Editor\MainWindow</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>
