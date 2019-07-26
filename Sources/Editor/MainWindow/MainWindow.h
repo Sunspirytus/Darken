@@ -15,7 +15,7 @@ public:
 	
 private:
 
-	WOpenGLWindow*			Widget_OpenGLWindow;
+	WOpenGLWindowCore*			Widget_OpenGLWindow;
 	QHBoxLayout*			Layout_MainWindow;
 	//QSplitter*				Widget_MainWindow;
 

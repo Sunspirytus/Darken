@@ -20,25 +20,25 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_WOpenGLWindow_t {
+struct qt_meta_stringdata_WOpenGLWindowCore_t {
     QByteArrayData data[1];
-    char stringdata0[14];
+    char stringdata0[18];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_WOpenGLWindow_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_WOpenGLWindowCore_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_WOpenGLWindow_t qt_meta_stringdata_WOpenGLWindow = {
+static const qt_meta_stringdata_WOpenGLWindowCore_t qt_meta_stringdata_WOpenGLWindowCore = {
     {
-QT_MOC_LITERAL(0, 0, 13) // "WOpenGLWindow"
+QT_MOC_LITERAL(0, 0, 17) // "WOpenGLWindowCore"
 
     },
-    "WOpenGLWindow"
+    "WOpenGLWindowCore"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_WOpenGLWindow[] = {
+static const uint qt_meta_data_WOpenGLWindowCore[] = {
 
  // content:
        8,       // revision
@@ -54,7 +54,7 @@ static const uint qt_meta_data_WOpenGLWindow[] = {
        0        // eod
 };
 
-void WOpenGLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void WOpenGLWindowCore::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     Q_UNUSED(_o);
     Q_UNUSED(_id);
@@ -62,30 +62,30 @@ void WOpenGLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
     Q_UNUSED(_a);
 }
 
-QT_INIT_METAOBJECT const QMetaObject WOpenGLWindow::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject WOpenGLWindowCore::staticMetaObject = { {
     &QOpenGLWidget::staticMetaObject,
-    qt_meta_stringdata_WOpenGLWindow.data,
-    qt_meta_data_WOpenGLWindow,
+    qt_meta_stringdata_WOpenGLWindowCore.data,
+    qt_meta_data_WOpenGLWindowCore,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *WOpenGLWindow::metaObject() const
+const QMetaObject *WOpenGLWindowCore::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *WOpenGLWindow::qt_metacast(const char *_clname)
+void *WOpenGLWindowCore::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_WOpenGLWindow.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_WOpenGLWindowCore.stringdata0))
         return static_cast<void*>(this);
     return QOpenGLWidget::qt_metacast(_clname);
 }
 
-int WOpenGLWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int WOpenGLWindowCore::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QOpenGLWidget::qt_metacall(_c, _id, _a);
     return _id;

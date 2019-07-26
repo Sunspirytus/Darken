@@ -69,18 +69,18 @@ void CameraTranslateForwardMinus(std::shared_ptr<SceneManager> _Scene)
 
 }
 
-WOpenGLWindow::WOpenGLWindow(QWidget * parent, Qt::WindowFlags f) : QOpenGLWidget(parent, f)
+WOpenGLWindowCore::WOpenGLWindowCore(QWidget * parent, Qt::WindowFlags f) : QOpenGLWidget(parent, f)
 {
 	this->SetOpenGLContext();
 	this->grabKeyboard();
 	View = std::shared_ptr<MainViewPort>(new MainViewPort());
 }
 
-WOpenGLWindow::~WOpenGLWindow()
+WOpenGLWindowCore::~WOpenGLWindowCore()
 {
 }
 
-void WOpenGLWindow::SetOpenGLContext()
+void WOpenGLWindowCore::SetOpenGLContext()
 {
 	QSurfaceFormat format;
 	format.setSwapInterval(0);
@@ -91,7 +91,7 @@ void WOpenGLWindow::SetOpenGLContext()
 	this->setFormat(format);
 }
 
-void WOpenGLWindow::initializeGL()
+void WOpenGLWindowCore::initializeGL()
 {
 	OpenGLContext::Init();
 	View->InitScene();
@@ -99,7 +99,7 @@ void WOpenGLWindow::initializeGL()
 
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0) 
 
-void WOpenGLWindow::paintGL()
+void WOpenGLWindowCore::paintGL()
 { 
 	if (KEY_DOWN(0x01))
 	{
@@ -111,12 +111,12 @@ void WOpenGLWindow::paintGL()
 	QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
 }
 
-void WOpenGLWindow::resizeGL(int w, int h)
+void WOpenGLWindowCore::resizeGL(int w, int h)
 {
 
 }
 
-void WOpenGLWindow::keyPressEvent(QKeyEvent* ev)
+void WOpenGLWindowCore::keyPressEvent(QKeyEvent* ev)
 {
 	//if (ev->key() == Qt::Key_W)
 	//{
@@ -139,7 +139,7 @@ void WOpenGLWindow::keyPressEvent(QKeyEvent* ev)
 		CameraRotateUpMinus(View->Scene);*/
 	update();
 }
-void WOpenGLWindow::keyReleaseEvent(QKeyEvent* ev)
+void WOpenGLWindowCore::keyReleaseEvent(QKeyEvent* ev)
 {
 	
 }

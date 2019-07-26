@@ -6,12 +6,12 @@
 #include <qopenglcontext.h>
 #include <qevent.h>
 
-class WOpenGLWindow : public QOpenGLWidget
+class WOpenGLWindowCore : public QOpenGLWidget
 {
 	Q_OBJECT
 public:
-	WOpenGLWindow(QWidget* parent, Qt::WindowFlags f = Qt::WindowFlags());
-	~WOpenGLWindow();
+	WOpenGLWindowCore(QWidget* parent, Qt::WindowFlags f = Qt::WindowFlags());
+	~WOpenGLWindowCore();
 
 	virtual void initializeGL() final;
 	virtual void resizeGL(int w, int h) final;
@@ -27,20 +27,20 @@ protected:
 	
 };
 
-class WOpenGLWindow : public QSplitter
-{
-public:
-	WOpenGLWindowSplitter();
-	~WOpenGLWindowSplitter();
-
-private:
-
-};
-
-WOpenGLWindowSplitter::WOpenGLWindowSplitter()
-{
-}
-
-WOpenGLWindowSplitter::~WOpenGLWindowSplitter()
-{
-}
+//class WOpenGLWindowSplitter : public QSplitter
+//{
+//public:
+//	WOpenGLWindowSplitter();
+//	~WOpenGLWindowSplitter();
+//
+//private:
+//
+//};
+//
+//WOpenGLWindowSplitter::WOpenGLWindowSplitter()
+//{
+//}
+//
+//WOpenGLWindowSplitter::~WOpenGLWindowSplitter()
+//{
+//}

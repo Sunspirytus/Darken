@@ -21,7 +21,7 @@ WMainWindow::WMainWindow(QWidget *parent)
 	}
 
 	{
-		Widget_OpenGLWindow = new WOpenGLWindow(this); 
+		Widget_OpenGLWindow = new WOpenGLWindowCore(this); 
 	}
 
 	this->setLayout(Layout_MainWindow);
