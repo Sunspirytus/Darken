@@ -2,6 +2,7 @@
 #include "MainViewPort.h"
 #include "TypeDefine.h"
 #include <QtWidgets/QOpenGLWidget>
+#include <QSplitter>
 #include <qopenglcontext.h>
 #include <qevent.h>
 
@@ -25,3 +26,21 @@ protected:
 	virtual void keyReleaseEvent(QKeyEvent* ev);
 	
 };
+
+class WOpenGLWindow : public QSplitter
+{
+public:
+	WOpenGLWindowSplitter();
+	~WOpenGLWindowSplitter();
+
+private:
+
+};
+
+WOpenGLWindowSplitter::WOpenGLWindowSplitter()
+{
+}
+
+WOpenGLWindowSplitter::~WOpenGLWindowSplitter()
+{
+}

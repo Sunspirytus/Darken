@@ -1,10 +1,12 @@
 #pragma once
 #include <QWidget>
 #include <QLayout>
+#include <QSplitter>
+#include <QTextEdit>
 #include "TypeDefine.h"
 
 
-class WWorldComponentWindow : public QWidget
+class WWorldComponentWindow : public QSplitter
 {
 	Q_OBJECT
 public:
@@ -12,7 +14,8 @@ public:
 	~WWorldComponentWindow();
 
 private:
-	QVBoxLayout*		Layout_WorldComponent;
+	QVBoxLayout* Layout_WorldComponent;
+	QTextEdit* TextEdit_Test;
 	int32				MinWidth;
 	int32				MinHeight;
 };

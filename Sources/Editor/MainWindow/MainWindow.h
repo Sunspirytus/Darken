@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QBoxLayout>
+#include <QSplitter>
 #include "OpenGLWindowWidget.h"
 #include "WorldComponentWidget.h"
 
@@ -16,6 +17,7 @@ private:
 
 	WOpenGLWindow*			Widget_OpenGLWindow;
 	QHBoxLayout*			Layout_MainWindow;
+	//QSplitter*				Widget_MainWindow;
 
 	WWorldComponentWindow*	Widget_WorldComponent;
 	
