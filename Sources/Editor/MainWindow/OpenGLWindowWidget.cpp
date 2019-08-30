@@ -143,3 +143,24 @@ void WOpenGLWindowCore::keyReleaseEvent(QKeyEvent* ev)
 {
 	
 }
+
+WOpenGLWindowSplitter::WOpenGLWindowSplitter(QWidget* parent, Qt::WindowFlags f)
+{
+	{
+		this->setObjectName("Widget_OpenGLWindow");
+
+		Layout_OpenGLWindow = new QHBoxLayout(nullptr);
+		Layout_OpenGLWindow->setObjectName("Layout_OpenGLWindow");
+	}
+
+	{
+		Widget_OpenGLWindow = new WOpenGLWindowCore(this);
+	}
+	this->addWidget(Widget_OpenGLWindow);
+	//this->setLayout(Layout_OpenGLWindow);
+	//Layout_OpenGLWindow->addWidget(Widget_OpenGLWindow);
+}
+
+WOpenGLWindowSplitter::~WOpenGLWindowSplitter()
+{
+}

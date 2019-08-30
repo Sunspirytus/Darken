@@ -21,11 +21,12 @@ WMainWindow::WMainWindow(QWidget *parent)
 	}
 
 	{
-		Widget_OpenGLWindow = new WOpenGLWindowCore(this); 
+		//Widget_OpenGLWindow = new WOpenGLWindowCore(this); 
+		Widget_OpenGLWindow2 = new WOpenGLWindowSplitter(this);
 	}
 
 	this->setLayout(Layout_MainWindow);
-	Layout_MainWindow->addWidget(Widget_OpenGLWindow);
+	Layout_MainWindow->addWidget(Widget_OpenGLWindow2);
 	Layout_MainWindow->addWidget(Widget_WorldComponent);
 }
 

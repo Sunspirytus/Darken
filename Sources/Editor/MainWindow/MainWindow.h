@@ -14,7 +14,7 @@ public:
 	WMainWindow(QWidget *parent = Q_NULLPTR);
 	
 private:
-
+	WOpenGLWindowSplitter* Widget_OpenGLWindow2;
 	WOpenGLWindowCore*			Widget_OpenGLWindow;
 	QHBoxLayout*			Layout_MainWindow;
 	//QSplitter*				Widget_MainWindow;

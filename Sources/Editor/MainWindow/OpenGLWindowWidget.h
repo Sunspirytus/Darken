@@ -3,6 +3,7 @@
 #include "TypeDefine.h"
 #include <QtWidgets/QOpenGLWidget>
 #include <QSplitter>
+#include <QBoxLayout>
 #include <qopenglcontext.h>
 #include <qevent.h>
 
@@ -27,20 +28,16 @@ protected:
 	
 };
 
-//class WOpenGLWindowSplitter : public QSplitter
-//{
-//public:
-//	WOpenGLWindowSplitter();
-//	~WOpenGLWindowSplitter();
-//
-//private:
-//
-//};
-//
-//WOpenGLWindowSplitter::WOpenGLWindowSplitter()
-//{
-//}
-//
-//WOpenGLWindowSplitter::~WOpenGLWindowSplitter()
-//{
-//}
+class WOpenGLWindowSplitter : public QSplitter
+{
+	Q_OBJECT
+public:
+	WOpenGLWindowSplitter(QWidget* parent, Qt::WindowFlags f = Qt::WindowFlags());
+	~WOpenGLWindowSplitter();
+
+private:
+	WOpenGLWindowCore* Widget_OpenGLWindow;
+	QHBoxLayout*		Layout_OpenGLWindow;
+};
+
+
