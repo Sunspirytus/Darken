@@ -144,23 +144,23 @@ void WOpenGLWindowCore::keyReleaseEvent(QKeyEvent* ev)
 	
 }
 
-WOpenGLWindowSplitter::WOpenGLWindowSplitter(QWidget* parent, Qt::WindowFlags f)
+DOCK_OpenGLWindow::DOCK_OpenGLWindow(QWidget* parent)
+	: QDockWidget(parent)
+	, Widget_OpenGLWindow(nullptr)
 {
 	{
-		this->setObjectName("Widget_OpenGLWindow");
-
-		Layout_OpenGLWindow = new QHBoxLayout(nullptr);
-		Layout_OpenGLWindow->setObjectName("Layout_OpenGLWindow");
+		this->setObjectName("DOCK_OpenGLWindow");
+		this->setAllowedAreas(Qt::DockWidgetArea::AllDockWidgetAreas);
+		this->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::AllDockWidgetFeatures);
+		this->setWindowTitle("View");
 	}
-
+	
 	{
 		Widget_OpenGLWindow = new WOpenGLWindowCore(this);
 	}
-	this->addWidget(Widget_OpenGLWindow);
-	//this->setLayout(Layout_OpenGLWindow);
-	//Layout_OpenGLWindow->addWidget(Widget_OpenGLWindow);
+	this->setWidget(Widget_OpenGLWindow);
 }
 
-WOpenGLWindowSplitter::~WOpenGLWindowSplitter()
+DOCK_OpenGLWindow::~DOCK_OpenGLWindow()
 {
 }

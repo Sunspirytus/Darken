@@ -2,32 +2,33 @@
 #include "SystemContext.h"
 
 
-WMainWindow::WMainWindow(QWidget *parent)
-	: QWidget(parent)
-	, Widget_OpenGLWindow(nullptr)
+MW_MainWindow::MW_MainWindow(QWidget *parent)
+	: QMainWindow(parent)
+	, DOCK_OpenGLView(nullptr)
+	, DOCK_WorldComponent(nullptr)
 	, Layout_MainWindow(nullptr)
-	, MinWidth(512)
-	, MinHeight(512)
+	, MinWidth(100)
+	, MinHeight(100)
 {
 	{
-		this->setObjectName("Widget_MainWindow");
+		this->setObjectName("MainWindow_MainWindow");
 		this->setMinimumSize(QSize(MinWidth, MinHeight)); 
 
-		Layout_MainWindow = new QHBoxLayout(nullptr);
-		Layout_MainWindow->setObjectName("Layout_MainWindow");
+		//Layout_MainWindow = new QHBoxLayout(nullptr);
+		//Layout_MainWindow->setObjectName("Layout_MainWindow");
 	}
 	{
-		Widget_WorldComponent = new WWorldComponentWindow(this);
+		DOCK_WorldComponent = new DOCK_WorldComponentWindow(nullptr);
 	}
 
 	{
-		//Widget_OpenGLWindow = new WOpenGLWindowCore(this); 
-		Widget_OpenGLWindow2 = new WOpenGLWindowSplitter(this);
+		//DOCK_OpenGLView = new DOCK_OpenGLWindow(this);
 	}
-
-	this->setLayout(Layout_MainWindow);
-	Layout_MainWindow->addWidget(Widget_OpenGLWindow2);
-	Layout_MainWindow->addWidget(Widget_WorldComponent);
+	this->addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, DOCK_WorldComponent);
+	
+	//this->setLayout(Layout_MainWindow);
+	//Layout_MainWindow->addWidget(Widget_OpenGLWindow);
+	//Layout_MainWindow->addWidget(Widget_WorldComponent);
 }
 
 

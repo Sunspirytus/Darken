@@ -90,25 +90,25 @@ int WOpenGLWindowCore::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     _id = QOpenGLWidget::qt_metacall(_c, _id, _a);
     return _id;
 }
-struct qt_meta_stringdata_WOpenGLWindowSplitter_t {
+struct qt_meta_stringdata_DOCK_OpenGLWindow_t {
     QByteArrayData data[1];
-    char stringdata0[22];
+    char stringdata0[18];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_WOpenGLWindowSplitter_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_DOCK_OpenGLWindow_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_WOpenGLWindowSplitter_t qt_meta_stringdata_WOpenGLWindowSplitter = {
+static const qt_meta_stringdata_DOCK_OpenGLWindow_t qt_meta_stringdata_DOCK_OpenGLWindow = {
     {
-QT_MOC_LITERAL(0, 0, 21) // "WOpenGLWindowSplitter"
+QT_MOC_LITERAL(0, 0, 17) // "DOCK_OpenGLWindow"
 
     },
-    "WOpenGLWindowSplitter"
+    "DOCK_OpenGLWindow"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_WOpenGLWindowSplitter[] = {
+static const uint qt_meta_data_DOCK_OpenGLWindow[] = {
 
  // content:
        8,       // revision
@@ -124,7 +124,7 @@ static const uint qt_meta_data_WOpenGLWindowSplitter[] = {
        0        // eod
 };
 
-void WOpenGLWindowSplitter::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void DOCK_OpenGLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     Q_UNUSED(_o);
     Q_UNUSED(_id);
@@ -132,32 +132,32 @@ void WOpenGLWindowSplitter::qt_static_metacall(QObject *_o, QMetaObject::Call _c
     Q_UNUSED(_a);
 }
 
-QT_INIT_METAOBJECT const QMetaObject WOpenGLWindowSplitter::staticMetaObject = { {
-    &QSplitter::staticMetaObject,
-    qt_meta_stringdata_WOpenGLWindowSplitter.data,
-    qt_meta_data_WOpenGLWindowSplitter,
+QT_INIT_METAOBJECT const QMetaObject DOCK_OpenGLWindow::staticMetaObject = { {
+    &QDockWidget::staticMetaObject,
+    qt_meta_stringdata_DOCK_OpenGLWindow.data,
+    qt_meta_data_DOCK_OpenGLWindow,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *WOpenGLWindowSplitter::metaObject() const
+const QMetaObject *DOCK_OpenGLWindow::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *WOpenGLWindowSplitter::qt_metacast(const char *_clname)
+void *DOCK_OpenGLWindow::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_WOpenGLWindowSplitter.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_DOCK_OpenGLWindow.stringdata0))
         return static_cast<void*>(this);
-    return QSplitter::qt_metacast(_clname);
+    return QDockWidget::qt_metacast(_clname);
 }
 
-int WOpenGLWindowSplitter::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int DOCK_OpenGLWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QSplitter::qt_metacall(_c, _id, _a);
+    _id = QDockWidget::qt_metacall(_c, _id, _a);
     return _id;
 }
 QT_WARNING_POP

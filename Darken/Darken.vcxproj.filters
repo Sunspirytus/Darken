@@ -233,10 +233,10 @@
     <ClCompile Include="..\Sources\Editor\MainWindow\MainWindow.cpp">
       <Filter>源文件\Editor\MainWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Editor\MainWindow\WorldComponentWidget.cpp">
+    <ClCompile Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.cpp">
       <Filter>源文件\Editor\MainWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.cpp">
+    <ClCompile Include="..\Sources\Editor\MainWindow\WorldComponentWindow.cpp">
       <Filter>源文件\Editor\MainWindow</Filter>
     </ClCompile>
   </ItemGroup>
@@ -247,10 +247,10 @@
     <QtMoc Include="..\Sources\Editor\MainWindow\Application.h">
       <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
-    <QtMoc Include="..\Sources\Editor\MainWindow\WorldComponentWidget.h">
+    <QtMoc Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.h">
       <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
-    <QtMoc Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.h">
+    <QtMoc Include="..\Sources\Editor\MainWindow\WorldComponentWindow.h">
       <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
   </ItemGroup>

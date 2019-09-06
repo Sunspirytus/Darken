@@ -20,25 +20,25 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_WWorldComponentWindow_t {
+struct qt_meta_stringdata_DOCK_WorldComponentWindow_t {
     QByteArrayData data[1];
-    char stringdata0[22];
+    char stringdata0[26];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_WWorldComponentWindow_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_DOCK_WorldComponentWindow_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_WWorldComponentWindow_t qt_meta_stringdata_WWorldComponentWindow = {
+static const qt_meta_stringdata_DOCK_WorldComponentWindow_t qt_meta_stringdata_DOCK_WorldComponentWindow = {
     {
-QT_MOC_LITERAL(0, 0, 21) // "WWorldComponentWindow"
+QT_MOC_LITERAL(0, 0, 25) // "DOCK_WorldComponentWindow"
 
     },
-    "WWorldComponentWindow"
+    "DOCK_WorldComponentWindow"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_WWorldComponentWindow[] = {
+static const uint qt_meta_data_DOCK_WorldComponentWindow[] = {
 
  // content:
        8,       // revision
@@ -54,7 +54,7 @@ static const uint qt_meta_data_WWorldComponentWindow[] = {
        0        // eod
 };
 
-void WWorldComponentWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void DOCK_WorldComponentWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     Q_UNUSED(_o);
     Q_UNUSED(_id);
@@ -62,32 +62,32 @@ void WWorldComponentWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c
     Q_UNUSED(_a);
 }
 
-QT_INIT_METAOBJECT const QMetaObject WWorldComponentWindow::staticMetaObject = { {
-    &QSplitter::staticMetaObject,
-    qt_meta_stringdata_WWorldComponentWindow.data,
-    qt_meta_data_WWorldComponentWindow,
+QT_INIT_METAOBJECT const QMetaObject DOCK_WorldComponentWindow::staticMetaObject = { {
+    &QDockWidget::staticMetaObject,
+    qt_meta_stringdata_DOCK_WorldComponentWindow.data,
+    qt_meta_data_DOCK_WorldComponentWindow,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *WWorldComponentWindow::metaObject() const
+const QMetaObject *DOCK_WorldComponentWindow::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *WWorldComponentWindow::qt_metacast(const char *_clname)
+void *DOCK_WorldComponentWindow::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_WWorldComponentWindow.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_DOCK_WorldComponentWindow.stringdata0))
         return static_cast<void*>(this);
-    return QSplitter::qt_metacast(_clname);
+    return QDockWidget::qt_metacast(_clname);
 }
 
-int WWorldComponentWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int DOCK_WorldComponentWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QSplitter::qt_metacall(_c, _id, _a);
+    _id = QDockWidget::qt_metacall(_c, _id, _a);
     return _id;
 }
 QT_WARNING_POP

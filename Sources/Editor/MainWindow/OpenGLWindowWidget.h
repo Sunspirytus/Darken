@@ -4,8 +4,9 @@
 #include <QtWidgets/QOpenGLWidget>
 #include <QSplitter>
 #include <QBoxLayout>
-#include <qopenglcontext.h>
-#include <qevent.h>
+#include <QDockWidget>
+#include <QOpenGLContext>
+#include <QEvent>
 
 class WOpenGLWindowCore : public QOpenGLWidget
 {
@@ -28,16 +29,15 @@ protected:
 	
 };
 
-class WOpenGLWindowSplitter : public QSplitter
+class DOCK_OpenGLWindow : public QDockWidget
 {
 	Q_OBJECT
 public:
-	WOpenGLWindowSplitter(QWidget* parent, Qt::WindowFlags f = Qt::WindowFlags());
-	~WOpenGLWindowSplitter();
+	DOCK_OpenGLWindow(QWidget* parent);
+	~DOCK_OpenGLWindow();
 
 private:
 	WOpenGLWindowCore* Widget_OpenGLWindow;
-	QHBoxLayout*		Layout_OpenGLWindow;
 };
 
 

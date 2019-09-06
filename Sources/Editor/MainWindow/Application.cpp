@@ -8,7 +8,7 @@ dkApplication::dkApplication(int& argc, char** argv)
 	: QApplication(argc, argv)
 	, MainWindow(nullptr)
 {
-	MainWindow = new WMainWindow(nullptr);
+	MainWindow = new MW_MainWindow(nullptr);
 	MainWindow->show();
 }
 

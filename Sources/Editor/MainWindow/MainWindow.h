@@ -3,23 +3,23 @@
 #include <QWidget>
 #include <QBoxLayout>
 #include <QSplitter>
+#include <QMainWindow>
 #include "OpenGLWindowWidget.h"
-#include "WorldComponentWidget.h"
+#include "WorldComponentWindow.h"
 
-class WMainWindow : public QWidget
+class MW_MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	WMainWindow(QWidget *parent = Q_NULLPTR);
+	MW_MainWindow(QWidget *parent = Q_NULLPTR);
 	
 private:
-	WOpenGLWindowSplitter* Widget_OpenGLWindow2;
-	WOpenGLWindowCore*			Widget_OpenGLWindow;
+	DOCK_OpenGLWindow*	DOCK_OpenGLView;
 	QHBoxLayout*			Layout_MainWindow;
 	//QSplitter*				Widget_MainWindow;
 
-	WWorldComponentWindow*	Widget_WorldComponent;
+	DOCK_WorldComponentWindow* DOCK_WorldComponent;
 	
 
 	int32					MinWidth;

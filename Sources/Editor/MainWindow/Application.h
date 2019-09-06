@@ -10,7 +10,7 @@ public:
 	~dkApplication();
 	
 private:
-	WMainWindow* MainWindow;
+	MW_MainWindow* MainWindow;
 
 };
 
