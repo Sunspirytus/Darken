@@ -11,6 +11,7 @@ public:
 	virtual void InitScene() final;
 	virtual void TickScene() final;
 	virtual void RenderScene() final;
-
+protected:
+	virtual void OnSizeChange() final;
 private:
 };

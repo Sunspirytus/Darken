@@ -22,10 +22,10 @@ MW_MainWindow::MW_MainWindow(QWidget *parent)
 	}
 
 	{
-		//DOCK_OpenGLView = new DOCK_OpenGLWindow(this);
+		DOCK_OpenGLView = new DOCK_OpenGLWindow(this);
 	}
-	this->addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, DOCK_WorldComponent);
-	
+	this->addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, DOCK_WorldComponent);
+	this->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, DOCK_OpenGLView);
 	//this->setLayout(Layout_MainWindow);
 	//Layout_MainWindow->addWidget(Widget_OpenGLWindow);
 	//Layout_MainWindow->addWidget(Widget_WorldComponent);

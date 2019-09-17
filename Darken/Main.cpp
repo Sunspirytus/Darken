@@ -24,8 +24,8 @@ std::string AssetFolderPath = "..\\Assets\\";
 std::shared_ptr<BufferManager> _GPUBuffers;
 std::shared_ptr<SystemTextureFactory> GlobalTextures;
 
-const uint32 _ScreenWidth = 1200;
-const uint32 _ScreenHeight = 900;
+//const uint32 _ScreenWidth = 1200;
+//const uint32 _ScreenHeight = 900;
 
 uint32 APP_DeltaTime = 0;
 unsigned long APP_FrameCount = 0;
@@ -106,7 +106,8 @@ GLFWwindow* InitWindow()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint( GLFW_DOUBLEBUFFER, GL_FALSE );
 	//glfwWindowHint(GLFW_SAMPLES, 4);
-	
+	const uint32 _ScreenWidth = 1200;
+	const uint32 _ScreenHeight = 900;
 
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
@@ -313,6 +314,8 @@ void InitView()
 	_Scene = std::shared_ptr<SceneManager>(new SceneManager());
 	_GPUBuffers = std::shared_ptr<BufferManager>(new BufferManager());
 	_Scene->SetCurrentEditMode(ModeState::EditMode::CameraTranslation);
+	const uint32 _ScreenWidth = 1200;
+	const uint32 _ScreenHeight = 900;
 	std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(Vector3f(0.0, 10.0, 10.0), Vector3f(0.0, 0.0, -90.0), Math::Radians(60.0), (float32)_ScreenWidth / (float32)_ScreenHeight, 0.1f, 100.0f, Vector2i(_ScreenWidth, _ScreenHeight)));
 	//std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(Vector3f(0, 0.0, 50.0), Vector3f(0.0, -90.0, 0.0), Math::Radians(60.0), (float32)_ScreenWidth / (float32)_ScreenHeight, 0.10f, 100.0f, Vector2i(_ScreenWidth, _ScreenHeight)));
 

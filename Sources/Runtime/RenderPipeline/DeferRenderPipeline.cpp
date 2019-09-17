@@ -50,9 +50,9 @@ void DeferRenderPipeline::Init(std::shared_ptr<SceneManager> scene)
 	//ToneMappingPass
 	ToneMappingPass = std::shared_ptr<ToneMapping>(new ToneMapping());
 	ToneMappingPass->GenerateLUTTexture(PPObj);
-	ToneMappingPass->ToneMappingMaterialInst->SetUniform<Vector2f>("ScreenSize", Vector2f(_ScreenWidth, _ScreenHeight));
-	ToneMappingPass->ToneMappingMaterialInst->SetTextureID("LUTTexture", ToneMappingPass->LUT_TEX);
 	ToneMappingPass->ToneMappingMaterialInst->SetTextureID("TextureBefore", TAAPass->TAAToScreenFrame_Tex);
+	ToneMappingPass->ToneMappingMaterialInst->SetTextureID("LUTTexture", ToneMappingPass->LUT_TEX);
+	//ToneMappingPass->ToneMappingMaterialInst->SetTextureID("TextureBefore", SSSPass->SSSRecombine_TexOut);
 }
 
 void DeferRenderPipeline::SortSceneLights()
@@ -111,6 +111,15 @@ void DeferRenderPipeline::ExecuteTemporalAA()
 void DeferRenderPipeline::ExecuteToneMapping()
 {
 	ToneMappingPass->Execute(PPObj->VAO, PPObj->NumFaces, PPObj->IndexType);
+}
+
+void DeferRenderPipeline::RenderTextureSizeChange(Vector2i newSize)
+{
+	ShadowMappingPass->RenderTextureSizeChange(newSize);
+	LightingPass->RenderTextureSizeChange(newSize);
+	SSSPass->RenderTextureSizeChange(newSize);
+	TAAPass->RenderTextureSizeChange(newSize);
+	ToneMappingPass->RenderTextureSizeChange(newSize);
 }
 
 ShadowDepth::ShadowDepth(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights) :
@@ -355,7 +364,7 @@ void Lighting::CreateLightingPassResources()
 {
 	glGenTextures(1, &Lighting_Tex);
 	glBindTexture(GL_TEXTURE_2D, Lighting_Tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -364,7 +373,7 @@ void Lighting::CreateLightingPassResources()
 
 	glGenTextures(1, &ScreenDepthZ_Tex);
 	glBindTexture(GL_TEXTURE_2D, ScreenDepthZ_Tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, _ScreenWidth, _ScreenHeight, 0, GL_RED, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RED, GL_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -373,7 +382,7 @@ void Lighting::CreateLightingPassResources()
 
 	glGenTextures(1, &Velocity_Tex);
 	glBindTexture(GL_TEXTURE_2D, Velocity_Tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, _ScreenWidth, _ScreenHeight, 0, GL_RG, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RG, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -382,7 +391,7 @@ void Lighting::CreateLightingPassResources()
 
 	glGenTextures(1, &BaseColor_Tex);
 	glBindTexture(GL_TEXTURE_2D, BaseColor_Tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -391,7 +400,7 @@ void Lighting::CreateLightingPassResources()
 
 	glGenTextures(1, &CustomData_Tex);
 	glBindTexture(GL_TEXTURE_2D, CustomData_Tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -413,7 +422,7 @@ void Lighting::CreateLightingPassResources()
 
 	glGenRenderbuffers(1, &LightingPass_RBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, LightingPass_RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, _ScreenWidth, _ScreenHeight);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, RenderTextureSize.x, RenderTextureSize.y);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, LightingPass_RBO);
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -421,6 +430,34 @@ void Lighting::CreateLightingPassResources()
 	}
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Lighting::RenderTextureSizeChange(Vector2i newSize)
+{
+	RenderTextureSize = newSize;
+	glBindTexture(GL_TEXTURE_2D, Lighting_Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, ScreenDepthZ_Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RED, GL_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, Velocity_Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RG, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, BaseColor_Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, CustomData_Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, LightingPass_RBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, RenderTextureSize.x, RenderTextureSize.y);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 //void Lighting::CreateLightingPassMaterial()
@@ -558,7 +595,7 @@ SubSurfaceShading::SubSurfaceShading(std::shared_ptr<Camera> camera)
 	// * 0.5f: hacked in 0.5 - -1..1 to 0..1 but why this isn't in demo code?
 	float32 SSSScaleX = SSSScaleZ / (float32)(SUBSURFACE_KERNEL_SIZE) * 0.5f;
 	Vector2f SSSParams = Vector2f(SSSScaleX, SSSScaleZ);
-	Vector4f ViewSizeAndInvSize = Vector4f(_ScreenWidth, _ScreenHeight, 1.0 / _ScreenWidth, 1.0 / _ScreenHeight);
+	Vector4f ViewSizeAndInvSize = Vector4f(RenderTextureSize.x, RenderTextureSize.y, 1.0 / RenderTextureSize.x, 1.0 / RenderTextureSize.y);
 	//FSubsurfaceProfileStruct Data = SubsurfaceProfileEntries[QualityIndex];
 	//InitSSSSProfilekernel(QualityIndex);
 
@@ -587,7 +624,7 @@ void SubSurfaceShading::CreateResources()
 {
 	glGenTextures(1, &SSSRender_Tex);
 	glBindTexture(GL_TEXTURE_2D, SSSRender_Tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -596,7 +633,7 @@ void SubSurfaceShading::CreateResources()
 
 	glGenTextures(1, &SSSSetup_TexOut);
 	glBindTexture(GL_TEXTURE_2D, SSSSetup_TexOut);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -605,7 +642,7 @@ void SubSurfaceShading::CreateResources()
 
 	glGenTextures(1, &SSSScatering_TexOut1);
 	glBindTexture(GL_TEXTURE_2D, SSSScatering_TexOut1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -614,7 +651,7 @@ void SubSurfaceShading::CreateResources()
 
 	glGenTextures(1, &SSSScatering_TexOut2);
 	glBindTexture(GL_TEXTURE_2D, SSSScatering_TexOut2);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -623,7 +660,7 @@ void SubSurfaceShading::CreateResources()
 
 	glGenTextures(1, &SSSRecombine_TexOut);
 	glBindTexture(GL_TEXTURE_2D, SSSRecombine_TexOut);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -642,6 +679,30 @@ void SubSurfaceShading::CreateResources()
 		std::cout << "SSS FrameBufferError" << std::endl;
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void SubSurfaceShading::RenderTextureSizeChange(Vector2i newSize)
+{
+	RenderTextureSize = newSize;
+	glBindTexture(GL_TEXTURE_2D, SSSRender_Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, SSSSetup_TexOut);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, SSSScatering_TexOut1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, SSSScatering_TexOut2);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, SSSRecombine_TexOut);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Vector4f SubSurfaceShading::GetSSSS_DUAL_SPECULAR_Params(int32 index)
@@ -930,31 +991,31 @@ void SubSurfaceShading::Render(uint32 VAO, int32 NumFaces, IndexSizeType indexTy
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, SSSFrameBuffer);
 	glClear(GL_COLOR_BUFFER_BIT);
-	SSSSetupMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, OGL_ELEMENT);
+	SSSSetupMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, 0, OGL_ELEMENT);
 	glBindTexture(GL_TEXTURE_2D, SSSSetup_TexOut);
-	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, _ScreenWidth, _ScreenHeight, 0);
+	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, RenderTextureSize.x, RenderTextureSize.y, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	SSSScateringMaterialInst->SetUniform<int32>("SSS_DIRECTION", 0);
 	SSSScateringMaterialInst->SetTextureID("PostprocessInput0", SSSSetup_TexOut);
-	SSSScateringMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, OGL_ELEMENT);
+	SSSScateringMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, 0, OGL_ELEMENT);
 	glBindTexture(GL_TEXTURE_2D, SSSScatering_TexOut1);
-	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, _ScreenWidth, _ScreenHeight, 0);
+	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, RenderTextureSize.x, RenderTextureSize.y, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	SSSScateringMaterialInst->SetUniform<int32>("SSS_DIRECTION", 1);
 	SSSScateringMaterialInst->SetTextureID("PostprocessInput0", SSSScatering_TexOut1);
-	SSSScateringMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, OGL_ELEMENT);
+	SSSScateringMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, 0, OGL_ELEMENT);
 	glBindTexture(GL_TEXTURE_2D, SSSScatering_TexOut2);
-	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, _ScreenWidth, _ScreenHeight, 0);
+	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, RenderTextureSize.x, RenderTextureSize.y, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glClear(GL_COLOR_BUFFER_BIT);
-	SSSRecombineMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, OGL_ELEMENT);
+	SSSRecombineMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, 0, OGL_ELEMENT);
 	glBindTexture(GL_TEXTURE_2D, SSSRecombine_TexOut);
-	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, _ScreenWidth, _ScreenHeight, 0);
+	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, RenderTextureSize.x, RenderTextureSize.y, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -966,7 +1027,7 @@ UE4TemporalAA::UE4TemporalAA(std::shared_ptr<Camera> camera)
 	CreateTAAPassMaterial();
 	CreateTAAPassResources();
 	TAAPassMaterialInst->SetTextureID("PreFrame", TAAHistoryFrame_Tex);
-	TAAPassMaterialInst->SetUniform<Vector2f>("ScreenSize", Vector2f(_ScreenWidth, _ScreenHeight));
+	TAAPassMaterialInst->SetUniform<Vector2f>("ScreenSize", Vector2f(RenderTextureSize.x, RenderTextureSize.y));
 	TAAPassMaterialInst->SetUniform<Vector4f>("ViewCamera_ZBufferParams", Vector4f(ViewCamera->GetNearClipPlaneDis(), ViewCamera->GetFarClipPlaneDis(), ViewCamera->GetFOVinRadians(), ViewCamera->GetAspect()));
 	TAAPixelUniformData = std::shared_ptr<TemporalAAPixelUniformData>(new TemporalAAPixelUniformData());
 
@@ -981,7 +1042,7 @@ UE4TemporalAA::~UE4TemporalAA()
 void UE4TemporalAA::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 {
 	Vector4f JitterUV = ActiveJitterSample;
-	TAAPassMaterialInst->SetUniform<Vector4f>(TAAPixelUniformData->JitterID, Vector4f(JitterUV.x / _ScreenWidth, JitterUV.y / _ScreenHeight, JitterUV.z / _ScreenWidth, JitterUV.w / _ScreenHeight));
+	TAAPassMaterialInst->SetUniform<Vector4f>(TAAPixelUniformData->JitterID, Vector4f(JitterUV.x / RenderTextureSize.x, JitterUV.y / RenderTextureSize.y, JitterUV.z / RenderTextureSize.x, JitterUV.w / RenderTextureSize.y));
 
 	//Update Weight Plus
 	{
@@ -1019,7 +1080,7 @@ void UE4TemporalAA::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 		TotalWeightPlus = Weights[1] + Weights[3] + Weights[4] + Weights[5] + Weights[7];
 
 		TAAPassMaterialInst->SetUniform<Vector4f>(TAAPixelUniformData->PlusWeights_0ID, Vector4f(WeightsPlus[0], WeightsPlus[1], WeightsPlus[2], WeightsPlus[3]) / TotalWeightPlus);
-		TAAPassMaterialInst->SetUniform<Vector4f>(TAAPixelUniformData->PlusWeights_1ID, Vector4f(WeightsPlus[5], 0.0, 0.0, 0.0) / TotalWeightPlus);
+		TAAPassMaterialInst->SetUniform<Vector4f>(TAAPixelUniformData->PlusWeights_1ID, Vector4f(WeightsPlus[4], 0.0, 0.0, 0.0) / TotalWeightPlus);
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, TAAFrameBuffer);
@@ -1028,7 +1089,7 @@ void UE4TemporalAA::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 	TAAPassMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType);
 
 #ifdef TAASingleTex
-	glCopyImageSubData(TAAToScreenFrame_Tex, GL_TEXTURE_2D, 0, 0, 0, 0, TAAHistoryFrame_Tex, GL_TEXTURE_2D, 0, 0, 0, 0, _ScreenWidth, _ScreenHeight, 1);
+	glCopyImageSubData(TAAToScreenFrame_Tex, GL_TEXTURE_2D, 0, 0, 0, 0, TAAHistoryFrame_Tex, GL_TEXTURE_2D, 0, 0, 0, 0, RenderTextureSize.x, RenderTextureSize.y, 1);
 #endif // TAASingleTex
 
 
@@ -1082,8 +1143,8 @@ void UE4TemporalAA::UpdateJitter()
 void UE4TemporalAA::HackUpdateCameraProjectMatrix(float32 sampleOffsetX, float32 sampleOffsetY)
 {
 	JitterProjectMatrix = ViewCamera->GetProjectMatrix();
-	JitterProjectMatrix[2][0] += sampleOffsetX * (2.0f) / _ScreenWidth;
-	JitterProjectMatrix[2][1] += sampleOffsetY * (-2.0f) / _ScreenHeight;
+	JitterProjectMatrix[2][0] += sampleOffsetX * (2.0f) / RenderTextureSize.x;
+	JitterProjectMatrix[2][1] += sampleOffsetY * (-2.0f) / RenderTextureSize.y;
 	ViewCamera->SetProjectMatrix(JitterProjectMatrix);
 }
 
@@ -1095,34 +1156,34 @@ void UE4TemporalAA::RemoveJitter()
 void UE4TemporalAA::HackRemoveCameraProjectMatrix(float32 sampleOffsetX, float32 sampleOffsetY)
 {
 	JitterProjectMatrix = ViewCamera->GetProjectMatrix();
-	JitterProjectMatrix[2][0] -= sampleOffsetX * (2.0f) / _ScreenWidth;
-	JitterProjectMatrix[2][1] -= sampleOffsetY * (-2.0f) / _ScreenHeight;
+	JitterProjectMatrix[2][0] -= sampleOffsetX * (2.0f) / RenderTextureSize.x;
+	JitterProjectMatrix[2][1] -= sampleOffsetY * (-2.0f) / RenderTextureSize.y;
 	ViewCamera->SetProjectMatrix(JitterProjectMatrix);
 }
 
 void UE4TemporalAA::UpdateCameraProjectMatrix(float32 sampleOffsetX, float32 sampleOffsetY)
 {
-	float32 oneExtentY = Math::Tan(0.5f * ViewCamera->GetFOVinRadians());
-	float32 oneExtentX = oneExtentY * ViewCamera->GetAspect();
-	float32 texelSizeX = oneExtentX / (0.5f * _ScreenWidth);
-	float32 texelSizeY = oneExtentY / (0.5f * _ScreenHeight);
-	float32 oneJitterX = texelSizeX * sampleOffsetX;
-	float32 oneJitterY = texelSizeY * sampleOffsetY;
+	//float32 oneExtentY = Math::Tan(0.5f * ViewCamera->GetFOVinRadians());
+	//float32 oneExtentX = oneExtentY * ViewCamera->GetAspect();
+	//float32 texelSizeX = oneExtentX / (0.5f * RenderTextureSize.x);
+	//float32 texelSizeY = oneExtentY / (0.5f * RenderTextureSize.y);
+	//float32 oneJitterX = texelSizeX * sampleOffsetX;
+	//float32 oneJitterY = texelSizeY * sampleOffsetY;
 
-	Vector4f extents = Vector4f(oneExtentX, oneExtentY, oneJitterX, oneJitterY);// xy = frustum extents at distance 1, zw = jitter at distance 1
+	//Vector4f extents = Vector4f(oneExtentX, oneExtentY, oneJitterX, oneJitterY);// xy = frustum extents at distance 1, zw = jitter at distance 1
 
-	float32 cf = ViewCamera->GetFarClipPlaneDis();
-	float32 cn = ViewCamera->GetNearClipPlaneDis();
-	float32 xm = extents.z - extents.x;
-	float32 xp = extents.z + extents.x;
-	float32 ym = extents.w - extents.y;
-	float32 yp = extents.w + extents.y;
+	//float32 cf = ViewCamera->GetFarClipPlaneDis();
+	//float32 cn = ViewCamera->GetNearClipPlaneDis();
+	//float32 xm = extents.z - extents.x;
+	//float32 xp = extents.z + extents.x;
+	//float32 ym = extents.w - extents.y;
+	//float32 yp = extents.w + extents.y;
 
-	JitterProjectMatrix = CameraUtil::Frustum(xm * cn, xp * cn, ym * cn, yp * cn, cn, cf);
+	//JitterProjectMatrix = CameraUtil::Frustum(xm * cn, xp * cn, ym * cn, yp * cn, cn, cf);
 
 	JitterProjectMatrix = ViewCamera->GetProjectMatrix();
-	JitterProjectMatrix[2][0] += sampleOffsetX * (2.0f) / _ScreenWidth;
-	JitterProjectMatrix[2][1] += sampleOffsetX * (-2.0f) / _ScreenHeight;
+	JitterProjectMatrix[2][0] += sampleOffsetX * (2.0f) / RenderTextureSize.x;
+	JitterProjectMatrix[2][1] += sampleOffsetX * (-2.0f) / RenderTextureSize.y;
 	ViewCamera->SetProjectMatrix(JitterProjectMatrix);
 }
 
@@ -1130,7 +1191,7 @@ void UE4TemporalAA::CreateTAAPassResources()
 {
 	glGenTextures(1, &TAAHistoryFrame_Tex);
 	glBindTexture(GL_TEXTURE_2D, TAAHistoryFrame_Tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -1139,7 +1200,7 @@ void UE4TemporalAA::CreateTAAPassResources()
 
 	glGenTextures(1, &TAAToScreenFrame_Tex);
 	glBindTexture(GL_TEXTURE_2D, TAAToScreenFrame_Tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _ScreenWidth, _ScreenHeight, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -1179,11 +1240,27 @@ void UE4TemporalAA::CreateTAAPassResources()
 #endif // TAASingleTex
 }
 
+void UE4TemporalAA::RenderTextureSizeChange(Vector2i newSize)
+{
+	RenderTextureSize = newSize;
+	glBindTexture(GL_TEXTURE_2D, TAAHistoryFrame_Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, TAAToScreenFrame_Tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, RenderTextureSize.x, RenderTextureSize.y, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	TAAPassMaterialInst->SetUniform<Vector2f>("ScreenSize", Vector2f(RenderTextureSize.x, RenderTextureSize.y));
+	TAAPassMaterialInst->SetUniform<Vector4f>("ViewCamera_ZBufferParams", Vector4f(ViewCamera->GetNearClipPlaneDis(), ViewCamera->GetFarClipPlaneDis(), ViewCamera->GetFOVinRadians(), ViewCamera->GetAspect()));
+}
+
 
 ToneMapping::ToneMapping()
 {
 	ToneMappingUniformDatas = std::shared_ptr<ToneMappingPixelShaderUniformData>(new ToneMappingPixelShaderUniformData());
 	CreateToneMappingPassMaterial();
+	ToneMappingMaterialInst->SetUniform<Vector2f>("ScreenSize", Vector2f(RenderTextureSize.x, RenderTextureSize.y));
 }
 
 ToneMapping::~ToneMapping()
@@ -1290,4 +1367,9 @@ void ToneMapping::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 	ToneMappingMaterialInst->SetUniform<Vector2f>(ToneMappingUniformDatas->GrainRandomFullID, GrainRandomFull);
 
 	ToneMappingMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType);
+}
+
+void ToneMapping::RenderTextureSizeChange(Vector2i newSize)
+{
+	ToneMappingMaterialInst->SetUniform<Vector2f>("ScreenSize", Vector2f(RenderTextureSize.x, RenderTextureSize.y));
 }

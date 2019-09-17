@@ -23,7 +23,7 @@ WD_WorldComponentsSearch::WD_WorldComponentsSearch(QWidget* parent)
 	
 	LE_Search->setLayout(Layout_InSearch);
 	PB_Search = new QPushButton("1", LE_Search);
-	PB_Search->setFixedSize(15, 15);
+	PB_Search->setMaximumWidth(20);
 	Layout_InSearch->addWidget(PB_Search);
 }
 
@@ -41,10 +41,17 @@ WD_WorldComponentsTable::WD_WorldComponentsTable(QWidget* parent)
 
 	Table_Components = new QTableWidget(parent);
 	Table_Components->setObjectName("Table_Components");
-	Table_Components->setColumnCount(20);
-	Table_Components->setRowCount(10);
+	Table_Components->setColumnCount(2);
+	Table_Components->setRowCount(2);
 	Table_Components->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
 	Table_Components->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOn);
+	Table_Components->setShowGrid(false);
+	Table_Components->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
+	Table_Components->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+	QStringList HorizenHeaders;
+	HorizenHeaders << "Tag" << "Type";
+	Table_Components->setHorizontalHeaderLabels(HorizenHeaders);
+
 	Layout_Main->addWidget(Table_Components);
 }
 

@@ -155,6 +155,11 @@ void Camera::SetProjectMatrix_PreFrame(Mat4f newMatrix)
 	ProjectMatrix_PreFrame = newMatrix;
 }
 
+void Camera::SetViewPortSize(Vector2i viewPortSize)
+{
+	ViewPortSize = viewPortSize;
+}
+
 void Camera::SetDirection(const Vector3f& forward, const Vector3f& up)
 {
 	CameraTransform.SetForward(forward);

@@ -38,6 +38,7 @@ public:
 	void SetProjectMatrix(Mat4f newMatrix);
 	void SetViewMatrix_PreFrame(Mat4f newMatrix);
 	void SetProjectMatrix_PreFrame(Mat4f newMatrix);
+	void SetViewPortSize(Vector2i viewPortSize);
 	void ReCalculateProjectMatrix();
 	void SetDirection(const Vector3f& forward, const Vector3f& up);
 

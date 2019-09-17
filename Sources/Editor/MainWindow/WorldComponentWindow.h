@@ -36,9 +36,11 @@ public:
 private:
 	QTableWidget* Table_Components;
 	QVBoxLayout* Layout_Main;
-
+	
 protected:
 	virtual void resizeEvent(QResizeEvent* event);
+private slots:
+
 };
 
 

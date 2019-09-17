@@ -101,10 +101,10 @@ void WOpenGLWindowCore::initializeGL()
 
 void WOpenGLWindowCore::paintGL()
 { 
-	if (KEY_DOWN(0x01))
+	/*if (KEY_DOWN(0x01))
 	{
 		CameraTranslateForwardPlus(View->Scene);
-	}
+	}*/
 
 	View->TickScene();
 	View->RenderScene();
@@ -113,7 +113,7 @@ void WOpenGLWindowCore::paintGL()
 
 void WOpenGLWindowCore::resizeGL(int w, int h)
 {
-
+	View->SizeChange(Vector2i(w, h));
 }
 
 void WOpenGLWindowCore::keyPressEvent(QKeyEvent* ev)

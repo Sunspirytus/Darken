@@ -14,6 +14,21 @@ class SubSurfaceShading;
 class UE4TemporalAA;
 class ToneMapping;
 
+class RenderPassBase
+{
+public:
+	RenderPassBase() 
+		: RenderTextureSize(Vector2i(100, 100))
+	{
+	
+	};
+	~RenderPassBase() {};
+
+	virtual void RenderTextureSizeChange(Vector2i newSize) = 0;
+protected:
+	Vector2i RenderTextureSize;
+};
+
 class DeferRenderPipeline : public RenderPipelineBase
 {
 public:
@@ -40,6 +55,7 @@ public:
 
 	virtual void Init(std::shared_ptr<SceneManager> Scene) final;
 	virtual void Render(std::shared_ptr<Camera> camera) final;
+	virtual void RenderTextureSizeChange(Vector2i newSize) final;
 
 private:
 	std::shared_ptr<RectBufferObject> PPObj;
@@ -62,7 +78,7 @@ struct ShadowDepthMaterialDataIDs
 	}
 };
 
-class ShadowDepth
+class ShadowDepth : public RenderPassBase
 {
 public:
 	ShadowDepth(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights);
@@ -87,6 +103,8 @@ private:
 	void RenderSpotLightDepth(int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects);
 
 	std::shared_ptr<SceneManager> Scene;
+public:
+	virtual void RenderTextureSizeChange(Vector2i newSize) final {};
 };
 
 struct LightingMaterialDataIDs
@@ -121,7 +139,7 @@ struct LightingMaterialDataIDs
 	}
 };
 
-class Lighting
+class Lighting : public RenderPassBase
 {
 public:
 	Lighting(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights);
@@ -147,6 +165,8 @@ private:
 	
 	std::shared_ptr<LightingMaterialDataIDs> MaterialDataIDs;
 	std::shared_ptr<SceneManager> Scene;
+public:
+	virtual void RenderTextureSizeChange(Vector2i newSize) final;
 };
 
 
@@ -165,7 +185,7 @@ private:
 #define skin_profile_index  3
 #define eye_refractive_index  2
 
-class SubSurfaceShading
+class SubSurfaceShading : public RenderPassBase
 {
 public:
 	SubSurfaceShading(std::shared_ptr<Camera> camera);
@@ -224,6 +244,8 @@ private:
 	uint32 SSSFrameBuffer;
 
 	std::shared_ptr<Camera> ViewCamera;
+public:
+	virtual void RenderTextureSizeChange(Vector2i newSize) final;
 };
 
 struct TemporalAAPixelUniformData
@@ -239,7 +261,7 @@ struct TemporalAAPixelUniformData
 	}
 };
 
-class UE4TemporalAA
+class UE4TemporalAA : public RenderPassBase
 {
 public:
 	UE4TemporalAA(std::shared_ptr<Camera> camera);
@@ -273,6 +295,8 @@ private:
 	void CreateTAAPassMaterial();
 	void CreateTAAPassResources();
 	std::shared_ptr<Camera> ViewCamera;
+public:
+	virtual void RenderTextureSizeChange(Vector2i newSize) final;
 };
 
 struct ToneMappingPixelShaderUniformData
@@ -284,7 +308,7 @@ struct ToneMappingPixelShaderUniformData
 	}
 };
 
-class ToneMapping
+class ToneMapping : public RenderPassBase
 {
 public:
 	ToneMapping();
@@ -300,6 +324,8 @@ private:
 	void CreateToneMappingPassMaterial();
 	std::shared_ptr<ToneMappingPixelShaderUniformData> ToneMappingUniformDatas;
 	Vector2f GrainRandomFromFrame(int32 FrameCountMode8);
+public:
+	virtual void RenderTextureSizeChange(Vector2i newSize) final;
 };
 
 

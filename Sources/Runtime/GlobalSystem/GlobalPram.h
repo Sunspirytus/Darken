@@ -10,8 +10,8 @@ using namespace dk;
 //extern std::shared_ptr<SceneManager> _Scene;
 extern std::shared_ptr<BufferManager> _GPUBuffers;
 extern std::shared_ptr<SystemTextureFactory> GlobalTextures;
-extern const uint32 _ScreenWidth;
-extern const uint32 _ScreenHeight;
+//extern const uint32 _ScreenWidth;
+//extern const uint32 _ScreenHeight;
 
 //extern std::unordered_map<pvr::Keys, bool> InputKeyPressed;
 //extern std::vector<pvr::Keys> InputKeyRecord;
