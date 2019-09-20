@@ -2,7 +2,7 @@
 
 Light::Light()
 {
-	LightTransform = Transform();
+	LightTransform = TransformComponent();
 	Type = Unknow;
 	ShadowBias = 0.0;
 }
@@ -31,7 +31,7 @@ void Light::SetTransform(Vector3f position, Vector3f eulerAngle)
 	LightTransform.SetTransform(position, eulerAngle, Vector3f(1.0));
 }
 
-Transform* Light::GetTransform()
+TransformComponent* Light::GetTransform()
 {
 	return &LightTransform;
 }

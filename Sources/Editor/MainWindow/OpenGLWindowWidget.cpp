@@ -2,7 +2,6 @@
 #include "OpenGLWindowWidget.h"
 #include <thread>
 #include <iostream>
-#include "GlobalPram.h"
 
 void CameraRotateLeftPlus(std::shared_ptr<SceneManager> _Scene)
 {

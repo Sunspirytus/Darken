@@ -1,6 +1,8 @@
 #include "DeferRenderPipeline.h"
 #include "Model.h"
-#include "GlobalPram.h"
+
+extern std::shared_ptr<BufferManager> _GPUBuffers;
+extern unsigned long APP_FrameCount;
 
 #define TAASingleTex
 
@@ -227,19 +229,21 @@ void ShadowDepth::CalculateLightsVPMatrix()
 		if (Lights[LightIndex]->Type == LightType::Direct)
 		{
 			DirectLight* DL = dynamic_cast<DirectLight*>(Lights[LightIndex]);
-			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(DL->GetTransform()->GetPosition(), DL->GetTransform()->GetEulerAngle(), 180.0f, 1.0f, 0.1f, 100.0f, Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
+			CameraProperty CProperty;
+			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(CProperty, DL->GetTransform()->GetPosition(), DL->GetTransform()->GetEulerAngle(), 180.0f, 1.0f, 0.1f, 100.0f, Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
 			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
 		}
 		else if (Lights[LightIndex]->Type == LightType::Point)
 		{
 			PointLight* PL = dynamic_cast<PointLight*>(Lights[LightIndex]);
 
-			std::shared_ptr<Camera> LCamera0 = std::shared_ptr<Camera>(new Camera(PL->GetTransform()->GetPosition(), Vector3f(0.0,   0.0, 180.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
-			std::shared_ptr<Camera> LCamera1 = std::shared_ptr<Camera>(new Camera(PL->GetTransform()->GetPosition(), Vector3f(0.0,   0.0,   0.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
-			std::shared_ptr<Camera> LCamera2 = std::shared_ptr<Camera>(new Camera(PL->GetTransform()->GetPosition(), Vector3f(0.0, -90.0,   0.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
-			std::shared_ptr<Camera> LCamera3 = std::shared_ptr<Camera>(new Camera(PL->GetTransform()->GetPosition(), Vector3f(0.0,  90.0,   0.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
-			std::shared_ptr<Camera> LCamera4 = std::shared_ptr<Camera>(new Camera(PL->GetTransform()->GetPosition(), Vector3f(0.0, -90.0,  90.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
-			std::shared_ptr<Camera> LCamera5 = std::shared_ptr<Camera>(new Camera(PL->GetTransform()->GetPosition(), Vector3f(0.0,  90.0, -90.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
+			CameraProperty CProperty;
+			std::shared_ptr<Camera> LCamera0 = std::shared_ptr<Camera>(new Camera(CProperty, PL->GetTransform()->GetPosition(), Vector3f(0.0,   0.0, 180.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
+			std::shared_ptr<Camera> LCamera1 = std::shared_ptr<Camera>(new Camera(CProperty, PL->GetTransform()->GetPosition(), Vector3f(0.0,   0.0,   0.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
+			std::shared_ptr<Camera> LCamera2 = std::shared_ptr<Camera>(new Camera(CProperty, PL->GetTransform()->GetPosition(), Vector3f(0.0, -90.0,   0.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
+			std::shared_ptr<Camera> LCamera3 = std::shared_ptr<Camera>(new Camera(CProperty, PL->GetTransform()->GetPosition(), Vector3f(0.0,  90.0,   0.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
+			std::shared_ptr<Camera> LCamera4 = std::shared_ptr<Camera>(new Camera(CProperty, PL->GetTransform()->GetPosition(), Vector3f(0.0, -90.0,  90.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
+			std::shared_ptr<Camera> LCamera5 = std::shared_ptr<Camera>(new Camera(CProperty, PL->GetTransform()->GetPosition(), Vector3f(0.0,  90.0, -90.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
 			
 			LCamera0->SetNextCamera(LCamera1);
 			LCamera1->SetNextCamera(LCamera2);
@@ -251,7 +255,8 @@ void ShadowDepth::CalculateLightsVPMatrix()
 		else if (Lights[LightIndex]->Type == LightType::Spot)
 		{
 			SpotLight* SL = dynamic_cast<SpotLight*>(Lights[LightIndex]);
-			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(SL->GetTransform()->GetPosition(), SL->GetTransform()->GetEulerAngle(), Math::Radians(SL->GetOutConeAngle() / 2.0f), 1.0f, 2.0f, SL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
+			CameraProperty CProperty;
+			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(CProperty, SL->GetTransform()->GetPosition(), SL->GetTransform()->GetEulerAngle(), Math::Radians(SL->GetOutConeAngle() / 2.0f), 1.0f, 2.0f, SL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
 			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
 		}
 	}
@@ -505,6 +510,7 @@ void Lighting::Render(std::shared_ptr<Camera> camera, uint32 typeFlags)
 		ShadowBuffer.ShadowBufferSize = Vector4f(ShadowMappingPass->ShadowDepthTexWidth, ShadowMappingPass->ShadowDepthTexHeight, 1.0f / ShadowMappingPass->ShadowDepthTexWidth, 1.0f / ShadowMappingPass->ShadowDepthTexHeight);
 
 		std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
+		//const ObjectProperty& P = LCamera->GetProperty();
 		float32 Near = LCamera->GetNearClipPlaneDis();
 		float32 Far = LCamera->GetFarClipPlaneDis();
 		float32 FOV = LCamera->GetFOVinRadians();
@@ -991,7 +997,7 @@ void SubSurfaceShading::Render(uint32 VAO, int32 NumFaces, IndexSizeType indexTy
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, SSSFrameBuffer);
 	glClear(GL_COLOR_BUFFER_BIT);
-	SSSSetupMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, 0, OGL_ELEMENT);
+	SSSSetupMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType);
 	glBindTexture(GL_TEXTURE_2D, SSSSetup_TexOut);
 	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, RenderTextureSize.x, RenderTextureSize.y, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -999,7 +1005,7 @@ void SubSurfaceShading::Render(uint32 VAO, int32 NumFaces, IndexSizeType indexTy
 	glClear(GL_COLOR_BUFFER_BIT);
 	SSSScateringMaterialInst->SetUniform<int32>("SSS_DIRECTION", 0);
 	SSSScateringMaterialInst->SetTextureID("PostprocessInput0", SSSSetup_TexOut);
-	SSSScateringMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, 0, OGL_ELEMENT);
+	SSSScateringMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType);
 	glBindTexture(GL_TEXTURE_2D, SSSScatering_TexOut1);
 	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, RenderTextureSize.x, RenderTextureSize.y, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -1007,13 +1013,13 @@ void SubSurfaceShading::Render(uint32 VAO, int32 NumFaces, IndexSizeType indexTy
 	glClear(GL_COLOR_BUFFER_BIT);
 	SSSScateringMaterialInst->SetUniform<int32>("SSS_DIRECTION", 1);
 	SSSScateringMaterialInst->SetTextureID("PostprocessInput0", SSSScatering_TexOut1);
-	SSSScateringMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, 0, OGL_ELEMENT);
+	SSSScateringMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType);
 	glBindTexture(GL_TEXTURE_2D, SSSScatering_TexOut2);
 	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, RenderTextureSize.x, RenderTextureSize.y, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glClear(GL_COLOR_BUFFER_BIT);
-	SSSRecombineMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType, 0, OGL_ELEMENT);
+	SSSRecombineMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType);
 	glBindTexture(GL_TEXTURE_2D, SSSRecombine_TexOut);
 	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 0, 0, RenderTextureSize.x, RenderTextureSize.y, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -1365,7 +1371,6 @@ void ToneMapping::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 
 	Vector2f GrainRandomFull = GrainRandomFromFrame(APP_FrameCount % 8);
 	ToneMappingMaterialInst->SetUniform<Vector2f>(ToneMappingUniformDatas->GrainRandomFullID, GrainRandomFull);
-
 	ToneMappingMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType);
 }
 

@@ -45,7 +45,7 @@ void SceneManager::Render(std::shared_ptr<Camera> camera, uint32 typeFlags)
 		}
 		if (ObjectIterator->second->bNeedCheckClip)
 		{
-			ObjectIterator->second->CheckWhetherNeedClip(camera);
+			ObjectIterator->second->CheckWhetherNeedClip();
 		}
 		if (ObjectIterator->second->bNeedClip)
 		{

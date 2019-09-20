@@ -37,11 +37,18 @@ struct ModelMesh
 	ModelMesh(){};
 };
 
+class ModelProperty : public ObjectProperty
+{
+public:
+	ModelProperty() {};
+	~ModelProperty() {};
+};
+
 class Model : public Object
 {
 public:
-	Model();
-	Model(std::string fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
+	Model(ModelProperty property);
+	Model(ModelProperty property, std::string fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
 	~Model();
 
 	void LoadModelFromAsset(std::string fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
@@ -50,7 +57,7 @@ public:
 	void BindLightingMaterial();
 	void SetAnimationPlaySpeed(float32 speed);
 
-	virtual void CheckWhetherNeedClip(std::shared_ptr<Camera> camera) final;
+	virtual void CheckWhetherNeedClip() final;
 	virtual void Draw() final;
 	virtual void Start();
 	virtual void InternalUpdate() final;

@@ -1,13 +1,25 @@
 #pragma once
 
-#include "Transform.h"
+#include "Object.h"
 
-class Camera
+class CameraProperty : public ObjectProperty
 {
 public:
-	Camera();
+	CameraProperty() {};
+	~CameraProperty() {};
+
+	float32 Fovy;
+	float32 Aspect;
+	float32 NearPlane;
+	float32 FarPlane;
+};
+
+class Camera : public Object
+{
+public:
+	Camera(CameraProperty property);
 	~Camera();
-	Camera(Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize);
+	Camera(CameraProperty property, Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize);
 	void Init(Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize);
 	//void ModifyProjectionForClipping(Vector4f vClipPlane);
 
@@ -46,6 +58,13 @@ public:
 
 	void SetNextCamera(std::shared_ptr<Camera> camera);
 	std::shared_ptr<Camera> GetNextCamera();
+
+	virtual void CheckWhetherNeedClip() final {};
+	virtual void Start() final {};
+	virtual void InternalUpdate() final {};
+	virtual void Update() final {};
+	virtual void FixUpdate() final {};
+	virtual void Draw() final {};
 private:
 
 	float32 Fovy;
@@ -67,7 +86,7 @@ private:
 	Mat4f ViewMatrix_PreFrame;
 	Mat4f ProjectMatrix_PreFrame;
 
-	Transform CameraTransform;
+	//Transform Transform;
 
 	float32 sgn(float32 a);
 

@@ -24,12 +24,12 @@ public:
 	void SetShadowBias(float32 newBias);
 	float32 GetShadowBias();
 
-	Transform* GetTransform();
+	TransformComponent* GetTransform();
 
 	virtual void GetShaderData(LightData &lightBuffer) = 0;
 
 protected:
-	Transform LightTransform;
+	TransformComponent LightTransform;
 
 	float32 ShadowBias;
 	Vector3f Color;

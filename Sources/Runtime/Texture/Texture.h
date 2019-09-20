@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include "FreeImage.h"
+#include "TypeDefine.h"
 #ifndef PI
 #define PI 3.1415926535897932384626433832795028841968f
 #endif

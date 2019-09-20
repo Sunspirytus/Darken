@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include "SystemContext.h"
-
+#include "FileIO.h"
 
 MW_MainWindow::MW_MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -17,18 +17,22 @@ MW_MainWindow::MW_MainWindow(QWidget *parent)
 		//Layout_MainWindow = new QHBoxLayout(nullptr);
 		//Layout_MainWindow->setObjectName("Layout_MainWindow");
 	}
-	{
-		DOCK_WorldComponent = new DOCK_WorldComponentWindow(nullptr);
-	}
 
 	{
 		DOCK_OpenGLView = new DOCK_OpenGLWindow(this);
 	}
+
+	{
+		DOCK_WorldComponent = new DOCK_WorldComponentWindow(nullptr);
+	}
+	
 	this->addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, DOCK_WorldComponent);
 	this->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, DOCK_OpenGLView);
 	//this->setLayout(Layout_MainWindow);
 	//Layout_MainWindow->addWidget(Widget_OpenGLWindow);
 	//Layout_MainWindow->addWidget(Widget_WorldComponent);
+
+	//DOCK_WorldComponent->GetTable()->UpdateComponent(DOCK_OpenGLView->GetView()->Scene);
 }
 
 

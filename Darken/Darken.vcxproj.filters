@@ -70,6 +70,9 @@
     <Filter Include="源文件\Editor\MainWindow">
       <UniqueIdentifier>{627bc0e4-8e70-474a-a39e-41b24187c31a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Runtime\FileIO">
+      <UniqueIdentifier>{3a97d2d0-e29e-408c-a2f6-30659ed2f0ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConstructScene.h">
@@ -86,9 +89,6 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Runtime\Camera\Camera.h">
       <Filter>源文件\Runtime\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Runtime\GlobalSystem\GlobalPram.h">
-      <Filter>源文件\Runtime\GlobalSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Runtime\GlobalSystem\SystemContext.h">
       <Filter>源文件\Runtime\GlobalSystem</Filter>
@@ -155,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPortBase.h">
       <Filter>源文件\Runtime\ViewPort</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Runtime\FileIO\FileIO.h">
+      <Filter>源文件\Runtime\FileIO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Editor\MainWindow\WorldComponentWindow.cpp">
       <Filter>源文件\Editor\MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Runtime\FileIO\FileIO.cpp">
+      <Filter>源文件\Runtime\FileIO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

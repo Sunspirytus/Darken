@@ -1,8 +1,7 @@
-#include "GlobalPram.h"
-#include <glfw3.h>
+//#include <glfw3.h>
 //#include <stb_image.h>
 #include "Texture.h"
-
+extern std::string AssetFolderPath;
 Texture::Texture()
 {
 	Width = -1;

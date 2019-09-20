@@ -1,10 +1,12 @@
 #include "Material.h"
-#include "GlobalPram.h"
 #include "BufferManager.h"
 #include <algorithm>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
+extern std::shared_ptr<BufferManager> _GPUBuffers;
+extern std::string AssetFolderPath;
 
 Material::Material()
 {
@@ -276,7 +278,7 @@ void Material::FindUniformInfos()
 			int32 DataSize;
 			glGetActiveUniformBlockiv(MaterialProgram->Id, UniformBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &DataSize);
 
-			std::hash<string> hs;
+			std::hash<std::string> hs;
 			std::shared_ptr<UniformItem_Block> Block = std::shared_ptr<UniformItem_Block>(new UniformItem_Block());
 			Block->HashCode = (int32)hs(UniformBlockName);
 			Block->DataSize_Byte = DataSize;

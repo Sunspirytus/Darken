@@ -6,13 +6,14 @@
 class SimpleObject : public Model
 {
 public:
-	SimpleObject(std::string ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
+	SimpleObject(ModelProperty property, std::string ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
+		: Model(property)
 	{
 		LoadModelFromAsset(ModelFileName);
 		BindMaterial(ShadowDepthMaterialInst, LightingMaterialInst);
-		ObjectTransform.SetScale(Vector3f(1.0, 1.0, 1.0));
-		ObjectTransform.SetEulerAngle(Vector3f(0.0, 0.0, 0.0));
-		ObjectTransform.SetPosition(Vector3f(0.0, 0.0, 0.0));
+		Transform->SetScale(Vector3f(1.0, 1.0, 1.0));
+		Transform->SetEulerAngle(Vector3f(0.0, 0.0, 0.0));
+		Transform->SetPosition(Vector3f(0.0, 0.0, 0.0));
 	};
 	~SimpleObject() {};
 
@@ -27,13 +28,14 @@ private:
 class DigitalHuman : public Model
 {
 public:
-	DigitalHuman(std::string ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
+	DigitalHuman(ModelProperty property, std::string ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
+		: Model(property)
 	{
 		LoadModelFromAsset(ModelFileName);
 		BindMaterial(ShadowDepthMaterialInst, LightingMaterialInst);
-		ObjectTransform.SetScale(Vector3f(1.0, 1.0, 1.0));
-		ObjectTransform.SetEulerAngle(Vector3f(0.0, 0.0, 0.0));
-		ObjectTransform.SetPosition(Vector3f(0.0, 0.0, 0.0));
+		Transform->SetScale(Vector3f(1.0, 1.0, 1.0));
+		Transform->SetEulerAngle(Vector3f(0.0, 0.0, 0.0));
+		Transform->SetPosition(Vector3f(0.0, 0.0, 0.0));
 	};
 	~DigitalHuman() {};
 
@@ -41,10 +43,10 @@ public:
 	virtual void Start(){};
 	virtual void Update()
 	{
-		Vector3f eulerAngle = ObjectTransform.GetEulerAngle();
-		//ObjectTransform.SetEulerAngle(eulerAngle + Vector3f(0.0, 0.0, -0.5));
-		Vector3f position = ObjectTransform.GetPosition();
-		//ObjectTransform.SetPosition(Vector3f(0.0, step, 0.0) + position);
+		Vector3f eulerAngle = Transform->GetEulerAngle();
+		//Transform->SetEulerAngle(eulerAngle + Vector3f(0.0, 0.0, -0.5));
+		Vector3f position = Transform->GetPosition();
+		//Transform->SetPosition(Vector3f(0.0, step, 0.0) + position);
 		if(position.y < - 5.0)
 		{
 			step = 0.005f;

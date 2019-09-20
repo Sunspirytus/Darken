@@ -3,12 +3,12 @@
 #include "Util.h"
 #include <cmath>
 
-class Transform
+class TransformComponent
 {
 public:
-	Transform(Vector3f position, Vector3f eulerAngle, Vector3f scale);
-	Transform();
-	~Transform();
+	TransformComponent(Vector3f position, Vector3f eulerAngle, Vector3f scale);
+	TransformComponent();
+	~TransformComponent();
 
 	void SetTransform(Vector3f position, Vector3f eulerAngle, Vector3f scale);
 	void SetPosition(Vector3f position);

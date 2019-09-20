@@ -1,7 +1,7 @@
 #include "Transform.h"
 #include "Quaternion.h"
 
-Transform::Transform(Vector3f position, Vector3f eulerAngle, Vector3f scale)
+TransformComponent::TransformComponent(Vector3f position, Vector3f eulerAngle, Vector3f scale)
 {
 	Position = Vector3f(position);
 	TranslationMatrix = Mat4f(Math::Translate(Mat4f(1.0), position));
@@ -22,7 +22,7 @@ Transform::Transform(Vector3f position, Vector3f eulerAngle, Vector3f scale)
 	ModelMatrix_PreFrame = ModelMatrix;
 }
 
-Transform::Transform()
+TransformComponent::TransformComponent()
 {
 	Position = Vector3f(0.0, 0.0, 0.0);
 	TranslationMatrix = Mat4f(1.0);
@@ -43,7 +43,7 @@ Transform::Transform()
 	ModelMatrix_PreFrame = ModelMatrix;
 }
 
-void Transform::SetTransform(Vector3f position, Vector3f eulerAngle, Vector3f scale)
+void TransformComponent::SetTransform(Vector3f position, Vector3f eulerAngle, Vector3f scale)
 {
 	Position = Vector3f(position);
 	TranslationMatrix = Mat4f(Math::Translate(Mat4f(1.0), position));
@@ -63,11 +63,11 @@ void Transform::SetTransform(Vector3f position, Vector3f eulerAngle, Vector3f sc
 	CalculateModelMatrix();
 }
 
-Transform::~Transform()
+TransformComponent::~TransformComponent()
 {
 }
 
-void Transform::SetPosition(Vector3f position)
+void TransformComponent::SetPosition(Vector3f position)
 {
 	if (Position == position) return;
 	Position = position;
@@ -75,7 +75,7 @@ void Transform::SetPosition(Vector3f position)
 	CalculateModelMatrix();
 }
 
-void Transform::SetEulerAngle(Vector3f eulerAngle)
+void TransformComponent::SetEulerAngle(Vector3f eulerAngle)
 {
 	if (EulerAngle == eulerAngle) return;
 	EulerAngle = eulerAngle;
@@ -86,7 +86,7 @@ void Transform::SetEulerAngle(Vector3f eulerAngle)
 	Leftward = Mat3f(RotationMatrix) * ORIGIN_LEFTWARD;
 }
 
-void Transform::SetScale(Vector3f scale)
+void TransformComponent::SetScale(Vector3f scale)
 {
 	if (Scale == scale) return;
 	Scale = scale;
@@ -94,7 +94,7 @@ void Transform::SetScale(Vector3f scale)
 	CalculateModelMatrix();
 }
 
-void Transform::SetForward(Vector3f forward)
+void TransformComponent::SetForward(Vector3f forward)
 {
 	if (Math::IsNearlyEqual(Forward, forward, 0.1f)) return;
 	Vector3f C = Math::Cross(Forward, forward);
@@ -107,7 +107,7 @@ void Transform::SetForward(Vector3f forward)
 	SetEulerAngle(Vector3f(EulerX, -EulerY, EulerZ) + EulerAngle);
 }
 
-void Transform::SetLeftward(Vector3f leftward)
+void TransformComponent::SetLeftward(Vector3f leftward)
 {
 	if (Math::IsNearlyEqual(Leftward, leftward, 0.1f)) return;
 	Vector3f C = Math::Cross(Leftward, leftward);
@@ -120,7 +120,7 @@ void Transform::SetLeftward(Vector3f leftward)
 	SetEulerAngle(Vector3f(EulerX, -EulerY, EulerZ) + EulerAngle);
 }
 
-void Transform::SetUpward(Vector3f upward)
+void TransformComponent::SetUpward(Vector3f upward)
 {
 	if (Math::IsNearlyEqual(Upward, upward, 0.1f)) return;
 	Vector3f C = Math::Cross(Upward, upward);
@@ -133,72 +133,72 @@ void Transform::SetUpward(Vector3f upward)
 	SetEulerAngle(Vector3f(EulerX, -EulerY, EulerZ) + EulerAngle);
 }
 
-void Transform::SetModelMatrix_PreFrame(Mat4f newMatrix)
+void TransformComponent::SetModelMatrix_PreFrame(Mat4f newMatrix)
 {
 	ModelMatrix_PreFrame = newMatrix;
 }
 
-Vector3f Transform::GetForward()
+Vector3f TransformComponent::GetForward()
 {
 	return Forward;
 }
 
-Vector3f Transform::GetUpward()
+Vector3f TransformComponent::GetUpward()
 {
 	return Upward;
 }
 
-Vector3f Transform::GetLeftward()
+Vector3f TransformComponent::GetLeftward()
 {
 	return Leftward;
 }
 
-Vector3f Transform::GetPosition()
+Vector3f TransformComponent::GetPosition()
 {
 	return Position;
 }
 
-Vector3f Transform::GetEulerAngle()
+Vector3f TransformComponent::GetEulerAngle()
 {
 	return EulerAngle;
 }
 
-Vector3f Transform::GetScale()
+Vector3f TransformComponent::GetScale()
 {
 	return Scale;
 }
 
-Mat4f Transform::GetTranslationMatrix()
+Mat4f TransformComponent::GetTranslationMatrix()
 {
 	return TranslationMatrix;
 }
 
-Mat4f Transform::GetRotationMatrix()
+Mat4f TransformComponent::GetRotationMatrix()
 {
 	return RotationMatrix;
 }
 
-Mat4f Transform::GetScaleMatrix()
+Mat4f TransformComponent::GetScaleMatrix()
 {
 	return ScaleMatrix;
 }
 
-Mat4f Transform::GetModelMatrix()
+Mat4f TransformComponent::GetModelMatrix()
 {
 	return ModelMatrix;
 }
 
-Mat4f Transform::GetModelMatrix_PreFrame()
+Mat4f TransformComponent::GetModelMatrix_PreFrame()
 {
 	return ModelMatrix_PreFrame;
 }
 
-Mat4f Transform::GetModelMatrix_IT()
+Mat4f TransformComponent::GetModelMatrix_IT()
 {
 	return ModelMatrix_IT;
 }
 
-void Transform::CalculateModelMatrix()
+void TransformComponent::CalculateModelMatrix()
 {
 	ModelMatrix = TranslationMatrix * ScaleMatrix * RotationMatrix;
 	ModelMatrix_IT = Math::Inverse(Math::Transpose(ModelMatrix));

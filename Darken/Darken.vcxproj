@@ -222,7 +222,7 @@
     <ClInclude Include="..\Sources\Runtime\Base\Object.h" />
     <ClInclude Include="..\Sources\Runtime\Base\Transform.h" />
     <ClInclude Include="..\Sources\Runtime\Camera\Camera.h" />
-    <ClInclude Include="..\Sources\Runtime\GlobalSystem\GlobalPram.h" />
+    <ClInclude Include="..\Sources\Runtime\FileIO\FileIO.h" />
     <ClInclude Include="..\Sources\Runtime\GlobalSystem\SystemContext.h" />
     <ClInclude Include="..\Sources\Runtime\GlobalSystem\SystemTextures.h" />
     <ClInclude Include="..\Sources\Runtime\GlobalSystem\TypeDefine.h" />
@@ -256,6 +256,7 @@
     <ClCompile Include="..\Sources\Runtime\Base\Object.cpp" />
     <ClCompile Include="..\Sources\Runtime\Base\Transform.cpp" />
     <ClCompile Include="..\Sources\Runtime\Camera\Camera.cpp" />
+    <ClCompile Include="..\Sources\Runtime\FileIO\FileIO.cpp" />
     <ClCompile Include="..\Sources\Runtime\GlobalSystem\glad.c" />
     <ClCompile Include="..\Sources\Runtime\GlobalSystem\SystemTextures.cpp" />
     <ClCompile Include="..\Sources\Runtime\Input\InputBase.cpp" />

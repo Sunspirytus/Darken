@@ -37,16 +37,6 @@ enum CameraIndex
 	ReflectionCaptureCamera = 100
 };
 
-enum ObjectType
-{
-	Default =			0x00000000,
-	StaticMesh =		0x00000001,
-	DynamicMesh =		0x00000002,
-	LandscapeMesh =		0x00000004,
-	AbstractActor =		0x00000008,
-	NavigationSystem =	0x000000F0
-};
-
 class SceneManager
 {
 public:

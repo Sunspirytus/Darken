@@ -64,6 +64,19 @@ void WD_WorldComponentsTable::resizeEvent(QResizeEvent* event)
 	const QSize ParentSize = this->parentWidget()->size();
 	this->setBaseSize(ParentSize);
 }
+#define ToString(x) #x
+void WD_WorldComponentsTable::UpdateComponent(std::shared_ptr<SceneManager> Scene)
+{
+	std::vector<std::shared_ptr<Object>> Objects = Scene->GetObjects(ObjectType::Default);
+	int32 RowCount = Table_Components->rowCount();
+	for(int32 Index = 0; Index < Objects.size(); Index++)
+	{
+		Table_Components->insertRow(RowCount + Index);
+		Table_Components->setItem(RowCount - 1, 0, new QTableWidgetItem(Objects[Index]->GetProperty()->Name.c_str()));
+		Table_Components->setItem(RowCount - 1, 1, new QTableWidgetItem(ToString(Objects[Index]->GetProperty()->Type)));
+	}
+	
+}
 
 
 DOCK_WorldComponentWindow::DOCK_WorldComponentWindow(QWidget* parent)
@@ -99,6 +112,7 @@ DOCK_WorldComponentWindow::DOCK_WorldComponentWindow(QWidget* parent)
 
 	WD_ComponentsTable = new WD_WorldComponentsTable(WD_ComponentsSearch);
 	Layout_WorldComponent->addWidget(WD_ComponentsTable);
+	
 }
 
 DOCK_WorldComponentWindow::~DOCK_WorldComponentWindow()

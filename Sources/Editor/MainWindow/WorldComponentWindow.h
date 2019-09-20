@@ -10,6 +10,7 @@
 #include <qevent.h>
 #include <QPushButton>
 #include "TypeDefine.h"
+#include "SceneManager.h"
 
 class WD_WorldComponentsSearch : public QWidget
 {
@@ -32,7 +33,8 @@ class WD_WorldComponentsTable : public QWidget
 public:
 	WD_WorldComponentsTable(QWidget* parent = Q_NULLPTR);
 	~WD_WorldComponentsTable();
-
+	
+	void UpdateComponent(std::shared_ptr<SceneManager> Scene);
 private:
 	QTableWidget* Table_Components;
 	QVBoxLayout* Layout_Main;

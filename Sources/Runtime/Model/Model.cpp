@@ -1,11 +1,16 @@
 #include "Model.h"
+#include "BufferManager.h"
 
-Model::Model()
+extern std::string AssetFolderPath;
+extern std::shared_ptr<BufferManager> _GPUBuffers;
+
+Model::Model(ModelProperty property)
+	: Object(property)
 {
-	
 }
 
-Model::Model(std::string fileName, Vector3f scale, bool bPackToOneMesh)
+Model::Model(ModelProperty property, std::string fileName, Vector3f scale, bool bPackToOneMesh)
+	: Object(property)
 {
 	LoadModelFromAsset(fileName, scale, bPackToOneMesh);
 }
@@ -318,15 +323,16 @@ void Model::BindLightingMaterial()
 	RenderMaterial = LightingMaterial;
 }
 
-void Model::CheckWhetherNeedClip(std::shared_ptr<Camera> camera)
+void Model::CheckWhetherNeedClip()
 {
 	for (uint32 Index = 0; Index < RenderGroup.size(); Index++)
 	{
-		//RenderGroup[Index]->bNeedClip = RenderGroup[Index]->SurroundSphereBox.bOutOfCamera(ObjectTransform.GetModelMatrix() * (RenderGroup[Index]->AnimationSys.GetNumFrames() == -1 ? RenderGroup[Index]->ModelMatrix : RenderGroup[Index]->AnimationSys.GetNextFrameAttitudeMatrix()), _Scene->GetCamera(CameraIndex::MainCamera)->GetVPMatrix());
-		Vector3f Scale = ObjectTransform.GetScale();
-		float32 MaxScale = Scale.x > Scale.y ? Scale.x : Scale.y;
-		MaxScale = MaxScale > Scale.z ? MaxScale : Scale.z;
-		RenderGroup[Index]->bNeedClip = RenderGroup[Index]->SurroundSphereBox.bOutOfCamera(ObjectTransform.GetModelMatrix() * RenderGroup[Index]->ModelMatrix, camera->GetVPMatrix(), MaxScale);
+		//RenderGroup[Index]->bNeedClip = RenderGroup[Index]->SurroundSphereBox.bOutOfCamera(Transform->GetModelMatrix() * (RenderGroup[Index]->AnimationSys.GetNumFrames() == -1 ? RenderGroup[Index]->ModelMatrix : RenderGroup[Index]->AnimationSys.GetNextFrameAttitudeMatrix()), _Scene->GetCamera(CameraIndex::MainCamera)->GetVPMatrix());
+		//Vector3f Scale = Transform->GetScale();
+		//float32 MaxScale = Scale.x > Scale.y ? Scale.x : Scale.y;
+		//MaxScale = MaxScale > Scale.z ? MaxScale : Scale.z;
+		//RenderGroup[Index]->bNeedClip = RenderGroup[Index]->SurroundSphereBox.bOutOfCamera(Transform->GetModelMatrix() * RenderGroup[Index]->ModelMatrix, camera->GetVPMatrix(), MaxScale);
+		RenderGroup[Index]->bNeedClip = false;
 	}
 }
 
@@ -336,15 +342,15 @@ void Model::Draw()
 	{
 		if (RenderGroup[Index]->bNeedClip) continue;
 
-		Mat4f ModelMatrix = ObjectTransform.GetModelMatrix() *  RenderGroup[Index]->ModelMatrix;
-		Mat4f Model_ITMatrix = Math::Inverse(Math::Transpose(ObjectTransform.GetModelMatrix() * RenderGroup[Index]->ModelMatrix));
-		Mat4f Model_PreMatrix = ObjectTransform.GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix;
-		Mat4f Model_ITPreMatrix = Math::Inverse(Math::Transpose(ObjectTransform.GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix));
+		Mat4f ModelMatrix = Transform->GetModelMatrix() *  RenderGroup[Index]->ModelMatrix;
+		Mat4f Model_ITMatrix = Math::Inverse(Math::Transpose(Transform->GetModelMatrix() * RenderGroup[Index]->ModelMatrix));
+		Mat4f Model_PreMatrix = Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix;
+		Mat4f Model_ITPreMatrix = Math::Inverse(Math::Transpose(Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix));
 		_GPUBuffers->UpdateModelBuffer(ModelMatrix, Model_ITMatrix, Model_PreMatrix, Model_ITPreMatrix);
 
-		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrixID, ObjectTransform.GetModelMatrix() *  RenderGroup[Index]->ModelMatrix);
-		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrix_PreID, ObjectTransform.GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix);
-		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrix_ITID, Math::Inverse(Math::Transpose(ObjectTransform.GetModelMatrix() * RenderGroup[Index]->ModelMatrix)));
+		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrixID, Transform->GetModelMatrix() *  RenderGroup[Index]->ModelMatrix);
+		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrix_PreID, Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix);
+		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrix_ITID, Math::Inverse(Math::Transpose(Transform->GetModelMatrix() * RenderGroup[Index]->ModelMatrix)));
 
 		RenderMaterial->GetParent()->Draw(RenderGroup[Index]->VAO, RenderGroup[Index]->NumFaces, RenderGroup[Index]->IBOIndexSizeType, 0, OGL_ELEMENT);
 	}	
@@ -352,7 +358,7 @@ void Model::Draw()
 
 void Model::UpdatePreFrameModelMatrix()
 {
-	ObjectTransform.SetModelMatrix_PreFrame(ObjectTransform.GetModelMatrix());
+	Transform->SetModelMatrix_PreFrame(Transform->GetModelMatrix());
 }
 
 void Model::Start()

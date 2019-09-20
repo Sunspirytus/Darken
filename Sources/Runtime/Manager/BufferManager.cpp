@@ -1,10 +1,9 @@
 #include "BufferManager.h"
-#include "GlobalPram.h"
 #include <iostream>
 
 BufferManager::BufferManager()
 {
-	hash<std::string>hs;
+	std::hash<std::string>hs;
 	MODEL_UNIFORM_BLOCK_NAME_ID = (int32) hs(MODEL_UNIFORM_BLOCK_NAME);
 	VIEW_UNIFORM_BLOCK_NAME_ID = (int32) hs(VIEW_UNIFORM_BLOCK_NAME);
 	SHADOWMAPPING_UNIFORM_BLOCK_NAME_ID = (int32)hs(SHADOWMAPPING_UNIFORM_BLOCK_NAME);

@@ -1,8 +1,8 @@
 #include "Camera.h"
 #include "Quaternion.h"
-#include "Util.h"
 
-Camera::Camera()
+Camera::Camera(CameraProperty property)
+	: Object(property)
 {
 	
 }
@@ -11,14 +11,15 @@ Camera::~Camera()
 {
 }
 
-Camera::Camera(Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize)
+Camera::Camera(CameraProperty property, Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize)
+	: Object(property)
 {
 	Init(position, eulerAngle, fovy, aspect, nearPlane, farPlane, viewPortSize);
 }
 
 void Camera::Init(Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize)
 {
-	CameraTransform.SetTransform(position, eulerAngle, Vector3f(1.0));
+	Transform->SetTransform(position, eulerAngle, Vector3f(1.0));
 	ViewPortSize = viewPortSize;
 	Fovy = fovy;
 	Aspect = aspect;
@@ -34,7 +35,7 @@ void Camera::Init(Vector3f position, Vector3f eulerAngle, float32 fovy, float32 
 void Camera::CreateViewMatrix()
 {
 	Mat4f viewMatrix = Mat4f(1.0);
-	ViewMatrix = CameraUtil::LookAt(CameraTransform.GetPosition(), CameraTransform.GetPosition() + CameraTransform.GetForward(), CameraTransform.GetUpward());
+	ViewMatrix = CameraUtil::LookAt(Transform->GetPosition(), Transform->GetPosition() + Transform->GetForward(), Transform->GetUpward());
 }
 
 void Camera::CreateProjectionMatrix()
@@ -79,8 +80,8 @@ void Camera::SetPosition(Vector3f position)
 {
 	
 
-	if (CameraTransform.GetPosition() == position) return;
-	CameraTransform.SetPosition(position);
+	if (Transform->GetPosition() == position) return;
+	Transform->SetPosition(position);
 	CreateViewMatrix();
 	CreateVPMatrix();
 }
@@ -88,16 +89,16 @@ void Camera::SetPosition(Vector3f position)
 void Camera::SetPosition(float32 x, float32 y, float32 z)
 {
 	Vector3f newPosition(x, y, z);
-	if (CameraTransform.GetPosition() == newPosition) return;
-	CameraTransform.SetPosition(newPosition);
+	if (Transform->GetPosition() == newPosition) return;
+	Transform->SetPosition(newPosition);
 	CreateViewMatrix();
 	CreateVPMatrix();	
 }
 
 void Camera::SetEulerAngle(Vector3f eulerAngle)
 {
-	if (CameraTransform.GetEulerAngle() == eulerAngle) return;
-	CameraTransform.SetEulerAngle(eulerAngle);
+	if (Transform->GetEulerAngle() == eulerAngle) return;
+	Transform->SetEulerAngle(eulerAngle);
 	CreateViewMatrix();
 	CreateVPMatrix();
 }
@@ -105,22 +106,22 @@ void Camera::SetEulerAngle(Vector3f eulerAngle)
 void Camera::SetEulerAngle(float32 x, float32 y, float32 z)
 {
 	Vector3f newEulerAngle(x, y, z);
-	if (CameraTransform.GetEulerAngle() == newEulerAngle) return;
-	CameraTransform.SetEulerAngle(newEulerAngle);
+	if (Transform->GetEulerAngle() == newEulerAngle) return;
+	Transform->SetEulerAngle(newEulerAngle);
 	CreateViewMatrix();
 	CreateVPMatrix();
 }
 
 void Camera::SetFovy(float32 fovy)
 {
-	fovy = fovy;
+	Fovy = fovy;
 	CreateProjectionMatrix();
 	CreateVPMatrix();
 }
 
 void Camera::SetAspect(float32 aspect)
 {
-	aspect = aspect;
+	Aspect = aspect;
 	CreateProjectionMatrix();
 	CreateVPMatrix();
 }
@@ -162,8 +163,8 @@ void Camera::SetViewPortSize(Vector2i viewPortSize)
 
 void Camera::SetDirection(const Vector3f& forward, const Vector3f& up)
 {
-	CameraTransform.SetForward(forward);
-	CameraTransform.SetUpward(up);
+	Transform->SetForward(forward);
+	Transform->SetUpward(up);
 	CreateViewMatrix();
 	CreateVPMatrix();
 }
@@ -200,27 +201,27 @@ Mat4f Camera::GetVPMatrix_I()
 
 Vector3f Camera::GetEulerAngle()
 {
-	return CameraTransform.GetEulerAngle();
+	return Transform->GetEulerAngle();
 }
 
 Vector3f Camera::GetPosition()
 {
-	return CameraTransform.GetPosition();
+	return Transform->GetPosition();
 }
 
 Vector3f Camera::GetForward()
 {
-	return CameraTransform.GetForward();
+	return Transform->GetForward();
 }
 
 Vector3f Camera::GetUpward()
 {
-	return CameraTransform.GetUpward();
+	return Transform->GetUpward();
 }
 
 Vector3f Camera::GetLeftward()
 {
-	return CameraTransform.GetLeftward();
+	return Transform->GetLeftward();
 }
 
 float32 Camera::GetFOVinRadians()

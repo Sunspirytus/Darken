@@ -1,5 +1,7 @@
 #include "MaterialInstance.h"
-#include "GlobalPram.h"
+#include "BufferManager.h"
+
+extern std::shared_ptr<BufferManager> _GPUBuffers;
 
 MaterialInstance::MaterialInstance(std::shared_ptr<Material> parentMaterial)
 {
