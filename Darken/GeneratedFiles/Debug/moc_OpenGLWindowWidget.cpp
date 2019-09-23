@@ -20,25 +20,25 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_WOpenGLWindowCore_t {
+struct qt_meta_stringdata_WD_OpenGLWindowCore_t {
     QByteArrayData data[1];
-    char stringdata0[18];
+    char stringdata0[20];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_WOpenGLWindowCore_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_WD_OpenGLWindowCore_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_WOpenGLWindowCore_t qt_meta_stringdata_WOpenGLWindowCore = {
+static const qt_meta_stringdata_WD_OpenGLWindowCore_t qt_meta_stringdata_WD_OpenGLWindowCore = {
     {
-QT_MOC_LITERAL(0, 0, 17) // "WOpenGLWindowCore"
+QT_MOC_LITERAL(0, 0, 19) // "WD_OpenGLWindowCore"
 
     },
-    "WOpenGLWindowCore"
+    "WD_OpenGLWindowCore"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_WOpenGLWindowCore[] = {
+static const uint qt_meta_data_WD_OpenGLWindowCore[] = {
 
  // content:
        8,       // revision
@@ -54,7 +54,7 @@ static const uint qt_meta_data_WOpenGLWindowCore[] = {
        0        // eod
 };
 
-void WOpenGLWindowCore::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void WD_OpenGLWindowCore::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     Q_UNUSED(_o);
     Q_UNUSED(_id);
@@ -62,30 +62,30 @@ void WOpenGLWindowCore::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
     Q_UNUSED(_a);
 }
 
-QT_INIT_METAOBJECT const QMetaObject WOpenGLWindowCore::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject WD_OpenGLWindowCore::staticMetaObject = { {
     &QOpenGLWidget::staticMetaObject,
-    qt_meta_stringdata_WOpenGLWindowCore.data,
-    qt_meta_data_WOpenGLWindowCore,
+    qt_meta_stringdata_WD_OpenGLWindowCore.data,
+    qt_meta_data_WD_OpenGLWindowCore,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *WOpenGLWindowCore::metaObject() const
+const QMetaObject *WD_OpenGLWindowCore::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *WOpenGLWindowCore::qt_metacast(const char *_clname)
+void *WD_OpenGLWindowCore::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_WOpenGLWindowCore.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_WD_OpenGLWindowCore.stringdata0))
         return static_cast<void*>(this);
     return QOpenGLWidget::qt_metacast(_clname);
 }
 
-int WOpenGLWindowCore::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int WD_OpenGLWindowCore::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QOpenGLWidget::qt_metacall(_c, _id, _a);
     return _id;

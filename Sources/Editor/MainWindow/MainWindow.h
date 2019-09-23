@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include "OpenGLWindowWidget.h"
 #include "WorldComponentWindow.h"
+#include "MenuBar.h"
 
 class MW_MainWindow : public QMainWindow
 {
@@ -20,7 +21,7 @@ private:
 	//QSplitter*				Widget_MainWindow;
 
 	DOCK_WorldComponentWindow* DOCK_WorldComponent;
-	
+	MW_MenuBar*				MenuBar;
 
 	int32					MinWidth;
 	int32					MinHeight;

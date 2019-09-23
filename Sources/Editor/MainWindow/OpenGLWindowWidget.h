@@ -8,12 +8,12 @@
 #include <QOpenGLContext>
 #include <QEvent>
 
-class WOpenGLWindowCore : public QOpenGLWidget
+class WD_OpenGLWindowCore : public QOpenGLWidget
 {
 	Q_OBJECT
 public:
-	WOpenGLWindowCore(QWidget* parent, Qt::WindowFlags f = Qt::WindowFlags());
-	~WOpenGLWindowCore();
+	WD_OpenGLWindowCore(QWidget* parent, Qt::WindowFlags f = Qt::WindowFlags());
+	~WD_OpenGLWindowCore();
 
 	virtual void initializeGL() final;
 	virtual void resizeGL(int w, int h) final;
@@ -37,7 +37,7 @@ public:
 	~DOCK_OpenGLWindow();
 
 private:
-	WOpenGLWindowCore* Widget_OpenGLWindow;
+	WD_OpenGLWindowCore* Widget_OpenGLWindow;
 };
 
 

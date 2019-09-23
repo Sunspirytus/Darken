@@ -19,6 +19,11 @@ MW_MainWindow::MW_MainWindow(QWidget *parent)
 	}
 
 	{
+		MenuBar = new MW_MenuBar();
+		this->setMenuBar(MenuBar);
+	}
+
+	{
 		DOCK_OpenGLView = new DOCK_OpenGLWindow(this);
 	}
 

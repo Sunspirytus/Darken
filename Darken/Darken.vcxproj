@@ -218,6 +218,12 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles</IncludePath>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles</IncludePath>
     </QtMoc>
+    <QtMoc Include="..\Sources\Editor\MainWindow\MenuBar.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;$(SolutionDir)Sources\Editor\MainWindow;$(SolutionDir)Darken;$(SolutionDir)Sources\UI\QtOutput\$(ConfigurationName);$(SolutionDir)Sources\UI\QtOutput;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(SolutionDir)\Sources\Runtime\UI;$(SolutionDir)\Sources\Runtime\Texture;$(SolutionDir)\Sources\Runtime\SurroundBox;$(SolutionDir)\Sources\Runtime\RenderPipeline;$(SolutionDir)\Sources\Runtime\ReflectionCapture;$(SolutionDir)\Sources\Runtime\PostProcess;$(SolutionDir)\Sources\Runtime\Material;$(SolutionDir)\Sources\Runtime\Model;$(SolutionDir)\Sources\Runtime\Math;$(SolutionDir)\Sources\Runtime\Manager;$(SolutionDir)\Sources\Runtime\Lights;$(SolutionDir)\Sources\Runtime\GlobalSystem;$(SolutionDir)\Sources\Runtime\Camera;$(SolutionDir)\Sources\Runtime\Base;$(SolutionDir)\Sources\Runtime\ViewPort;$(SolutionDir)\Sources\Runtime\FileIO;$(SolutionDir)\Sources\Runtime\Animation;F:\Darken\3rdParty\include;F:\Darken\3rdParty\include\SOIL;F:\Darken\3rdParty\include\half-1.12.0;F:\Darken\3rdParty\include\glm;F:\Darken\3rdParty\include\GLFW;F:\Darken\3rdParty\include\Glad;F:\Darken\3rdParty\include\freeimage;F:\Darken\3rdParty\include\Assimp</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles</IncludePath>
+    </QtMoc>
     <ClInclude Include="..\Sources\Runtime\Animation\Animation.h" />
     <ClInclude Include="..\Sources\Runtime\Base\Object.h" />
     <ClInclude Include="..\Sources\Runtime\Base\Transform.h" />
@@ -250,6 +256,7 @@
   <ItemGroup>
     <ClCompile Include="..\Sources\Editor\MainWindow\Application.cpp" />
     <ClCompile Include="..\Sources\Editor\MainWindow\MainWindow.cpp" />
+    <ClCompile Include="..\Sources\Editor\MainWindow\MenuBar.cpp" />
     <ClCompile Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.cpp" />
     <ClCompile Include="..\Sources\Editor\MainWindow\WorldComponentWindow.cpp" />
     <ClCompile Include="..\Sources\Runtime\Animation\Animation.cpp" />

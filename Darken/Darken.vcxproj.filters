@@ -245,6 +245,9 @@
     <ClCompile Include="..\Sources\Runtime\FileIO\FileIO.cpp">
       <Filter>源文件\Runtime\FileIO</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Editor\MainWindow\MenuBar.cpp">
+      <Filter>源文件\Editor\MainWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\Sources\Editor\MainWindow\MainWindow.h">
@@ -257,6 +260,9 @@
       <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
     <QtMoc Include="..\Sources\Editor\MainWindow\WorldComponentWindow.h">
+      <Filter>源文件\Editor\MainWindow</Filter>
+    </QtMoc>
+    <QtMoc Include="..\Sources\Editor\MainWindow\MenuBar.h">
       <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
   </ItemGroup>
