@@ -73,6 +73,9 @@
     <Filter Include="源文件\Runtime\FileIO">
       <UniqueIdentifier>{3a97d2d0-e29e-408c-a2f6-30659ed2f0ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Runtime\Util">
+      <UniqueIdentifier>{6af474b6-d127-4eb1-a3e3-e2a59747ad9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConstructScene.h">
@@ -158,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Runtime\FileIO\FileIO.h">
       <Filter>源文件\Runtime\FileIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Runtime\Util\CommonFunctions.h">
+      <Filter>源文件\Runtime\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,12 +4,12 @@
 extern std::string AssetFolderPath;
 extern std::shared_ptr<BufferManager> _GPUBuffers;
 
-Model::Model(ModelProperty property)
+Model::Model(std::shared_ptr<ModelProperty> property)
 	: Object(property)
 {
 }
 
-Model::Model(ModelProperty property, std::string fileName, Vector3f scale, bool bPackToOneMesh)
+Model::Model(std::shared_ptr<ModelProperty> property, std::string fileName, Vector3f scale, bool bPackToOneMesh)
 	: Object(property)
 {
 	LoadModelFromAsset(fileName, scale, bPackToOneMesh);
@@ -408,4 +408,9 @@ void Model::SetAnimationPlaySpeed(float32 speed)
 std::shared_ptr<MaterialInstance> Model::GetRenderMaterial()
 {
 	return RenderMaterial;
+}
+
+void Model::Save(std::string* Data)
+{
+	Object::Save(Data);
 }

@@ -13,10 +13,13 @@ public:
 	virtual void TickScene() = 0;
 	virtual void RenderScene() = 0;
 	virtual void SizeChange(Vector2i newSize) final;
-	std::shared_ptr<SceneManager> Scene;
+
+	std::shared_ptr<SceneManager> GetScene();
+	
 protected:
 	Vector2i ViewPortSize;
 	std::shared_ptr<RenderPipelineBase> RenderPipeline;
+	std::shared_ptr<SceneManager> Scene;
 	
 	virtual void OnSizeChange() = 0;
 };

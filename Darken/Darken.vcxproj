@@ -248,6 +248,7 @@
     <ClInclude Include="..\Sources\Runtime\RenderPipeline\RenderPipelineBase.h" />
     <ClInclude Include="..\Sources\Runtime\SurroundBox\SurroundBox.h" />
     <ClInclude Include="..\Sources\Runtime\Texture\Texture.h" />
+    <ClInclude Include="..\Sources\Runtime\Util\CommonFunctions.h" />
     <ClInclude Include="..\Sources\Runtime\ViewPort\MainViewPort.h" />
     <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPort.h" />
     <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPortBase.h" />

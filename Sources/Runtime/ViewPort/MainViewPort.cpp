@@ -24,7 +24,7 @@ void MainViewPort::InitScene()
 
 	float32 Scale = 1.5f;
 	{
-		ModelProperty Property;
+		std::shared_ptr<ModelProperty> Property = std::shared_ptr<ModelProperty>(new ModelProperty());
 
 		std::shared_ptr<Material> SimpleObjectMaterial00 = std::shared_ptr<Material>(new Material(std::vector<std::string> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst00 = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectMaterial00));
@@ -56,7 +56,7 @@ void MainViewPort::InitScene()
 	}
 
 	{
-		ModelProperty Property;
+		std::shared_ptr<ModelProperty> Property;
 
 		std::shared_ptr<Material> SimpleObjectMaterial10 = std::shared_ptr<Material>(new Material(std::vector<std::string> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst10 = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectMaterial10));
@@ -88,7 +88,7 @@ void MainViewPort::InitScene()
 	}
 
 	{
-		ModelProperty Property;
+		std::shared_ptr<ModelProperty> Property;
 
 		std::shared_ptr<Material> SimpleObjectMaterial20 = std::shared_ptr<Material>(new Material(std::vector<std::string> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst20 = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectMaterial20));
@@ -120,7 +120,7 @@ void MainViewPort::InitScene()
 	}
 
 	{
-		ModelProperty Property;
+		std::shared_ptr<ModelProperty> Property;
 
 		std::shared_ptr<Material> SimpleObjectMaterial30 = std::shared_ptr<Material>(new Material(std::vector<std::string> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst30 = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectMaterial30));
@@ -151,7 +151,7 @@ void MainViewPort::InitScene()
 		Scene->AddObj(ObjectType::StaticMesh, Cube33);
 	}
 	{
-		ModelProperty Property;
+		std::shared_ptr<ModelProperty> Property;
 		std::shared_ptr<Material> SimpleObjectMaterial0 = std::shared_ptr<Material>(new Material(std::vector<std::string> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst7 = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectMaterial0));
 		SimpleObjectMaterialInst7->SetUniform<Vector3f>("ColorTest", Vector3f(1.0, 0.0, 1.0));
@@ -161,7 +161,7 @@ void MainViewPort::InitScene()
 		Scene->AddObj(ObjectType::StaticMesh, Plane);
 	}
 
-	ModelProperty Property;
+	std::shared_ptr<ModelProperty> Property;
 	std::shared_ptr<Material> SimpleObjectMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
 	std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectMaterial));
 	SimpleObjectMaterialInst->SetUniform<Vector3f>("ColorTest", Vector3f(1.0, 1.0, 1.0));
@@ -169,10 +169,10 @@ void MainViewPort::InitScene()
 	Sphere->Transform->SetPosition(Vector3f(0.0, 0.0, 10.0));
 	Sphere->Transform->SetScale(Vector3f(1.0, 1.0, 1.0));
 	Scene->AddObj(ObjectType::DynamicMesh, Sphere);
-	SphereReflectionCaptureProperty SRCProperty;
+	std::shared_ptr<SphereReflectionCaptureProperty> SRCProperty;
 	std::shared_ptr<SphereReflectionCapture> ReflectionActor = std::shared_ptr<SphereReflectionCapture>(new SphereReflectionCapture(SRCProperty, Scene, Vector3f(0.0, 0.0, 5.0), 1000.0, 1.0));
 	Scene->AddObj(ObjectType::AbstractActor, ReflectionActor);
-	CameraProperty CProperty;
+	std::shared_ptr<CameraProperty> CProperty;
 	std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(CProperty, Vector3f(0.0, 10.0, 10.0), Vector3f(0.0, 0.0, -90.0), Math::Radians(60.0), (float32)ViewPortSize.x / (float32)ViewPortSize.y, 0.1f, 100.0f, Vector2i(ViewPortSize.x, ViewPortSize.y)));
 
 	Scene->AddCamera(CameraIndex::MainCamera, ViewCamera);

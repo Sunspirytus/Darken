@@ -66,6 +66,9 @@ public:
 
 	void UpdatePreFrameData();
 
+
+	void GetSaveInfo(std::string* Infos);
+
 private:
 	std::vector<std::shared_ptr<Light>> SceneLights;
 	std::multimap<uint32, std::shared_ptr<Camera>> SceneCameras;

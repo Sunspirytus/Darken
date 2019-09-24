@@ -42,13 +42,18 @@ class ModelProperty : public ObjectProperty
 public:
 	ModelProperty() {};
 	~ModelProperty() {};
+
+	virtual void Save(std::string* Data)
+	{
+		ObjectProperty::Save(Data);
+	}
 };
 
 class Model : public Object
 {
 public:
-	Model(ModelProperty property);
-	Model(ModelProperty property, std::string fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
+	Model(std::shared_ptr<ModelProperty> property);
+	Model(std::shared_ptr<ModelProperty> property, std::string fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
 	~Model();
 
 	void LoadModelFromAsset(std::string fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
@@ -63,6 +68,7 @@ public:
 	virtual void InternalUpdate() final;
 	virtual void Update();
 	virtual void FixUpdate();
+	virtual void Save(std::string* Data) final;
 
 	void UpdatePreFrameModelMatrix();
 

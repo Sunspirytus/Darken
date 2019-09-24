@@ -1,10 +1,10 @@
 #include "Object.h"
 
-Object::Object(ObjectProperty property) 
+Object::Object(std::shared_ptr<ObjectProperty> property)
 	: bNeedCheckClip(true)
 	, bNeedClip(false)
 {
-	Property = std::shared_ptr<ObjectProperty>(new ObjectProperty(property));
+	Property = property;
 	Transform = std::shared_ptr<TransformComponent>(new TransformComponent());
 }
 

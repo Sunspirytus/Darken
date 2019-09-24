@@ -162,3 +162,11 @@ void SceneManager::PrepareLightingMaterial()
 		M->BindLightingMaterial();
 	}
 }
+
+void SceneManager::GetSaveInfo(std::string* Infos)
+{
+	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
+	{
+		ObjectIterator->second->Save(Infos);
+	}
+}

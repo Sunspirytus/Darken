@@ -229,7 +229,7 @@ void ShadowDepth::CalculateLightsVPMatrix()
 		if (Lights[LightIndex]->Type == LightType::Direct)
 		{
 			DirectLight* DL = dynamic_cast<DirectLight*>(Lights[LightIndex]);
-			CameraProperty CProperty;
+			std::shared_ptr<CameraProperty> CProperty;
 			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(CProperty, DL->GetTransform()->GetPosition(), DL->GetTransform()->GetEulerAngle(), 180.0f, 1.0f, 0.1f, 100.0f, Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
 			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
 		}
@@ -237,7 +237,7 @@ void ShadowDepth::CalculateLightsVPMatrix()
 		{
 			PointLight* PL = dynamic_cast<PointLight*>(Lights[LightIndex]);
 
-			CameraProperty CProperty;
+			std::shared_ptr<CameraProperty> CProperty;
 			std::shared_ptr<Camera> LCamera0 = std::shared_ptr<Camera>(new Camera(CProperty, PL->GetTransform()->GetPosition(), Vector3f(0.0,   0.0, 180.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
 			std::shared_ptr<Camera> LCamera1 = std::shared_ptr<Camera>(new Camera(CProperty, PL->GetTransform()->GetPosition(), Vector3f(0.0,   0.0,   0.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
 			std::shared_ptr<Camera> LCamera2 = std::shared_ptr<Camera>(new Camera(CProperty, PL->GetTransform()->GetPosition(), Vector3f(0.0, -90.0,   0.0), Math::Radians(90.0f), 1.0f, 2.0f, PL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
@@ -255,7 +255,7 @@ void ShadowDepth::CalculateLightsVPMatrix()
 		else if (Lights[LightIndex]->Type == LightType::Spot)
 		{
 			SpotLight* SL = dynamic_cast<SpotLight*>(Lights[LightIndex]);
-			CameraProperty CProperty;
+			std::shared_ptr<CameraProperty> CProperty;
 			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(CProperty, SL->GetTransform()->GetPosition(), SL->GetTransform()->GetEulerAngle(), Math::Radians(SL->GetOutConeAngle() / 2.0f), 1.0f, 2.0f, SL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
 			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
 		}

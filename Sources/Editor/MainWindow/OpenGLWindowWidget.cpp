@@ -143,6 +143,11 @@ void WD_OpenGLWindowCore::keyReleaseEvent(QKeyEvent* ev)
 	
 }
 
+std::shared_ptr<MainViewPort> WD_OpenGLWindowCore::GetView() 
+{
+	return View;
+}
+
 DOCK_OpenGLWindow::DOCK_OpenGLWindow(QWidget* parent)
 	: QDockWidget(parent)
 	, Widget_OpenGLWindow(nullptr)
@@ -163,3 +168,9 @@ DOCK_OpenGLWindow::DOCK_OpenGLWindow(QWidget* parent)
 DOCK_OpenGLWindow::~DOCK_OpenGLWindow()
 {
 }
+
+std::shared_ptr<MainViewPort> DOCK_OpenGLWindow::GetView()
+{
+	return Widget_OpenGLWindow->GetView();
+}
+

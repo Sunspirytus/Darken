@@ -19,8 +19,9 @@ MW_MainWindow::MW_MainWindow(QWidget *parent)
 	}
 
 	{
-		MenuBar = new MW_MenuBar();
+		MenuBar = new MW_MenuBar(this);
 		this->setMenuBar(MenuBar);
+		QMetaObject::Connection Connection = connect(MenuBar, SIGNAL(saveScene()), this, SLOT(SaveScene()));
 	}
 
 	{
@@ -39,6 +40,16 @@ MW_MainWindow::MW_MainWindow(QWidget *parent)
 
 	//DOCK_WorldComponent->GetTable()->UpdateComponent(DOCK_OpenGLView->GetView()->Scene);
 }
+
+void MW_MainWindow::SaveScene()
+{
+	std::string SaveData;
+	DOCK_OpenGLView->GetView()->GetScene()->GetSaveInfo(&SaveData);
+	//std::string a = PropertyDataToString(Name, 123);
+	int b = 0;
+}
+
+
 
 
 

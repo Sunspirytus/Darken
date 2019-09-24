@@ -14,3 +14,8 @@ void ViewPortBase::SizeChange(Vector2i newSize)
 	ViewPortSize = newSize;
 	OnSizeChange();
 }
+
+std::shared_ptr<SceneManager> ViewPortBase::GetScene()
+{
+	return Scene;
+}

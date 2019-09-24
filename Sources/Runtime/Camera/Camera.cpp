@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "Quaternion.h"
 
-Camera::Camera(CameraProperty property)
+Camera::Camera(std::shared_ptr<CameraProperty> property)
 	: Object(property)
 {
 	
@@ -11,7 +11,7 @@ Camera::~Camera()
 {
 }
 
-Camera::Camera(CameraProperty property, Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize)
+Camera::Camera(std::shared_ptr<CameraProperty> property, Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize)
 	: Object(property)
 {
 	Init(position, eulerAngle, fovy, aspect, nearPlane, farPlane, viewPortSize);

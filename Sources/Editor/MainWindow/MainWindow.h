@@ -14,7 +14,10 @@ class MW_MainWindow : public QMainWindow
 
 public:
 	MW_MainWindow(QWidget *parent = Q_NULLPTR);
-	
+
+private slots:
+	void SaveScene();
+
 private:
 	DOCK_OpenGLWindow*	DOCK_OpenGLView;
 	QHBoxLayout*			Layout_MainWindow;

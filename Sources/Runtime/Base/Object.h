@@ -2,6 +2,7 @@
 
 #include "Transform.h"
 #include "SurroundBox.h"
+#include "CommonFunctions.h"
 
 enum ObjectType
 {
@@ -23,6 +24,12 @@ public:
 	{};
 	~ObjectProperty() {};
 
+	virtual void Save(std::string* Data) 
+	{
+		//Data->append((TO_String(Name), DataToString(1));
+		int a = 0;
+	};
+
 	std::string Name;
 	ObjectType Type;
 };
@@ -30,7 +37,7 @@ public:
 class Object
 {
 public:
-	Object(ObjectProperty property);
+	Object(std::shared_ptr<ObjectProperty> property);
 	~Object();
 
 	std::shared_ptr<ObjectProperty> GetProperty() { return Property; }
@@ -46,6 +53,10 @@ public:
 	virtual void Update() = 0;
 	virtual void FixUpdate() = 0;
 	virtual void Draw() = 0;
+	virtual void Save(std::string* Data)
+	{
+		Property->Save(Data);
+	};
 private:
 	std::shared_ptr<ObjectProperty> Property;
 	//2

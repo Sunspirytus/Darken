@@ -13,7 +13,7 @@ public:
 class SphereReflectionCapture : public Object
 {
 public:
-	SphereReflectionCapture(SphereReflectionCaptureProperty property, std::shared_ptr<SceneManager> Scene, const Vector3f &position, const float32 &radius, const float32& brightness);
+	SphereReflectionCapture(std::shared_ptr<SphereReflectionCaptureProperty> property, std::shared_ptr<SceneManager> Scene, const Vector3f &position, const float32 &radius, const float32& brightness);
 	~SphereReflectionCapture();
 
 	virtual void Start() {};
@@ -22,6 +22,7 @@ public:
 	virtual void FixUpdate() {};
 	virtual void Draw() {};
 	virtual void CheckWhetherNeedClip() {};
+	virtual void Save(std::string* Data) final {};
 
 	void CaptureWithPipeLine(DeferRenderPipeline* Pipeline);
 	void CalReflectionCubeTexAvgBrightness();

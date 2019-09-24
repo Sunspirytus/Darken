@@ -4,7 +4,7 @@
 
 extern std::shared_ptr<BufferManager> _GPUBuffers;
 
-SphereReflectionCapture::SphereReflectionCapture(SphereReflectionCaptureProperty property, std::shared_ptr<SceneManager> Scene, const Vector3f &position, const float32 &radius, const float32& brightness)
+SphereReflectionCapture::SphereReflectionCapture(std::shared_ptr<SphereReflectionCaptureProperty> property, std::shared_ptr<SceneManager> Scene, const Vector3f &position, const float32 &radius, const float32& brightness)
 	:	Object(property),
 		InfluenceRadius(radius),
 		Brightness(brightness),
@@ -62,7 +62,7 @@ void SphereReflectionCapture::CreateCaptureResources()
 
 void SphereReflectionCapture::Create6FacesCameraList()
 {
-	CameraProperty CProperty;
+	std::shared_ptr<CameraProperty> CProperty;
 	std::shared_ptr<Camera> LCamera0 = std::shared_ptr<Camera>(new Camera(CProperty, Transform->GetPosition(), Vector3f(-90.0,  0.0,    0.0), Math::Radians(90.0f), 1.0f, 0.1f, InfluenceRadius, Vector2i(CaptureTexSize, CaptureTexSize)));
 	std::shared_ptr<Camera> LCamera1 = std::shared_ptr<Camera>(new Camera(CProperty, Transform->GetPosition(), Vector3f(90.0,  0.0,  180.0), Math::Radians(90.0f), 1.0f, 0.1f, InfluenceRadius, Vector2i(CaptureTexSize, CaptureTexSize)));
 	std::shared_ptr<Camera> LCamera2 = std::shared_ptr<Camera>(new Camera(CProperty, Transform->GetPosition(), Vector3f(180.0,  0.0,   90.0), Math::Radians(90.0f), 1.0f, 0.1f, InfluenceRadius, Vector2i(CaptureTexSize, CaptureTexSize)));

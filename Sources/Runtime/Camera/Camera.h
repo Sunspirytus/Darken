@@ -17,9 +17,9 @@ public:
 class Camera : public Object
 {
 public:
-	Camera(CameraProperty property);
+	Camera(std::shared_ptr<CameraProperty> property);
 	~Camera();
-	Camera(CameraProperty property, Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize);
+	Camera(std::shared_ptr<CameraProperty> property, Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize);
 	void Init(Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize);
 	//void ModifyProjectionForClipping(Vector4f vClipPlane);
 
@@ -65,6 +65,7 @@ public:
 	virtual void Update() final {};
 	virtual void FixUpdate() final {};
 	virtual void Draw() final {};
+	virtual void Save(std::string* Data) final {};
 private:
 
 	float32 Fovy;

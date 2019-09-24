@@ -5,6 +5,8 @@
 #include "glad.h"
 #include "glfw3.h"
 
+#define TO_String(x)	#x
+
 using half_float::half;
 
 namespace dk
