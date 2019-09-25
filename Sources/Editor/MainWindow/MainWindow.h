@@ -28,6 +28,6 @@ private:
 	DOCK_WorldComponentWindow* DOCK_WorldComponent;
 	MW_MenuBar* MenuBar;
 
-	std::string ProjectDir;
+	String ProjectDir;
 };
 

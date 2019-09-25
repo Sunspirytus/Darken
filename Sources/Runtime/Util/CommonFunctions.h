@@ -3,19 +3,19 @@
 #include <string>
 
 template<class T>
-inline std::string DataToString(T Data)
+inline String DataToString(T Data)
 {
 	return std::to_string(Data);
 }
 
 template<class T>
-std::string PropertyToString(std::string Name, VariableType Type, T* Data)
+String PropertyToString(String Name, VariableType Type, T* Data)
 {
-	std::string DataString;
+	String DataString;
 	switch (Type)
 	{
 	case STRING: 
-		DataString = *(std::string*)Data;
+		DataString = *(String*)Data;
 		break;
 	case BOOL_1:
 	{
@@ -90,7 +90,7 @@ std::string PropertyToString(std::string Name, VariableType Type, T* Data)
 		uint64* D = (uint64*)Data;
 		char str[256];
 		sprintf_s(str, "%llu", *D);
-		DataString = std::string(str);
+		DataString = String(str);
 		break; 
 	}
 	case VECTOR2_F:

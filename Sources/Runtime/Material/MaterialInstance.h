@@ -13,7 +13,7 @@ public:
 	void SetParent(std::shared_ptr<Material> parentMaterial);
 	void ChangedParentDynamic(std::shared_ptr<Material> parentMaterial);
 	std::shared_ptr<Material> GetParent();
-	static int32 GetID(const std::string &UniformName);
+	static int32 GetID(const String &UniformName);
 
 	template<class T>
 	void SetUniform(int32 UniformID, const T &data)
@@ -23,7 +23,7 @@ public:
 	}
 
 	template<class T>
-	void SetUniform(const std::string &UniformName, const T &data)
+	void SetUniform(const String &UniformName, const T &data)
 	{
 		int32 ID = (int32) hs(UniformName);
 		if (BasicUniformID_PtrMap.find(ID) == BasicUniformID_PtrMap.end()) return;
@@ -38,7 +38,7 @@ public:
 	}
 
 	template<class T>
-	void SetUniformArray(const std::string &UniformName, T * data, int32 count)
+	void SetUniformArray(const String &UniformName, T * data, int32 count)
 	{
 		int32 ID = (int32)hs(UniformName);
 		if (BasicUniformID_PtrMap.find(ID) == BasicUniformID_PtrMap.end()) return;
@@ -55,7 +55,7 @@ public:
 	}
 
 	template<class T>
-	void SetBlockUniform(const std::string &BlockName, const std::string &UniformName, const T &data)
+	void SetBlockUniform(const String &BlockName, const String &UniformName, const T &data)
 	{
 		int32 BlockID = (int32)hs(BlockName);
 		if (BlockID_UniformID_DataPtrMap.find(BlockID) == BlockID_UniformID_DataPtrMap.end()) return;
@@ -75,7 +75,7 @@ public:
 	}
 
 	template<class T>
-	void SetBlockUniformArray(const std::string &BlockName, const std::string &UniformName, T * data, int32 count)
+	void SetBlockUniformArray(const String &BlockName, const String &UniformName, T * data, int32 count)
 	{
 		int32 BlockID = hs(BlockName);
 		if (BlockID_UniformID_DataPtrMap.find(BlockID) == BlockID_UniformID_DataPtrMap.end()) return;
@@ -91,7 +91,7 @@ public:
 		memcpy(TextureUniformID_PtrMap[UniformID], &data, sizeof(uint32));
 	}
 
-	void SetTextureID(const std::string &UniformName, uint32 data)
+	void SetTextureID(const String &UniformName, uint32 data)
 	{
 		int32 ID = (int32)hs(UniformName);
 		if (TextureUniformID_PtrMap.find(ID) == TextureUniformID_PtrMap.end()) return;
@@ -103,7 +103,7 @@ private:
 	std::map<int32, uint32*> TextureUniformID_PtrMap;
 	std::map<int32, std::map<int32, void*>> BlockID_UniformID_DataPtrMap;
 	std::shared_ptr<Material> ParentMaterial;
-	std::hash<std::string> hs;
+	std::hash<String> hs;
 	void MarkDirty(int32 BlockID);
 };
 

@@ -207,9 +207,9 @@ void TransformComponent::CalculateModelMatrix()
 	ModelMatrix_IT = Math::Inverse(Math::Transpose(ModelMatrix));
 }
 
-void TransformComponent::Save(std::string* Data)
+void TransformComponent::Save(String* Data)
 {
-	Data->append(PropertyToString<std::string>(TO_String(Component), STRING, &Name));
+	Data->append(PropertyToString<String>(TO_String(Component), STRING, &Name));
 	Data->append(PropertyToString<Vector3f>(TO_String(Position), VECTOR3_F, &Position));
 	Data->append(PropertyToString<Vector3f>(TO_String(EulerAngle), VECTOR3_F, &EulerAngle));
 	Data->append(PropertyToString<Vector3f>(TO_String(Scale), VECTOR3_F, &Scale));

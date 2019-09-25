@@ -163,7 +163,7 @@ void SceneManager::PrepareLightingMaterial()
 	}
 }
 
-void SceneManager::GetSaveInfo(std::string* Infos)
+void SceneManager::GetSaveInfo(String* Infos)
 {
 	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{

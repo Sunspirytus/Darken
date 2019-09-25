@@ -34,7 +34,7 @@ public:
 	Mat4f GetModelMatrix_PreFrame();
 	Mat4f GetModelMatrix_IT();
 
-	virtual void Save(std::string* Data);
+	virtual void Save(String* Data);
 
 private:
 	Vector3f Forward;
@@ -49,7 +49,7 @@ private:
 
 	void CalculateModelMatrix();
 
-	std::string Name;
+	String Name;
 	Vector3f Position;
 	Vector3f EulerAngle;
 	Vector3f Scale;

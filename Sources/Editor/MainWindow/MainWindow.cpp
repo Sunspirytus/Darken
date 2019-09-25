@@ -17,6 +17,7 @@ MW_MainWindow::MW_MainWindow(QWidget *parent)
 	{
 		MenuBar = new MW_MenuBar(this);
 		this->setMenuBar(MenuBar);
+
 		QMetaObject::Connection Connection;
 		Connection = connect(MenuBar, SIGNAL(saveScene()), this, SLOT(SaveScene()));
 		Connection = connect(MenuBar, SIGNAL(saveProject()), this, SLOT(SaveProject()));
@@ -37,7 +38,7 @@ MW_MainWindow::MW_MainWindow(QWidget *parent)
 
 void MW_MainWindow::SaveScene()
 {
-	std::string SaveData;
+	String SaveData;
 	DOCK_OpenGLView->GetView()->GetScene()->GetSaveInfo(&SaveData);
 	FileIO FIO;
 	FIO.SaveFile(ProjectDir, "SceneDemo", FileType::WorldScene, SaveData);
@@ -45,7 +46,7 @@ void MW_MainWindow::SaveScene()
 
 void MW_MainWindow::SaveProject()
 {
-	std::string SaveData;
+	String SaveData;
 	SaveData =
 	{
 		"PrjDemo"

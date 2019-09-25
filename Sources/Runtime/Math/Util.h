@@ -234,7 +234,7 @@ T ReverseBits(T Bits)
 	return Bits;
 }
 
-static std::string ReadSourceCode(std::string souceCodePath)
+static String ReadSourceCode(String souceCodePath)
 {
 	std::ifstream ifile(souceCodePath);
 	//将文件读入到ostringstream对象buf中
@@ -278,7 +278,7 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
-		std::shared_ptr<Material> FlipYMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> { "DrawRectVertShader.vsh", "FlipTextureYFragShader.fsh" }));
+		std::shared_ptr<Material> FlipYMaterial = std::shared_ptr<Material>(new Material(std::vector<String> { "DrawRectVertShader.vsh", "FlipTextureYFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> FlipYMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(FlipYMaterial));
 		std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());
 		FlipYMaterialInst->SetTextureID("MainTex", TextureID);
@@ -310,7 +310,7 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
-		std::shared_ptr<Material> CopyMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }));
+		std::shared_ptr<Material> CopyMaterial = std::shared_ptr<Material>(new Material(std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> CopyMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(CopyMaterial));
 		std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());
 		CopyMaterialInst->SetTextureID("MainTex", SrcTextureID);
@@ -348,7 +348,7 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
-		std::shared_ptr<Material> CopyMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }));
+		std::shared_ptr<Material> CopyMaterial = std::shared_ptr<Material>(new Material(std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> CopyMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(CopyMaterial));
 		std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());
 		CopyMaterialInst->SetTextureID("MainTex", SrcTextureID);

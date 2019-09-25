@@ -306,12 +306,12 @@ public:
 
 	Texture();
 	~Texture();
-	Texture(std::string file, TextureParameter minParm, TextureParameter magParm, TextureParameter wrapParmU, TextureParameter wrapParmV);
-	//uint32 CreateCompositeTexture(float32 compositepower, bool useGPU = true, Channel AddToChanel = GREEN, std::string compositeTexFilePath = " ");
+	Texture(String file, TextureParameter minParm, TextureParameter magParm, TextureParameter wrapParmU, TextureParameter wrapParmV);
+	//uint32 CreateCompositeTexture(float32 compositepower, bool useGPU = true, Channel AddToChanel = GREEN, String compositeTexFilePath = " ");
 	void CreateGPUObject(TextureParameter minParm, TextureParameter magParm, TextureParameter wrapParmU, TextureParameter wrapParmV);
 	void UpdateGPUObjectData();
 
-	void LoadTextureFromAsset(std::string const& file);
+	void LoadTextureFromAsset(String const& file);
 	//void InitMipRawTextureData(int32 width, int32 height, TextureDataTypeFormat typeFormat);
 	//void InitNoMipRawTextureData(int32 width, int32 height, TextureDataTypeFormat typeFormat);
 
@@ -323,7 +323,7 @@ public:
 private:
 	int32 Width;
 	int32 Height;
-	FREE_IMAGE_FORMAT GetFileType(std::string const& file);
+	FREE_IMAGE_FORMAT GetFileType(String const& file);
 	TextureDataTypeFormat GetTextureType(FIBITMAP *dib);
 	TextureDataTypeFormat TypeFormat;
 	std::vector<std::shared_ptr<RawTextureData>> RawTextureDataPtrs;

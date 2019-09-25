@@ -13,9 +13,9 @@ Object::~Object()
 {
 }
 
-void Object::Save(std::string* Data)
+void Object::Save(String* Data)
 {
-	Data->append(PropertyToString<std::string>(TO_String(Name), STRING, &Name));
+	Data->append(PropertyToString<String>(TO_String(Name), STRING, &Name));
 	Data->append(PropertyToString<ObjectType>(TO_String(Type), ENUM, &Type));
 };
 

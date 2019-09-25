@@ -1,8 +1,10 @@
 #pragma once
 
+#include "TypeDefine.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QMenu>
+#include <QToolTip>
 #include <map>
 
 class MW_MenuBar;
@@ -25,23 +27,31 @@ public:
 	enum ItemType
 	{
 		Menu,
-		Action
+		Action,
+		Separator
 	};
 
-	MenuBarItem(const std::string& title, ItemType type, void(MW_MenuBar::* actionSignal)())
+	MenuBarItem(const String& title,
+		const String& describe,
+		const String& hotKey,
+		ItemType type,
+		void(MW_MenuBar::* actionSignal)()
+	)
 		: Title(title)
+		, Describe(describe)
+		, HotKey(hotKey)
 		, Type(type)
 		, Signal(actionSignal)
 	{
 	};
 	~MenuBarItem() {};
 
-	std::string Title;
+	String Title;
+	String Describe;
+	String HotKey;
 	ItemType Type;
 	void(MW_MenuBar::* Signal)();
 };
-
-
 
 class MW_MenuBar : public QMenuBar
 {
@@ -55,13 +65,19 @@ public slots:
 	void triggerMenu(QAction* Action);
 
 signals:
+	void newScene();
+	void openScene();
 	void saveScene();
-	void saveProject();
+
+	void newProject();
 	void loadProject();
+	void saveProject();	
+
+	void exitApplication();
 
 private:
 	void Setup();
-	void AddItem(const std::string& parentTitle, const std::string& title, MenuBarItem::ItemType type, void(MW_MenuBar::* signal)());
-	std::multimap<std::string, std::shared_ptr<MenuBarItem>> Items;
+	void AddItem(const String& parentTitle, const String& title, const String& describe, const String& hotKey, MenuBarItem::ItemType type, void(MW_MenuBar::* signal)());
+	std::multimap<String, std::shared_ptr<MenuBarItem>> Items;
 };
 

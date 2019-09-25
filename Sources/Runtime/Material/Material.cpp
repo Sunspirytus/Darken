@@ -6,7 +6,7 @@
 #include <iostream>
 
 extern std::shared_ptr<BufferManager> _GPUBuffers;
-extern std::string AssetFolderPath;
+extern String AssetFolderPath;
 
 Material::Material()
 {
@@ -16,7 +16,7 @@ Material::~Material()
 {
 }
 
-Material::Material(std::vector<std::string> shaderNames)
+Material::Material(std::vector<String> shaderNames)
 {
 	LoadAndCreateShaders(shaderNames);
 	FindShaderNames(shaderNames);
@@ -26,7 +26,7 @@ Material::Material(std::vector<std::string> shaderNames)
 	LinkLocation();
 }
 
-void Material::CreateMaterial(std::vector<std::string>& shaderNames)
+void Material::CreateMaterial(std::vector<String>& shaderNames)
 {
 	LoadAndCreateShaders(shaderNames);
 	FindShaderNames(shaderNames);
@@ -45,7 +45,7 @@ void Material::UnBindProgram()
 }
 void Material::BindUniforms()
 {
-	//for (std::unordered_map<std::string, UniformItem_Basic>::iterator it = MaterialProgram->Uniforms_Basic.begin(); it != MaterialProgram->Uniforms_Basic.end(); it++)
+	//for (std::unordered_map<String, UniformItem_Basic>::iterator it = MaterialProgram->Uniforms_Basic.begin(); it != MaterialProgram->Uniforms_Basic.end(); it++)
 	for(auto& uniformitempair: MaterialProgram->Uniforms_Basic)
 	{
 		auto& uniformitem = uniformitempair.second;
@@ -73,7 +73,7 @@ void Material::BindUniforms()
 }
 void Material::BindSamplers()
 {
-	//for (std::unordered_map<std::string, UniformItem_Texture>::iterator it = MaterialProgram->Uniforms_Texture.begin(); it != MaterialProgram->Uniforms_Texture.end(); it++)
+	//for (std::unordered_map<String, UniformItem_Texture>::iterator it = MaterialProgram->Uniforms_Texture.begin(); it != MaterialProgram->Uniforms_Texture.end(); it++)
 	for (auto& uniformitempair : MaterialProgram->Uniforms_Texture)
 	{
 		auto& uniformitem = uniformitempair.second;
@@ -137,7 +137,7 @@ void Material::Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 O
 	glBindVertexArray(0);
 }
 
-void Material::LoadAndCreateShaders(std::vector<std::string>& shaderNames)
+void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 {
 	if (!MaterialProgram)
 	{
@@ -157,7 +157,7 @@ void Material::LoadAndCreateShaders(std::vector<std::string>& shaderNames)
 
 		std::stringstream ShaderStream;
 		ShaderStream << ShaderFile.rdbuf();
-		std::string SourceCode = ShaderStream.str();
+		String SourceCode = ShaderStream.str();
 
 		int32 loc =(int32) shaderNames[i].find('.');
 		const int8 ShaderType = shaderNames[i][loc + 1];
@@ -193,7 +193,7 @@ void Material::LoadAndCreateShaders(std::vector<std::string>& shaderNames)
 	}
 }
 
-void Material::FindShaderNames(std::vector<std::string>& shaderNames)
+void Material::FindShaderNames(std::vector<String>& shaderNames)
 {
 	for (uint32 i = 0; i < shaderNames.size(); i++)
 	{
@@ -202,7 +202,7 @@ void Material::FindShaderNames(std::vector<std::string>& shaderNames)
 
 		std::stringstream ShaderStream;
 		ShaderStream << ShaderFile.rdbuf();
-		std::string SourceCode = ShaderStream.str();
+		String SourceCode = ShaderStream.str();
 
 		MaterialProgram->shaders[i].Name = shaderNames[i];
 	}
@@ -220,8 +220,8 @@ void Material::CreateProgram()
 	GLint glStatus;
 
 	glGetProgramiv(MaterialProgram->Id, GL_LINK_STATUS, &glStatus);
-	std::string default_infolog;
-	std::string& infolog = default_infolog;
+	String default_infolog;
+	String& infolog = default_infolog;
 	if (!glStatus)
 	{
 		int32_t infoLogLength, charWriten;
@@ -250,7 +250,7 @@ void Material::FindAttibInfos()
 		int32 AttribSize;
 		uint32 AttribType;
 		glGetActiveAttrib(MaterialProgram->Id, AttribIndex, AttribName_MaxLength, &NameLength, &AttribSize, &AttribType, AttribName);
-		MaterialProgram->Attribs.insert(std::pair<std::string, AttribItem>(std::string(AttribName), Attrib));
+		MaterialProgram->Attribs.insert(std::pair<String, AttribItem>(String(AttribName), Attrib));
 	}
 	delete[] AttribName;
 }
@@ -278,12 +278,12 @@ void Material::FindUniformInfos()
 			int32 DataSize;
 			glGetActiveUniformBlockiv(MaterialProgram->Id, UniformBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &DataSize);
 
-			std::hash<std::string> hs;
+			std::hash<String> hs;
 			std::shared_ptr<UniformItem_Block> Block = std::shared_ptr<UniformItem_Block>(new UniformItem_Block());
 			Block->HashCode = (int32)hs(UniformBlockName);
 			Block->DataSize_Byte = DataSize;
 			Block->Index = UniformBlockIndex;
-			MaterialProgram->Uniforms_Block.insert(std::pair<std::string, std::shared_ptr<UniformItem_Block>>(UniformBlockName, Block));
+			MaterialProgram->Uniforms_Block.insert(std::pair<String, std::shared_ptr<UniformItem_Block>>(UniformBlockName, Block));
 
 			int8* UniformInBlockName = new int8[UniformInBlockName_MaxLength];
 			for (int32 Index = 0; Index < UniformCountInBlock; Index++)
@@ -310,7 +310,7 @@ void Material::FindUniformInfos()
 		}
 		delete[] UniformBlockName;
 		
-		std::unordered_map<std::string, std::shared_ptr<UniformItem_Block>>::iterator it;
+		std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator it;
 		for(it = MaterialProgram->Uniforms_Block.begin(); it != MaterialProgram->Uniforms_Block.end(); it++)
 		{
 			it->second->Id = _GPUBuffers->CreateUniformBuffer(it->first, it->second);
@@ -343,13 +343,13 @@ void Material::FindUniformInfos()
 			UniformItem_Basic UniformBasic;
 			UniformBasic.Size = Size;
 			UniformBasic.DataType = T;
-			MaterialProgram->Uniforms_Basic.insert(std::pair<std::string, UniformItem_Basic>(UniformName, UniformBasic));
+			MaterialProgram->Uniforms_Basic.insert(std::pair<String, UniformItem_Basic>(UniformName, UniformBasic));
 		}
 		else
 		{
 			UniformItem_Texture UniformTexture;
 			UniformTexture.DataType = T;
-			MaterialProgram->Uniforms_Texture.insert(std::pair<std::string, UniformItem_Texture>(UniformName, UniformTexture));
+			MaterialProgram->Uniforms_Texture.insert(std::pair<String, UniformItem_Texture>(UniformName, UniformTexture));
 		}
 	}
 	delete[] UniformName;
@@ -358,25 +358,25 @@ void Material::FindUniformInfos()
 void Material::LinkLocation()
 {
 	glUseProgram(MaterialProgram->Id);
-	for (std::unordered_map<std::string, AttribItem>::iterator it = MaterialProgram->Attribs.begin(); it != MaterialProgram->Attribs.end(); it++)
+	for (std::unordered_map<String, AttribItem>::iterator it = MaterialProgram->Attribs.begin(); it != MaterialProgram->Attribs.end(); it++)
 	{
-		std::string name = it->first;;
+		String name = it->first;;
 		GLint loc = glGetAttribLocation(MaterialProgram->Id, name.c_str());
 		MaterialProgram->Attribs[name].Location = loc;
 	}
 
-	for (std::unordered_map<std::string, UniformItem_Basic>::iterator it = MaterialProgram->Uniforms_Basic.begin(); it != MaterialProgram->Uniforms_Basic.end(); it++)
+	for (std::unordered_map<String, UniformItem_Basic>::iterator it = MaterialProgram->Uniforms_Basic.begin(); it != MaterialProgram->Uniforms_Basic.end(); it++)
 	{
-		std::string name = it->first;
+		String name = it->first;
 		GLint loc = glGetUniformLocation(MaterialProgram->Id, name.c_str());
 		MaterialProgram->Uniforms_Basic[name].Location = loc;
 	}
 
 	int32 newLoc;
-	std::unordered_map<std::string, UniformItem_Texture>::iterator it;
+	std::unordered_map<String, UniformItem_Texture>::iterator it;
 	for (it = MaterialProgram->Uniforms_Texture.begin(), newLoc = 0; it != MaterialProgram->Uniforms_Texture.end(); it++, newLoc++)
 	{
-		std::string name = it->first;
+		String name = it->first;
 		GLint loc = glGetUniformLocation(MaterialProgram->Id, name.c_str());
 		if (loc == -1) continue;
 		glUniform1i(loc, newLoc);
@@ -386,7 +386,7 @@ void Material::LinkLocation()
 	glUseProgram(0);
 }
 
-uint32 Material::CreateShaderGPUObjFromSrcCode(std::string & srcCode, ShaderType type)
+uint32 Material::CreateShaderGPUObjFromSrcCode(String & srcCode, ShaderType type)
 {
 	uint32 outShader;
 

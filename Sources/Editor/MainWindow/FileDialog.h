@@ -1,5 +1,6 @@
 #pragma once
 
+#include "TypeDefine.h"
 #include <QFileDialog>
 
 class FileDialog : public QFileDialog
@@ -9,7 +10,7 @@ public:
 	FileDialog(QWidget* parent = Q_NULLPTR);
 	~FileDialog();
 
-	//std::string OpenAndGetFileName(const std::string)
+	String OpenAndGetFileName(const String& Title, const String& Filter);
 private:
 
 };

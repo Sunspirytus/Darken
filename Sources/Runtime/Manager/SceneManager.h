@@ -67,7 +67,7 @@ public:
 	void UpdatePreFrameData();
 
 
-	void GetSaveInfo(std::string* Infos);
+	void GetSaveInfo(String* Infos);
 
 private:
 	std::vector<std::shared_ptr<Light>> SceneLights;

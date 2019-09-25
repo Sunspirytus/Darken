@@ -240,7 +240,7 @@ private:
 	static const int32 SUBSURFACE_KERNEL_SIZE = 3;
 
 	void CreateResources();
-	void InitSSSSProfilekernelParams(std::string const & _prefix, int32 index);
+	void InitSSSSProfilekernelParams(String const & _prefix, int32 index);
 	uint32 SSSFrameBuffer;
 
 	std::shared_ptr<Camera> ViewCamera;

@@ -3,7 +3,7 @@
 
 BufferManager::BufferManager()
 {
-	std::hash<std::string>hs;
+	std::hash<String>hs;
 	MODEL_UNIFORM_BLOCK_NAME_ID = (int32) hs(MODEL_UNIFORM_BLOCK_NAME);
 	VIEW_UNIFORM_BLOCK_NAME_ID = (int32) hs(VIEW_UNIFORM_BLOCK_NAME);
 	SHADOWMAPPING_UNIFORM_BLOCK_NAME_ID = (int32)hs(SHADOWMAPPING_UNIFORM_BLOCK_NAME);
@@ -14,7 +14,7 @@ BufferManager::~BufferManager()
 {
 }
 
-int32 BufferManager::GetUniformBlockBindingPoint(const std::string & BlockName)
+int32 BufferManager::GetUniformBlockBindingPoint(const String & BlockName)
 {
 	if (BlockName == VIEW_UNIFORM_BLOCK_NAME) return VIEW_UNIFORM_BLOCK_BINDING_POINT;
 	else if (BlockName == LIGHT_UNIFORM_BLOCK_NAME) return LIGHT_UNIFORM_BLOCK_BINDING_POINT;
@@ -23,7 +23,7 @@ int32 BufferManager::GetUniformBlockBindingPoint(const std::string & BlockName)
 	else return UNIFORM_BLOCK_BINGDING_POINT_COMMEN_BEGIN + (int32)UniformBufferNameID_InfoPtrMap.size();
 }
 
-int32 BufferManager::CreateUniformBuffer(const std::string& BufferName, std::shared_ptr<UniformItem_Block> UniformBlockInfo)
+int32 BufferManager::CreateUniformBuffer(const String& BufferName, std::shared_ptr<UniformItem_Block> UniformBlockInfo)
 {
 	if(BufferName == VIEW_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(VIEW_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
 	{
@@ -52,8 +52,8 @@ int32 BufferManager::CreateUniformBuffer(const std::string& BufferName, std::sha
 	glBufferData(GL_UNIFORM_BUFFER, UniformBlockInfo->DataSize_Byte, NULL, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	UniformBufferName_GPUIDMap.insert(std::pair<std::string, int32>(BufferName, UBO));
-	std::hash<std::string> hs;
+	UniformBufferName_GPUIDMap.insert(std::pair<String, int32>(BufferName, UBO));
+	std::hash<String> hs;
 	int32 BufferNameID = (int32)hs(BufferName);
 	UniformBufferNameID_InfoPtrMap.insert(std::pair<int32, std::shared_ptr<UniformItem_Block>>(BufferNameID, UniformBlockInfo));
 	UniformBufferNameID_DirtyMap.insert(std::pair<int32, bool>(BufferNameID, false));

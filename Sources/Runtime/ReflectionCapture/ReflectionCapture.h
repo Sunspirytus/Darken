@@ -15,7 +15,7 @@ public:
 	virtual void FixUpdate() {};
 	virtual void Draw() {};
 	virtual void CheckWhetherNeedClip() {};
-	virtual void Save(std::string* Data) final {};
+	virtual void Save(String* Data) final {};
 
 	void CaptureWithPipeLine(DeferRenderPipeline* Pipeline);
 	void CalReflectionCubeTexAvgBrightness();

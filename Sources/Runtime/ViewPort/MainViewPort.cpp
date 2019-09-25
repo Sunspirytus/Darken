@@ -20,12 +20,12 @@ void MainViewPort::InitScene()
 	GlobalTextures = std::shared_ptr<SystemTextureFactory>(new SystemTextureFactory());
 	GlobalTextures->GeneratePreIntegratedGFTexture();
 
-	std::shared_ptr<Material> SimpleObjectShadowDepthMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string>{ "ShadowDepthVertShader.vsh", "ShadowDepthFragShader.fsh" }));
+	std::shared_ptr<Material> SimpleObjectShadowDepthMaterial = std::shared_ptr<Material>(new Material(std::vector<String>{ "ShadowDepthVertShader.vsh", "ShadowDepthFragShader.fsh" }));
 	std::shared_ptr<MaterialInstance> SimpleObjectShadowDepthMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectShadowDepthMaterial));
 
 	{
 
-		std::shared_ptr<Material> SimpleObjectMaterial00 = std::shared_ptr<Material>(new Material(std::vector<std::string> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
+		std::shared_ptr<Material> SimpleObjectMaterial00 = std::shared_ptr<Material>(new Material(std::vector<String> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
 		std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst00 = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectMaterial00));
 		SimpleObjectMaterialInst00->SetUniform<Vector3f>("ColorTest", Vector3f(1.0, 0.0, 0.0));
 		std::shared_ptr<SimpleObject> Cube00 = std::shared_ptr<SimpleObject>(new SimpleObject("BasicModel\\Cube.FBX", SimpleObjectShadowDepthMaterialInst, SimpleObjectMaterialInst00));

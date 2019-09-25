@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MW_MenuBar_t {
-    QByteArrayData data[8];
-    char stringdata0[74];
+    QByteArrayData data[12];
+    char stringdata0[120];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,17 +32,22 @@ struct qt_meta_stringdata_MW_MenuBar_t {
 static const qt_meta_stringdata_MW_MenuBar_t qt_meta_stringdata_MW_MenuBar = {
     {
 QT_MOC_LITERAL(0, 0, 10), // "MW_MenuBar"
-QT_MOC_LITERAL(1, 11, 9), // "saveScene"
-QT_MOC_LITERAL(2, 21, 0), // ""
-QT_MOC_LITERAL(3, 22, 11), // "saveProject"
-QT_MOC_LITERAL(4, 34, 11), // "loadProject"
-QT_MOC_LITERAL(5, 46, 11), // "triggerMenu"
-QT_MOC_LITERAL(6, 58, 8), // "QAction*"
-QT_MOC_LITERAL(7, 67, 6) // "Action"
+QT_MOC_LITERAL(1, 11, 8), // "newScene"
+QT_MOC_LITERAL(2, 20, 0), // ""
+QT_MOC_LITERAL(3, 21, 9), // "openScene"
+QT_MOC_LITERAL(4, 31, 9), // "saveScene"
+QT_MOC_LITERAL(5, 41, 10), // "newProject"
+QT_MOC_LITERAL(6, 52, 11), // "loadProject"
+QT_MOC_LITERAL(7, 64, 11), // "saveProject"
+QT_MOC_LITERAL(8, 76, 15), // "exitApplication"
+QT_MOC_LITERAL(9, 92, 11), // "triggerMenu"
+QT_MOC_LITERAL(10, 104, 8), // "QAction*"
+QT_MOC_LITERAL(11, 113, 6) // "Action"
 
     },
-    "MW_MenuBar\0saveScene\0\0saveProject\0"
-    "loadProject\0triggerMenu\0QAction*\0"
+    "MW_MenuBar\0newScene\0\0openScene\0saveScene\0"
+    "newProject\0loadProject\0saveProject\0"
+    "exitApplication\0triggerMenu\0QAction*\0"
     "Action"
 };
 #undef QT_MOC_LITERAL
@@ -53,28 +58,36 @@ static const uint qt_meta_data_MW_MenuBar[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       3,       // signalCount
+       7,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   34,    2, 0x06 /* Public */,
-       3,    0,   35,    2, 0x06 /* Public */,
-       4,    0,   36,    2, 0x06 /* Public */,
+       1,    0,   54,    2, 0x06 /* Public */,
+       3,    0,   55,    2, 0x06 /* Public */,
+       4,    0,   56,    2, 0x06 /* Public */,
+       5,    0,   57,    2, 0x06 /* Public */,
+       6,    0,   58,    2, 0x06 /* Public */,
+       7,    0,   59,    2, 0x06 /* Public */,
+       8,    0,   60,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    1,   37,    2, 0x0a /* Public */,
+       9,    1,   61,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 6,    7,
+    QMetaType::Void, 0x80000000 | 10,   11,
 
        0        // eod
 };
@@ -85,16 +98,20 @@ void MW_MenuBar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MW_MenuBar *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->saveScene(); break;
-        case 1: _t->saveProject(); break;
-        case 2: _t->loadProject(); break;
-        case 3: _t->triggerMenu((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 0: _t->newScene(); break;
+        case 1: _t->openScene(); break;
+        case 2: _t->saveScene(); break;
+        case 3: _t->newProject(); break;
+        case 4: _t->loadProject(); break;
+        case 5: _t->saveProject(); break;
+        case 6: _t->exitApplication(); break;
+        case 7: _t->triggerMenu((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<int*>(_a[0]) = -1; break;
-        case 3:
+        case 7:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
@@ -106,22 +123,50 @@ void MW_MenuBar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _t = void (MW_MenuBar::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::saveScene)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::newScene)) {
                 *result = 0;
                 return;
             }
         }
         {
             using _t = void (MW_MenuBar::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::saveProject)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::openScene)) {
                 *result = 1;
                 return;
             }
         }
         {
             using _t = void (MW_MenuBar::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::loadProject)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::saveScene)) {
                 *result = 2;
+                return;
+            }
+        }
+        {
+            using _t = void (MW_MenuBar::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::newProject)) {
+                *result = 3;
+                return;
+            }
+        }
+        {
+            using _t = void (MW_MenuBar::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::loadProject)) {
+                *result = 4;
+                return;
+            }
+        }
+        {
+            using _t = void (MW_MenuBar::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::saveProject)) {
+                *result = 5;
+                return;
+            }
+        }
+        {
+            using _t = void (MW_MenuBar::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MW_MenuBar::exitApplication)) {
+                *result = 6;
                 return;
             }
         }
@@ -157,33 +202,57 @@ int MW_MenuBar::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 8;
     }
     return _id;
 }
 
 // SIGNAL 0
-void MW_MenuBar::saveScene()
+void MW_MenuBar::newScene()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 
 // SIGNAL 1
-void MW_MenuBar::saveProject()
+void MW_MenuBar::openScene()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 
 // SIGNAL 2
-void MW_MenuBar::loadProject()
+void MW_MenuBar::saveScene()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+}
+
+// SIGNAL 3
+void MW_MenuBar::newProject()
+{
+    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
+}
+
+// SIGNAL 4
+void MW_MenuBar::loadProject()
+{
+    QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
+}
+
+// SIGNAL 5
+void MW_MenuBar::saveProject()
+{
+    QMetaObject::activate(this, &staticMetaObject, 5, nullptr);
+}
+
+// SIGNAL 6
+void MW_MenuBar::exitApplication()
+{
+    QMetaObject::activate(this, &staticMetaObject, 6, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

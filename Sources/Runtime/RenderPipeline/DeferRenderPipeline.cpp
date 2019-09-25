@@ -464,7 +464,7 @@ void Lighting::RenderTextureSizeChange(Vector2i newSize)
 
 //void Lighting::CreateLightingPassMaterial()
 //{
-//	std::shared_ptr<Material> LightingPassMaterial = std::shared_ptr<Material>(new Material(*App, std::vector<std::string> {"StanderdVertShader.vsh", "StanderdFragShader.fsh"}));
+//	std::shared_ptr<Material> LightingPassMaterial = std::shared_ptr<Material>(new Material(*App, std::vector<String> {"StanderdVertShader.vsh", "StanderdFragShader.fsh"}));
 //	LightingPassMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(LightingPassMaterial));
 //}
 
@@ -582,13 +582,13 @@ SubSurfaceShading::SubSurfaceShading(std::shared_ptr<Camera> camera)
 	CreateResources();
 	InitSubsurfaceProfileEntries();
 
-	std::shared_ptr<Material> SSSSetupMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> {"DrawRectVertShader.vsh", "SubsurfaceSetup.fsh"}));
+	std::shared_ptr<Material> SSSSetupMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceSetup.fsh"}));
 	SSSSetupMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SSSSetupMaterial));
 
-	std::shared_ptr<Material> SSSScateringMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> {"DrawRectVertShader.vsh", "SubsurfaceScatering.fsh"}));
+	std::shared_ptr<Material> SSSScateringMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceScatering.fsh"}));
 	SSSScateringMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SSSScateringMaterial));
 
-	std::shared_ptr<Material> SSSRecombineMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> {"DrawRectVertShader.vsh", "SubsurfaceRecombine.fsh"}));
+	std::shared_ptr<Material> SSSRecombineMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceRecombine.fsh"}));
 	SSSRecombineMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SSSRecombineMaterial));
 
 	SSSSetupMaterialInst->SetUniform<Vector2f>("CameraNearFar", Vector2f(ViewCamera->GetNearClipPlaneDis(), ViewCamera->GetFarClipPlaneDis()));
@@ -609,12 +609,12 @@ SubSurfaceShading::SubSurfaceShading(std::shared_ptr<Camera> camera)
 	//SSSScateringMaterialInst->SetUniformArray<Vector4f>("SSSSMirroredProfilekernel", &SSSSMirroredProfilekernel[0], SSSSMirroredProfilekernel.size());
 	//SSSRecombineMaterialInst->SetUniform<Vector4f>("SubsurfaceColor", Data.SubsurfaceColor);
 }
-void SubSurfaceShading::InitSSSSProfilekernelParams(std::string const & _prefix, int32 index)
+void SubSurfaceShading::InitSSSSProfilekernelParams(String const & _prefix, int32 index)
 {
 	InitSSSSProfilekernel(index);
 	FSubsurfaceProfileStruct Data = SubsurfaceProfileEntries[index];
-	std::string kenelname = "SSSSMirroredProfilekernel" + _prefix;
-	std::string colorname = "SubsurfaceColor" + _prefix;
+	String kenelname = "SSSSMirroredProfilekernel" + _prefix;
+	String colorname = "SubsurfaceColor" + _prefix;
 	SSSScateringMaterialInst->SetUniformArray(kenelname, &SSSSMirroredProfilekernelMap[index][0], (int32)SSSSMirroredProfilekernelMap[index].size());
 	SSSRecombineMaterialInst->SetUniform(colorname, Data.SubsurfaceColor);
 }
@@ -1106,7 +1106,7 @@ void UE4TemporalAA::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 
 void UE4TemporalAA::CreateTAAPassMaterial()
 {
-	std::shared_ptr<Material> TAAMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> {"DrawRectVertShader.vsh", "UE4TemporalAAFragShader.fsh"}));
+	std::shared_ptr<Material> TAAMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"DrawRectVertShader.vsh", "UE4TemporalAAFragShader.fsh"}));
 	TAAPassMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(TAAMaterial));
 	TAAPassMaterialInst->SetBlockUniform<Vector2f>("TestBlock", "Color2", Vector4f(1.0, 1.0, 0.0, 1.0));
 }
@@ -1272,14 +1272,14 @@ ToneMapping::~ToneMapping()
 
 void ToneMapping::CreateToneMappingPassMaterial()
 {
-	std::shared_ptr<Material> ToneMappingMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> {"ToneMappingVertShader.vsh", "ToneMappingFragShader.fsh"}));
+	std::shared_ptr<Material> ToneMappingMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"ToneMappingVertShader.vsh", "ToneMappingFragShader.fsh"}));
 	ToneMappingMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(ToneMappingMaterial));
 }
 
 void ToneMapping::GenerateLUTTexture(std::shared_ptr<RectBufferObject> pPObj)
 {
 	//Prepare LUT render Material
-	std::shared_ptr<Material> LUTMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> {"LUTVertShader.vsh", "LUTFragShader.fsh"}));
+	std::shared_ptr<Material> LUTMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"LUTVertShader.vsh", "LUTFragShader.fsh"}));
 	std::shared_ptr<MaterialInstance> LUTMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(LUTMaterial));
 
 	//Prepare LUT Texture

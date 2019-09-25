@@ -45,7 +45,7 @@ using half_float::half;
 
 namespace dk
 {
-	//typedef std::string String;
+	typedef std::string String;
 	typedef bool Bool;
 
 	typedef half float16;

@@ -20,7 +20,7 @@ MaterialInstance::~MaterialInstance()
 		delete it->second;
 	}
 	
-	for (std::unordered_map<std::string, std::shared_ptr<UniformItem_Block>>::iterator ItBlock = ParentMaterial->MaterialProgram->Uniforms_Block.begin(); ItBlock != ParentMaterial->MaterialProgram->Uniforms_Block.end(); ItBlock++)
+	for (std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator ItBlock = ParentMaterial->MaterialProgram->Uniforms_Block.begin(); ItBlock != ParentMaterial->MaterialProgram->Uniforms_Block.end(); ItBlock++)
 	{
 		free(ItBlock->second->DataPtr);
 	}
@@ -31,7 +31,7 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 	ParentMaterial = parentMaterial;
 
 	void* BlockData;
-	for(std::unordered_map<std::string, std::shared_ptr<UniformItem_Block>>::iterator ItBlock = ParentMaterial->MaterialProgram->Uniforms_Block.begin(); ItBlock != ParentMaterial->MaterialProgram->Uniforms_Block.end(); ItBlock++)
+	for(std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator ItBlock = ParentMaterial->MaterialProgram->Uniforms_Block.begin(); ItBlock != ParentMaterial->MaterialProgram->Uniforms_Block.end(); ItBlock++)
 	{
 		BlockData = malloc(ItBlock->second->DataSize_Byte);
 		ItBlock->second->DataPtr = BlockData;
@@ -47,7 +47,7 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 	}
 
 	void * Data;
-	for (std::unordered_map<std::string, UniformItem_Basic>::iterator it = ParentMaterial->MaterialProgram->Uniforms_Basic.begin(); it != ParentMaterial->MaterialProgram->Uniforms_Basic.end(); it++)
+	for (std::unordered_map<String, UniformItem_Basic>::iterator it = ParentMaterial->MaterialProgram->Uniforms_Basic.begin(); it != ParentMaterial->MaterialProgram->Uniforms_Basic.end(); it++)
 	{
 		int32 ID = (int32) hs(it->first);
 		switch (it->second.DataType)
@@ -69,7 +69,7 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 		it->second.DataPtr = (void*)Data;
 		BasicUniformID_PtrMap.insert(std::pair<int32, void*>(ID, it->second.DataPtr));
 	}
-	for (std::unordered_map<std::string, UniformItem_Texture>::iterator it = ParentMaterial->MaterialProgram->Uniforms_Texture.begin(); it != ParentMaterial->MaterialProgram->Uniforms_Texture.end(); it++)
+	for (std::unordered_map<String, UniformItem_Texture>::iterator it = ParentMaterial->MaterialProgram->Uniforms_Texture.begin(); it != ParentMaterial->MaterialProgram->Uniforms_Texture.end(); it++)
 	{
 		int32 ID = (int32)hs(it->first);
 		uint32 * textureID = new uint32;
@@ -80,24 +80,24 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 
 void MaterialInstance::ChangedParentDynamic(std::shared_ptr<Material> newParentMaterial)
 {	 
-	for(std::unordered_map<std::string, std::shared_ptr<UniformItem_Block>>::iterator it = newParentMaterial->MaterialProgram->Uniforms_Block.begin(); it != newParentMaterial->MaterialProgram->Uniforms_Block.end(); it++)
+	for(std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator it = newParentMaterial->MaterialProgram->Uniforms_Block.begin(); it != newParentMaterial->MaterialProgram->Uniforms_Block.end(); it++)
 	{
-		std::unordered_map<std::string, std::shared_ptr<UniformItem_Block>>::iterator it2 = ParentMaterial->MaterialProgram->Uniforms_Block.find(it->first);
+		std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator it2 = ParentMaterial->MaterialProgram->Uniforms_Block.find(it->first);
 		if(it2 == ParentMaterial->MaterialProgram->Uniforms_Block.end()) std::cout << "No " << it->first << " in new Shader." << std::endl;
 		it->second->DataPtr = it2->second->DataPtr;
 	}
 
 
-	for (std::unordered_map<std::string, UniformItem_Basic>::iterator it = newParentMaterial->MaterialProgram->Uniforms_Basic.begin(); it != newParentMaterial->MaterialProgram->Uniforms_Basic.end(); it++)
+	for (std::unordered_map<String, UniformItem_Basic>::iterator it = newParentMaterial->MaterialProgram->Uniforms_Basic.begin(); it != newParentMaterial->MaterialProgram->Uniforms_Basic.end(); it++)
 	{
-		std::unordered_map<std::string, UniformItem_Basic>::iterator it2 = ParentMaterial->MaterialProgram->Uniforms_Basic.find(it->first);
+		std::unordered_map<String, UniformItem_Basic>::iterator it2 = ParentMaterial->MaterialProgram->Uniforms_Basic.find(it->first);
 		if (it2 == ParentMaterial->MaterialProgram->Uniforms_Basic.end()) std::cout << "No " << it->first << " in new Shader." << std::endl;
 		it->second.DataPtr = it2->second.DataPtr;
 	}
 
-	for (std::unordered_map<std::string,UniformItem_Texture>::iterator it = newParentMaterial->MaterialProgram->Uniforms_Texture.begin(); it != newParentMaterial->MaterialProgram->Uniforms_Texture.end(); it++)
+	for (std::unordered_map<String,UniformItem_Texture>::iterator it = newParentMaterial->MaterialProgram->Uniforms_Texture.begin(); it != newParentMaterial->MaterialProgram->Uniforms_Texture.end(); it++)
 	{
-		std::unordered_map<std::string, UniformItem_Texture>::iterator it2 = ParentMaterial->MaterialProgram->Uniforms_Texture.find(it->first);
+		std::unordered_map<String, UniformItem_Texture>::iterator it2 = ParentMaterial->MaterialProgram->Uniforms_Texture.find(it->first);
 		if (it2 == ParentMaterial->MaterialProgram->Uniforms_Texture.end()) std::cout << "No " << it->first << " in new Shader." << std::endl;
 		it->second.IDPtr = it2->second.IDPtr;
 	}
@@ -109,9 +109,9 @@ std::shared_ptr<Material> MaterialInstance::GetParent()
 	return ParentMaterial;
 }
 
-int32 MaterialInstance::GetID(const std::string& ParameterName)
+int32 MaterialInstance::GetID(const String& ParameterName)
 {
-	std::hash<std::string> hs;
+	std::hash<String> hs;
 	return (int32) hs(ParameterName);
 }
 

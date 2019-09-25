@@ -41,10 +41,10 @@ class Model : public Object
 {
 public:
 	Model();
-	Model(std::string fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
+	Model(String fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
 	~Model();
 
-	void LoadModelFromAsset(std::string fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
+	void LoadModelFromAsset(String fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
 	void BindMaterial(std::shared_ptr<MaterialInstance> shadowDepthMaterial, std::shared_ptr<MaterialInstance> lightingMaterial);
 	void BindShadowDepthMaterial();
 	void BindLightingMaterial();
@@ -56,7 +56,7 @@ public:
 	virtual void InternalUpdate() final;
 	virtual void Update();
 	virtual void FixUpdate();
-	virtual void Save(std::string* Data);
+	virtual void Save(String* Data);
 
 	void UpdatePreFrameModelMatrix();
 
@@ -102,7 +102,7 @@ protected:
 	std::vector<std::shared_ptr<ModelNode>> RenderGroup;
 	std::vector<std::shared_ptr<ModelNode>> NodeGroup;
 	std::vector<std::shared_ptr<ModelMesh>> MeshGroup;
-	void LoadFromAssetWithAssimp(std::string folderPath, std::string fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
+	void LoadFromAssetWithAssimp(String folderPath, String fileName, Vector3f scale = Vector3f(1.0, 1.0, 1.0), bool bPackToOneMesh = false);
 	void AddNode(const aiScene* scene, aiNode* node, Mat4f parentTransformMatrix);
 	Assimp::Importer import;
 };

@@ -53,7 +53,7 @@ public:
 	virtual void Update() final {};
 	virtual void FixUpdate() final {};
 	virtual void Draw() final {};
-	virtual void Save(std::string* Data) final {};
+	virtual void Save(String* Data) final {};
 private:
 
 	float32 Fovy;

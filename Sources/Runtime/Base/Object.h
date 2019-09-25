@@ -33,11 +33,11 @@ public:
 	virtual void Update() = 0;
 	virtual void FixUpdate() = 0;
 	virtual void Draw() = 0;
-	virtual void Save(std::string* Data);
+	virtual void Save(String* Data);
 
 private:
 
-	std::string Name;
+	String Name;
 	ObjectType Type;
 	//2
 };

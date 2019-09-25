@@ -13,7 +13,7 @@
 #include <conio.h>
 
 // settings
-std::string AssetFolderPath = "..\\Assets\\";
+String AssetFolderPath = "..\\Assets\\";
 
 std::shared_ptr<BufferManager> _GPUBuffers;
 std::shared_ptr<SystemTextureFactory> GlobalTextures;
@@ -26,7 +26,7 @@ int32 main(int argc, char* argv[])
 	unsigned long long x = 999;
 	char str[256];
 	sprintf_s(str, "%llu", x);
-	std::string s = std::string(str);
+	String s = String(str);
 
 	dkApplication a(argc, argv);
 	return a.exec();
@@ -40,7 +40,7 @@ int32 main(int argc, char* argv[])
 //	unsigned long long x = 999;
 //	char str[256];
 //	sprintf_s(str, "%llu", x);
-//	std::string s = std::string(str);
+//	String s = String(str);
 //
 //	dkApplication a(argc, argv);
 //	return a.exec();

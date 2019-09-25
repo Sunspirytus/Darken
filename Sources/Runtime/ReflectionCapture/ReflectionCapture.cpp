@@ -131,7 +131,7 @@ void SphereReflectionCapture::CalReflectionCubeTexAvgBrightness()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//Create Material
-	std::shared_ptr<Material> CalculateMaterial = std::shared_ptr<Material>(new Material(std::vector<std::string> { "DrawRectVertShader.vsh", "ComputeAverageBrightnessFragShader.fsh" }));
+	std::shared_ptr<Material> CalculateMaterial = std::shared_ptr<Material>(new Material(std::vector<String> { "DrawRectVertShader.vsh", "ComputeAverageBrightnessFragShader.fsh" }));
 	std::shared_ptr<MaterialInstance> ComputeMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(CalculateMaterial));
 
 	//Create Quad Geometry

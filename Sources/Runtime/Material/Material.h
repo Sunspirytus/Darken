@@ -78,7 +78,7 @@ struct AttribItem
 
 struct UniformItem_WithinBlock
 {
-	std::string Name;
+	String Name;
 	UniformType DataType;
 	uint32 Size;
 	int32 Offset_Byte;
@@ -115,7 +115,7 @@ struct UniformItem_Texture
 struct Shader
 {
 	uint32 Id;
-	std::string Name;
+	String Name;
 	ShaderType type;
 	Shader() {}
 };
@@ -124,10 +124,10 @@ struct Program
 {
 	uint32 Id;
 	std::vector<Shader> shaders;
-	std::unordered_map<std::string, AttribItem> Attribs;
-	std::unordered_map<std::string, std::shared_ptr<UniformItem_Block>> Uniforms_Block;
-	std::unordered_map<std::string, UniformItem_Basic> Uniforms_Basic;
-	std::unordered_map<std::string, UniformItem_Texture> Uniforms_Texture;
+	std::unordered_map<String, AttribItem> Attribs;
+	std::unordered_map<String, std::shared_ptr<UniformItem_Block>> Uniforms_Block;
+	std::unordered_map<String, UniformItem_Basic> Uniforms_Basic;
+	std::unordered_map<String, UniformItem_Texture> Uniforms_Texture;
 };
 
 class Material
@@ -138,8 +138,8 @@ public:
 
 	std::shared_ptr<Program> MaterialProgram;
 
-	void CreateMaterial(std::vector<std::string>& shaderNames);
-	Material(std::vector<std::string> shaderNames);
+	void CreateMaterial(std::vector<String>& shaderNames);
+	Material(std::vector<String> shaderNames);
 
 	void Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 Offset = 0, GLDrawType drawType = GLDrawType::OGL_ELEMENT);
 	void BindProgram();
@@ -147,12 +147,12 @@ public:
 	void BindUniforms();
 	void BindSamplers();
 private:
-	void LoadAndCreateShaders(std::vector<std::string>& shaderNames);
+	void LoadAndCreateShaders(std::vector<String>& shaderNames);
 	void CreateProgram();
-	void FindShaderNames(std::vector<std::string>& shaderNames);
+	void FindShaderNames(std::vector<String>& shaderNames);
 	void FindAttibInfos();
 	void FindUniformInfos();
 	void LinkLocation();
-	uint32 CreateShaderGPUObjFromSrcCode(std::string & Code, ShaderType type);
+	uint32 CreateShaderGPUObjFromSrcCode(String & Code, ShaderType type);
 };
 

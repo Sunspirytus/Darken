@@ -1,7 +1,7 @@
 //#include <glfw3.h>
 //#include <stb_image.h>
 #include "Texture.h"
-extern std::string AssetFolderPath;
+extern String AssetFolderPath;
 Texture::Texture()
 {
 	Width = -1;
@@ -27,11 +27,11 @@ Texture::Texture()
 	#define GL_RGB16F_ARB 0x881B
 	#define GL_ALPHA16F_ARB 0x881C
 	#define GL_UNSIGNED_INT_24_8_EXT 0x84FA
-Texture::Texture(std::string file, TextureParameter minParm, TextureParameter magParm, TextureParameter wrapParmU, TextureParameter wrapParmV)
+Texture::Texture(String file, TextureParameter minParm, TextureParameter magParm, TextureParameter wrapParmU, TextureParameter wrapParmV)
 {
 	LoadTextureFromAsset(AssetFolderPath + file);
 	CreateGPUObject(minParm, magParm, wrapParmU, wrapParmV);
-	//	std::string  path = (AssetFolderPath + file);
+	//	String  path = (AssetFolderPath + file);
 	//	{
 	//#define GL_COMPRESSED_RGB_S3TC_DXT1_EXT 0x83F0
 	//#define GL_COMPRESSED_RGBA_S3TC_DXT1_EXT 0x83F1
@@ -764,7 +764,7 @@ int32 Texture::GetNumMip()
 //		break;
 //	}
 //}
-FREE_IMAGE_FORMAT Texture::GetFileType(std::string const& file)
+FREE_IMAGE_FORMAT Texture::GetFileType(String const& file)
 {
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	// check the file signature and deduce its format
@@ -833,7 +833,7 @@ TextureDataTypeFormat Texture::GetTextureType(FIBITMAP *dib)
 	}
 	return pformat;
 }
-void Texture::LoadTextureFromAsset(std::string const&file)
+void Texture::LoadTextureFromAsset(String const&file)
 {
 	int32 width, height, nrComponents;
 
@@ -867,7 +867,7 @@ void Texture::LoadTextureFromAsset(std::string const&file)
 
 
 }
-//uint32 Texture::CreateCompositeTexture(float32 compositepower, bool useGPU, Channel AddToChanel, std::string compositeTexFilePath)
+//uint32 Texture::CreateCompositeTexture(float32 compositepower, bool useGPU, Channel AddToChanel, String compositeTexFilePath)
 //{
 //	int32 width, height, nrComponents;
 //	if (compositeTexFilePath.empty())
@@ -932,7 +932,7 @@ void Texture::LoadTextureFromAsset(std::string const&file)
 //			glBindBuffer(GL_ARRAY_BUFFER, 0);
 //
 //		}
-//		std::shared_ptr<Material> composite_shader = std::shared_ptr<Material>(new Material(std::vector<std::string> {"PassQuad.vsh", "createCompositeTex.fsh"}));
+//		std::shared_ptr<Material> composite_shader = std::shared_ptr<Material>(new Material(std::vector<String> {"PassQuad.vsh", "createCompositeTex.fsh"}));
 //		std::shared_ptr<MaterialInstance> composite_instance = std::shared_ptr<MaterialInstance>(new MaterialInstance(composite_shader));
 //
 //		composite_instance->SetTextureID("normaltex", this->GPUId);

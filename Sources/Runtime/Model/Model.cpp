@@ -1,14 +1,14 @@
 #include "Model.h"
 #include "BufferManager.h"
 
-extern std::string AssetFolderPath;
+extern String AssetFolderPath;
 extern std::shared_ptr<BufferManager> _GPUBuffers;
 
 Model::Model()
 {
 }
 
-Model::Model(std::string fileName, Vector3f scale, bool bPackToOneMesh)
+Model::Model(String fileName, Vector3f scale, bool bPackToOneMesh)
 {
 	LoadModelFromAsset(fileName, scale, bPackToOneMesh);
 }
@@ -23,16 +23,16 @@ Model::~Model()
 	}
 }
 
-void Model::LoadModelFromAsset(std::string fileName, Vector3f scale, bool bPackToOneMesh)
+void Model::LoadModelFromAsset(String fileName, Vector3f scale, bool bPackToOneMesh)
 {
 	
 	LoadFromAssetWithAssimp(AssetFolderPath, fileName, scale, bPackToOneMesh);
 	
 }
 
-void Model::LoadFromAssetWithAssimp(std::string folderPath, std::string fileName, Vector3f scale, bool bPackToOneMesh)
+void Model::LoadFromAssetWithAssimp(String folderPath, String fileName, Vector3f scale, bool bPackToOneMesh)
 {
-	std::string file = folderPath + fileName;
+	String file = folderPath + fileName;
 	const aiScene* scene = import.ReadFile(file, aiProcess_Triangulate);
 	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -408,7 +408,7 @@ std::shared_ptr<MaterialInstance> Model::GetRenderMaterial()
 	return RenderMaterial;
 }
 
-void Model::Save(std::string* Data)
+void Model::Save(String* Data)
 {
 	Object::Save(Data);
 	Transform->Save(Data);
