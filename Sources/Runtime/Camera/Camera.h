@@ -2,24 +2,12 @@
 
 #include "Object.h"
 
-class CameraProperty : public ObjectProperty
-{
-public:
-	CameraProperty() {};
-	~CameraProperty() {};
-
-	float32 Fovy;
-	float32 Aspect;
-	float32 NearPlane;
-	float32 FarPlane;
-};
-
 class Camera : public Object
 {
 public:
-	Camera(std::shared_ptr<CameraProperty> property);
+	Camera();
 	~Camera();
-	Camera(std::shared_ptr<CameraProperty> property, Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize);
+	Camera(Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize);
 	void Init(Vector3f position, Vector3f eulerAngle, float32 fovy, float32 aspect, float32 nearPlane, float32 farPlane, Vector2i viewPortSize);
 	//void ModifyProjectionForClipping(Vector4f vClipPlane);
 

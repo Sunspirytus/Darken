@@ -7,10 +7,45 @@
 
 #define TO_String(x)	#x
 
+
+enum VariableType
+{
+	STRING,
+	BOOL_1,
+	FLOAT_16,
+	FLOAT_32,
+	FLOAT_64,
+	INT_8,
+	INT_16,
+	ENUM,
+	INT_32,
+	INT_64,
+	UINT_8,
+	UINT_16,
+	UINT_32,
+	UINT_64,
+	VECTOR2_F,
+	VECTOR3_F,
+	VECTOR4_F,
+	VECTOR2_D,
+	VECTOR3_D,
+	VECTOR4_D,
+	VECTOR2_I,
+	VECTOR3_I,
+	VECTOR4_I,
+	MAT2_F,
+	MAT3_F,
+	MAT4_F,
+	MAT2_D,
+	MAT3_D,
+	MAT4_D
+};
+
 using half_float::half;
 
 namespace dk
 {
+	//typedef std::string String;
 	typedef bool Bool;
 
 	typedef half float16;

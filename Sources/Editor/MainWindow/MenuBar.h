@@ -56,6 +56,8 @@ public slots:
 
 signals:
 	void saveScene();
+	void saveProject();
+	void loadProject();
 
 private:
 	void Setup();

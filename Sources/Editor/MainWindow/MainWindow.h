@@ -17,16 +17,17 @@ public:
 
 private slots:
 	void SaveScene();
+	void SaveProject();
+	void LoadProject();
 
 private:
-	DOCK_OpenGLWindow*	DOCK_OpenGLView;
-	QHBoxLayout*			Layout_MainWindow;
-	//QSplitter*				Widget_MainWindow;
+	DOCK_OpenGLWindow* DOCK_OpenGLView;
+	QHBoxLayout* Layout_MainWindow;
+	
 
 	DOCK_WorldComponentWindow* DOCK_WorldComponent;
-	MW_MenuBar*				MenuBar;
+	MW_MenuBar* MenuBar;
 
-	int32					MinWidth;
-	int32					MinHeight;
+	std::string ProjectDir;
 };
 

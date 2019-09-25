@@ -3,45 +3,25 @@
 #include "Transform.h"
 #include "SurroundBox.h"
 #include "CommonFunctions.h"
+#include "ObjectProperty.h"
 
 enum ObjectType
 {
-	Default					= 0xFFFFFFFF,
-	StaticMesh				= 1 << 1,
-	DynamicMesh				= 1 << 2,
-	CameraActor				= 1 << 3,
-	LandscapeMesh			= 1 << 4,
-	AbstractActor			= 1 << 5,
-	NavigationSystem		= 1 << 6,
+	Default = 0xFFFFFFFF,
+	StaticMesh = 1 << 1,
+	DynamicMesh = 1 << 2,
+	CameraActor = 1 << 3,
+	LandscapeMesh = 1 << 4,
+	AbstractActor = 1 << 5,
+	NavigationSystem = 1 << 6,
 };
 
-class ObjectProperty
+class Object : public PropertyBase
 {
 public:
-	ObjectProperty() 
-		:	Name("Object")
-		,	Type(ObjectType::Default)
-	{};
-	~ObjectProperty() {};
-
-	virtual void Save(std::string* Data) 
-	{
-		//Data->append((TO_String(Name), DataToString(1));
-		int a = 0;
-	};
-
-	std::string Name;
-	ObjectType Type;
-};
-
-class Object
-{
-public:
-	Object(std::shared_ptr<ObjectProperty> property);
+	Object();
 	~Object();
 
-	std::shared_ptr<ObjectProperty> GetProperty() { return Property; }
-	//void SetProperty(ObjectProperty property);
 	std::shared_ptr<TransformComponent> Transform;
 	
 	bool bNeedCheckClip;
@@ -53,12 +33,12 @@ public:
 	virtual void Update() = 0;
 	virtual void FixUpdate() = 0;
 	virtual void Draw() = 0;
-	virtual void Save(std::string* Data)
-	{
-		Property->Save(Data);
-	};
+	virtual void Save(std::string* Data);
+
 private:
-	std::shared_ptr<ObjectProperty> Property;
+
+	std::string Name;
+	ObjectType Type;
 	//2
 };
 

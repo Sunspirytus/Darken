@@ -165,6 +165,12 @@
     <ClInclude Include="..\Sources\Runtime\Util\CommonFunctions.h">
       <Filter>源文件\Runtime\Util</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Runtime\Base\ObjectComponent.h">
+      <Filter>源文件\Runtime\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Runtime\Base\ObjectProperty.h">
+      <Filter>源文件\Runtime\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -254,6 +260,9 @@
     <ClCompile Include="..\Sources\Editor\MainWindow\MenuBar.cpp">
       <Filter>源文件\Editor\MainWindow</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Editor\MainWindow\FileDialog.cpp">
+      <Filter>源文件\Editor\MainWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\Sources\Editor\MainWindow\MainWindow.h">
@@ -269,6 +278,9 @@
       <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
     <QtMoc Include="..\Sources\Editor\MainWindow\MenuBar.h">
+      <Filter>源文件\Editor\MainWindow</Filter>
+    </QtMoc>
+    <QtMoc Include="..\Sources\Editor\MainWindow\FileDialog.h">
       <Filter>源文件\Editor\MainWindow</Filter>
     </QtMoc>
   </ItemGroup>

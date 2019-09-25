@@ -13,6 +13,8 @@ MW_MenuBar::MW_MenuBar(QWidget* parent)
 	AddItem("", "File", MenuBarItem::ItemType::Menu, nullptr);
 
 	AddItem("File", "SaveScene", MenuBarItem::ItemType::Action, &MW_MenuBar::saveScene);
+	AddItem("File", "SaveProject", MenuBarItem::ItemType::Action, &MW_MenuBar::saveProject);
+	AddItem("File", "LoadProject", MenuBarItem::ItemType::Action, &MW_MenuBar::loadProject);
 
 	Setup();
 }
@@ -83,5 +85,4 @@ void MW_MenuBar::triggerMenu(QAction * Action)
 {
 	ItemData* Signal = (ItemData*) Action->userData(0);
 	emit (this->*Signal->ActionSignal)();
-
 }

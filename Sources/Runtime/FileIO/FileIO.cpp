@@ -12,13 +12,7 @@ void FileIO::SaveFile(const std::string& path, const std::string& name, FileType
 {
 	std::ofstream OutFile;
 	std::string FilePath = path + name;
-	switch (type)
-	{
-	case WorldScene:FilePath += FileTypeSuffixMap.find(type)->second; break;
-		break;
-	default:
-		break;
-	}
+	FilePath += FileTypeSuffixMap.find(type)->second;
 	OutFile.open(FilePath, std::ostream::out);
 	OutFile << content;
 	OutFile.close();

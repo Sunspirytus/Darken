@@ -6,11 +6,13 @@
 
 enum FileType
 {
+	Project,
 	WorldScene
 };
 
 static std::map<FileType, std::string> FileTypeSuffixMap = 
 {
+	std::pair<FileType, std::string>(FileType::Project, ".dkProject"),
 	std::pair<FileType, std::string>(FileType::WorldScene, ".dkScene")
 };
 

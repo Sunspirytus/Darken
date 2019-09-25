@@ -1,16 +1,23 @@
 #include "Object.h"
 
-Object::Object(std::shared_ptr<ObjectProperty> property)
+Object::Object()
 	: bNeedCheckClip(true)
 	, bNeedClip(false)
+	, Name("")
+	, Type(ObjectType::Default)
 {
-	Property = property;
 	Transform = std::shared_ptr<TransformComponent>(new TransformComponent());
 }
 
 Object::~Object()
 {
 }
+
+void Object::Save(std::string* Data)
+{
+	Data->append(PropertyToString<std::string>(TO_String(Name), STRING, &Name));
+	Data->append(PropertyToString<ObjectType>(TO_String(Type), ENUM, &Type));
+};
 
 //void Object::SetProperty(ObjectProperty property)
 //{

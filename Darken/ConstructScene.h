@@ -6,8 +6,7 @@
 class SimpleObject : public Model
 {
 public:
-	SimpleObject(std::shared_ptr<ModelProperty> property, std::string ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
-		: Model(property)
+	SimpleObject(std::string ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
 	{
 		LoadModelFromAsset(ModelFileName);
 		BindMaterial(ShadowDepthMaterialInst, LightingMaterialInst);
@@ -28,8 +27,7 @@ private:
 class DigitalHuman : public Model
 {
 public:
-	DigitalHuman(std::shared_ptr<ModelProperty> property, std::string ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
-		: Model(property)
+	DigitalHuman(std::string ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
 	{
 		LoadModelFromAsset(ModelFileName);
 		BindMaterial(ShadowDepthMaterialInst, LightingMaterialInst);

@@ -4,13 +4,11 @@
 extern std::string AssetFolderPath;
 extern std::shared_ptr<BufferManager> _GPUBuffers;
 
-Model::Model(std::shared_ptr<ModelProperty> property)
-	: Object(property)
+Model::Model()
 {
 }
 
-Model::Model(std::shared_ptr<ModelProperty> property, std::string fileName, Vector3f scale, bool bPackToOneMesh)
-	: Object(property)
+Model::Model(std::string fileName, Vector3f scale, bool bPackToOneMesh)
 {
 	LoadModelFromAsset(fileName, scale, bPackToOneMesh);
 }
@@ -413,4 +411,5 @@ std::shared_ptr<MaterialInstance> Model::GetRenderMaterial()
 void Model::Save(std::string* Data)
 {
 	Object::Save(Data);
+	Transform->Save(Data);
 }

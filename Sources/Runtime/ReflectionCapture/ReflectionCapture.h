@@ -3,17 +3,10 @@
 #include "Camera.h"
 #include "DeferRenderPipeline.h"
 
-class SphereReflectionCaptureProperty : public ObjectProperty
-{
-public:
-	SphereReflectionCaptureProperty() {};
-	~SphereReflectionCaptureProperty() {};
-};
-
 class SphereReflectionCapture : public Object
 {
 public:
-	SphereReflectionCapture(std::shared_ptr<SphereReflectionCaptureProperty> property, std::shared_ptr<SceneManager> Scene, const Vector3f &position, const float32 &radius, const float32& brightness);
+	SphereReflectionCapture( std::shared_ptr<SceneManager> Scene, const Vector3f &position, const float32 &radius, const float32& brightness);
 	~SphereReflectionCapture();
 
 	virtual void Start() {};
