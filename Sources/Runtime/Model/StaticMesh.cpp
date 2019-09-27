@@ -422,5 +422,4 @@ std::shared_ptr<MaterialInstance> StaticMesh::GetRenderMaterial()
 void StaticMesh::Save(String* Data)
 {
 	Object::Save(Data);
-	Transform->Save(Data);
 }
