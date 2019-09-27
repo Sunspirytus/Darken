@@ -129,9 +129,6 @@
     <ClInclude Include="..\Sources\Runtime\Math\Util.h">
       <Filter>源文件\Runtime\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Runtime\Model\Model.h">
-      <Filter>源文件\Runtime\Model</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Runtime\PostProcess\RectBufferObject.h">
       <Filter>源文件\Runtime\PostProcess</Filter>
     </ClInclude>
@@ -165,11 +162,20 @@
     <ClInclude Include="..\Sources\Runtime\Util\CommonFunctions.h">
       <Filter>源文件\Runtime\Util</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Runtime\Base\ObjectComponent.h">
+    <ClInclude Include="..\Sources\Runtime\Manager\MaterialManager.h">
+      <Filter>源文件\Runtime\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Runtime\Base\PropertyBase.h">
       <Filter>源文件\Runtime\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Runtime\Base\ObjectProperty.h">
+    <ClInclude Include="..\Sources\Runtime\Model\StaticMesh.h">
+      <Filter>源文件\Runtime\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Runtime\Base\ComponentBase.h">
       <Filter>源文件\Runtime\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\EngineRoot.h">
+      <Filter>源文件\Runtime\GlobalSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -211,9 +217,6 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Runtime\Math\Quaternion.cpp">
       <Filter>源文件\Runtime\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Runtime\Model\Model.cpp">
-      <Filter>源文件\Runtime\Model</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Runtime\PostProcess\RectBufferObject.cpp">
       <Filter>源文件\Runtime\PostProcess</Filter>
@@ -262,6 +265,24 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Editor\MainWindow\FileDialog.cpp">
       <Filter>源文件\Editor\MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Runtime\Manager\MaterialManager.cpp">
+      <Filter>源文件\Runtime\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Runtime\Util\CommonFunctions.cpp">
+      <Filter>源文件\Runtime\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Runtime\Model\StaticMesh.cpp">
+      <Filter>源文件\Runtime\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Runtime\Base\PropertyBase.cpp">
+      <Filter>源文件\Runtime\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Runtime\Base\ComponentBase.cpp">
+      <Filter>源文件\Runtime\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Runtime\GlobalSystem\EngineRoot.cpp">
+      <Filter>源文件\Runtime\GlobalSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

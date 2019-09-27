@@ -53,6 +53,7 @@ public:
 	DOCK_WorldComponentWindow(QWidget* parent = Q_NULLPTR);
 	~DOCK_WorldComponentWindow();
 
+	WD_WorldComponentsTable* GetTable();
 private:
 	QWidget* WD_WorldComponentWindow;
 	QVBoxLayout* Layout_WorldComponent;

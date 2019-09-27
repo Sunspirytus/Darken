@@ -1,10 +1,32 @@
 #include "Object.h"
 
+ObjectBase::ObjectBase()
+{
+}
+
+ObjectBase::~ObjectBase()
+{
+}
+
+ObjectBase::ObjectBase(const String& path, ObjectType type)
+	: Path(path)
+	, Type(type)
+{
+	AddProperty("Path", STRING, &Path);
+	AddProperty("Type", ENUM, &Type, std::map<int32, String>{ {Default, TO_String(Default)}, { StaticMeshActor,TO_String(StaticMeshActor) }, { DynamicMeshActor,TO_String(DynamicMeshActor) },	{ CameraActor,TO_String(CameraActor) },	{ LandscapeMeshActor,TO_String(LandscapeMeshActor) },	{ AbstractActor,TO_String(AbstractActor) },	{ NavigationSystemActor,TO_String(NavigationSystemActor) }});
+}
+
 Object::Object()
 	: bNeedCheckClip(true)
 	, bNeedClip(false)
-	, Name("")
-	, Type(ObjectType::Default)
+{
+	Transform = std::shared_ptr<TransformComponent>(new TransformComponent());
+}
+
+Object::Object(const String& name, ObjectType type)
+	:	ObjectBase(name, type)
+	,	bNeedCheckClip(true)
+	,	bNeedClip(false)
 {
 	Transform = std::shared_ptr<TransformComponent>(new TransformComponent());
 }
@@ -15,9 +37,9 @@ Object::~Object()
 
 void Object::Save(String* Data)
 {
-	Data->append(PropertyToString<String>(TO_String(Name), STRING, &Name));
-	Data->append(PropertyToString<ObjectType>(TO_String(Type), ENUM, &Type));
-};
+	PropertyBase::Save(Data);
+	Transform->Save(Data);
+}
 
 //void Object::SetProperty(ObjectProperty property)
 //{

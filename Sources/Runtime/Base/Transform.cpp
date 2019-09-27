@@ -2,8 +2,25 @@
 #include "Quaternion.h"
 #include "CommonFunctions.h"
 
+TransformComponentBase::TransformComponentBase(const Vector3f& position,
+	const Vector3f& eulerAngle,
+	const Vector3f& scale)
+	:	ComponentBase(CPT_Transform)
+	,	Position(position)
+	,	EulerAngle(eulerAngle)
+	,	Scale(scale)
+{
+	AddProperty("Position", VECTOR3_F, &Position);
+	AddProperty("EulerAngle", VECTOR3_F, &EulerAngle);
+	AddProperty("Scale", VECTOR3_F, &Scale);
+}
+
+TransformComponentBase::~TransformComponentBase()
+{
+}
+
 TransformComponent::TransformComponent(Vector3f position, Vector3f eulerAngle, Vector3f scale)
-	: Name("Transform")
+	: TransformComponentBase(position, eulerAngle, scale)
 {
 	Position = Vector3f(position);
 	TranslationMatrix = Mat4f(Math::Translate(Mat4f(1.0), position));
@@ -25,7 +42,7 @@ TransformComponent::TransformComponent(Vector3f position, Vector3f eulerAngle, V
 }
 
 TransformComponent::TransformComponent()
-	: Name("Transform")
+	: TransformComponentBase(Vector3f(0.0, 0.0, 0.0), Vector3f(0.0, 0.0, 0.0), Vector3f(1.0, 1.0, 1.0))
 {
 	Position = Vector3f(0.0, 0.0, 0.0);
 	TranslationMatrix = Mat4f(1.0);
@@ -205,12 +222,4 @@ void TransformComponent::CalculateModelMatrix()
 {
 	ModelMatrix = TranslationMatrix * ScaleMatrix * RotationMatrix;
 	ModelMatrix_IT = Math::Inverse(Math::Transpose(ModelMatrix));
-}
-
-void TransformComponent::Save(String* Data)
-{
-	Data->append(PropertyToString<String>(TO_String(Component), STRING, &Name));
-	Data->append(PropertyToString<Vector3f>(TO_String(Position), VECTOR3_F, &Position));
-	Data->append(PropertyToString<Vector3f>(TO_String(EulerAngle), VECTOR3_F, &EulerAngle));
-	Data->append(PropertyToString<Vector3f>(TO_String(Scale), VECTOR3_F, &Scale));
 }

@@ -1,8 +1,5 @@
 #include "DeferRenderPipeline.h"
-#include "Model.h"
-
-extern std::shared_ptr<BufferManager> _GPUBuffers;
-extern unsigned long APP_FrameCount;
+#include "StaticMesh.h"
 
 #define TAASingleTex
 
@@ -74,10 +71,10 @@ void DeferRenderPipeline::Render(std::shared_ptr<Camera> camera)
 	_GPUBuffers->UpdateCustomBufferData();
 
 	SceneWaitRender->PrepareShadowDepthMaterial();
-	RenderShadowDepthPass(StaticMesh | DynamicMesh);
+	RenderShadowDepthPass(StaticMeshActor | DynamicMeshActor);
 
 	SceneWaitRender->PrepareLightingMaterial();
-	RenderLightingPass(camera, StaticMesh | DynamicMesh);
+	RenderLightingPass(camera, StaticMeshActor | DynamicMeshActor);
 
 	RenderSSSPass();
 
@@ -282,7 +279,7 @@ void ShadowDepth::RenderDirectLightDepth(int32 LightIndex, const std::vector<std
 	std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
 	for (uint32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
 	{
-		Model* Modelptr = dynamic_cast<Model*>(Objects[ObjectIndex].get());
+		StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 		ShadowDepthMaterialInst = Modelptr->GetRenderMaterial();
 
 		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.bDirectLightID, 1);
@@ -307,7 +304,7 @@ void ShadowDepth::RenderPointLightDepth(int32 LightIndex, const std::vector<std:
 	{
 		for (uint32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
 		{
-			Model* Modelptr = dynamic_cast<Model*>(Objects[ObjectIndex].get());
+			StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 			ShadowDepthMaterialInst = Modelptr->GetRenderMaterial();
 
 			ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.bDirectLightID, 0);
@@ -334,7 +331,7 @@ void ShadowDepth::RenderSpotLightDepth(int32 LightIndex, const std::vector<std::
 	std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
 	for (uint32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
 	{
-		Model* Modelptr = dynamic_cast<Model*>(Objects[ObjectIndex].get());
+		StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 		ShadowDepthMaterialInst = Modelptr->GetRenderMaterial();
 
 		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.bDirectLightID, 0);
@@ -547,7 +544,7 @@ void Lighting::Render(std::shared_ptr<Camera> camera, uint32 typeFlags)
 		_GPUBuffers->UpdateLightBuffer(LightBuffer);
 		for (uint32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
 		{
-			Model* Modelptr = dynamic_cast<Model*>(Objects[ObjectIndex].get());
+			StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 			LightingPassMaterialInst = Modelptr->GetRenderMaterial();
 			if (Lights[LightIndex]->Type == LightType::Point)
 			{
@@ -582,14 +579,14 @@ SubSurfaceShading::SubSurfaceShading(std::shared_ptr<Camera> camera)
 	CreateResources();
 	InitSubsurfaceProfileEntries();
 
-	std::shared_ptr<Material> SSSSetupMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceSetup.fsh"}));
-	SSSSetupMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SSSSetupMaterial));
+	std::shared_ptr<Material> SSSSetupMaterial = _MaterialManager->CreateMaterial("SSSSetupMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceSetup.fsh"}, Internal);
+	SSSSetupMaterialInst = _MaterialManager->CreateMaterialInstance("SSSSetupMaterialInst", SSSSetupMaterial, Internal);
 
-	std::shared_ptr<Material> SSSScateringMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceScatering.fsh"}));
-	SSSScateringMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SSSScateringMaterial));
+	std::shared_ptr<Material> SSSScateringMaterial = _MaterialManager->CreateMaterial("SSSScateringMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceScatering.fsh"}, Internal);
+	SSSScateringMaterialInst = _MaterialManager->CreateMaterialInstance("SSSScateringMaterialInst", SSSScateringMaterial, Internal);
 
-	std::shared_ptr<Material> SSSRecombineMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceRecombine.fsh"}));
-	SSSRecombineMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SSSRecombineMaterial));
+	std::shared_ptr<Material> SSSRecombineMaterial = _MaterialManager->CreateMaterial("SSSRecombineMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceRecombine.fsh"}, Internal);
+	SSSRecombineMaterialInst = _MaterialManager->CreateMaterialInstance("SSSRecombineMaterialInst", SSSRecombineMaterial, Internal);
 
 	SSSSetupMaterialInst->SetUniform<Vector2f>("CameraNearFar", Vector2f(ViewCamera->GetNearClipPlaneDis(), ViewCamera->GetFarClipPlaneDis()));
 
@@ -1106,8 +1103,8 @@ void UE4TemporalAA::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 
 void UE4TemporalAA::CreateTAAPassMaterial()
 {
-	std::shared_ptr<Material> TAAMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"DrawRectVertShader.vsh", "UE4TemporalAAFragShader.fsh"}));
-	TAAPassMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(TAAMaterial));
+	std::shared_ptr<Material> TAAMaterial = _MaterialManager->CreateMaterial("TAAMaterial", std::vector<String> {"DrawRectVertShader.vsh", "UE4TemporalAAFragShader.fsh"}, Internal);
+	TAAPassMaterialInst = _MaterialManager->CreateMaterialInstance("TAAMaterialInst", TAAMaterial, Internal);
 	TAAPassMaterialInst->SetBlockUniform<Vector2f>("TestBlock", "Color2", Vector4f(1.0, 1.0, 0.0, 1.0));
 }
 
@@ -1272,15 +1269,15 @@ ToneMapping::~ToneMapping()
 
 void ToneMapping::CreateToneMappingPassMaterial()
 {
-	std::shared_ptr<Material> ToneMappingMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"ToneMappingVertShader.vsh", "ToneMappingFragShader.fsh"}));
-	ToneMappingMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(ToneMappingMaterial));
+	std::shared_ptr<Material> ToneMappingMaterial = _MaterialManager->CreateMaterial("ToneMappingMaterial", std::vector<String> {"ToneMappingVertShader.vsh", "ToneMappingFragShader.fsh"}, Internal);
+	ToneMappingMaterialInst = _MaterialManager->CreateMaterialInstance("ToneMappingMaterialInst", ToneMappingMaterial, Internal);
 }
 
 void ToneMapping::GenerateLUTTexture(std::shared_ptr<RectBufferObject> pPObj)
 {
 	//Prepare LUT render Material
-	std::shared_ptr<Material> LUTMaterial = std::shared_ptr<Material>(new Material(std::vector<String> {"LUTVertShader.vsh", "LUTFragShader.fsh"}));
-	std::shared_ptr<MaterialInstance> LUTMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(LUTMaterial));
+	std::shared_ptr<Material> LUTMaterial = _MaterialManager->CreateMaterial("LUTMaterial", std::vector<String> {"LUTVertShader.vsh", "LUTFragShader.fsh"}, Internal);
+	std::shared_ptr<MaterialInstance> LUTMaterialInst = _MaterialManager->CreateMaterialInstance("LUTMaterialInst", LUTMaterial, Internal);
 
 	//Prepare LUT Texture
 	static const int32 LUT_TEX_Size = 32;

@@ -2,8 +2,6 @@
 #include "ReflectionCapture.h"
 #include "DeferRenderPipeline.h"
 
-extern std::shared_ptr<BufferManager> _GPUBuffers;
-
 SphereReflectionCapture::SphereReflectionCapture(std::shared_ptr<SceneManager> Scene, const Vector3f &position, const float32 &radius, const float32& brightness)
 	:	InfluenceRadius(radius)
 	,	Brightness(brightness)
@@ -86,10 +84,10 @@ void SphereReflectionCapture::CaptureWithPipeLine(DeferRenderPipeline* Pipeline)
 		_GPUBuffers->UpdateCustomBufferData();
 
 		Pipeline->SceneWaitRender->PrepareShadowDepthMaterial();
-		Pipeline->RenderShadowDepthPass(StaticMesh);
+		Pipeline->RenderShadowDepthPass(StaticMeshActor);
 
 		Pipeline->SceneWaitRender->PrepareLightingMaterial();
-		Pipeline->RenderLightingPass(CaptureCamera, StaticMesh);
+		Pipeline->RenderLightingPass(CaptureCamera, StaticMeshActor);
 		Pipeline->RenderSSSPass();
 
 		Pipeline->ExecuteTemporalAA();
@@ -131,8 +129,8 @@ void SphereReflectionCapture::CalReflectionCubeTexAvgBrightness()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//Create Material
-	std::shared_ptr<Material> CalculateMaterial = std::shared_ptr<Material>(new Material(std::vector<String> { "DrawRectVertShader.vsh", "ComputeAverageBrightnessFragShader.fsh" }));
-	std::shared_ptr<MaterialInstance> ComputeMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(CalculateMaterial));
+	std::shared_ptr<Material> CalculateMaterial = _MaterialManager->CreateMaterial("CalculateReflectionBrightnessMaterial", std::vector<String> { "DrawRectVertShader.vsh", "ComputeAverageBrightnessFragShader.fsh" }, Internal);
+	std::shared_ptr<MaterialInstance> ComputeMaterialInst = _MaterialManager->CreateMaterialInstance("CalculateReflectionBrightnessMaterialInst", CalculateMaterial, Internal);
 
 	//Create Quad Geometry
 	std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());

@@ -10,7 +10,7 @@
 using namespace std;
 
 class Object;
-class Model;
+class StaticMesh;
 
 namespace ModeState{
 	enum EditMode

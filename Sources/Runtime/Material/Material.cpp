@@ -5,36 +5,49 @@
 #include <sstream>
 #include <iostream>
 
-extern std::shared_ptr<BufferManager> _GPUBuffers;
-extern String AssetFolderPath;
-
-Material::Material()
+MaterialBase::MaterialBase()
 {
+};
+
+MaterialBase::MaterialBase(const String& path, const std::vector<String>& shaderNames)
+	: Path(path)
+	, ShaderNames(shaderNames)
+{
+	AddProperty("Name", STRING, &Path);
+	int32 ShaderCount = (int32)ShaderNames.size();
+	AddProperty("ShaderCount", INT_32, &ShaderCount);
+	for(int32 Index = 0; Index < ShaderCount; Index++)
+	{
+		AddProperty("Shader" + DataToString(Index), STRING, &ShaderNames[Index]);
+	}
+};
+
+MaterialBase::~MaterialBase() 
+{
+};
+
+String MaterialBase::GetPath()
+{
+	return Path;
 }
+
+
+Material::Material(const String& name, std::vector<String> shaderNames)
+	: MaterialBase(name, shaderNames)
+{
+	LoadAndCreateShaders(shaderNames);
+	FindShaderNames(shaderNames);
+	CreateProgram();
+	FindAttibInfos();
+	FindUniformInfos();
+	LinkLocation();
+}
+
 
 Material::~Material()
 {
 }
 
-Material::Material(std::vector<String> shaderNames)
-{
-	LoadAndCreateShaders(shaderNames);
-	FindShaderNames(shaderNames);
-	CreateProgram();
-	FindAttibInfos();
-	FindUniformInfos();
-	LinkLocation();
-}
-
-void Material::CreateMaterial(std::vector<String>& shaderNames)
-{
-	LoadAndCreateShaders(shaderNames);
-	FindShaderNames(shaderNames);
-	CreateProgram();
-	FindAttibInfos();
-	FindUniformInfos();
-	LinkLocation();
-}
 void Material::BindProgram()
 {
 	glUseProgram(MaterialProgram->Id);

@@ -3,14 +3,22 @@
 #include "TypeDefine.h"
 #include <QFileDialog>
 
+
+
 class FileDialog : public QFileDialog
 {
 	Q_OBJECT
 public:
+	enum SelectMode
+	{
+		Single,
+		Multi
+	};
+
 	FileDialog(QWidget* parent = Q_NULLPTR);
 	~FileDialog();
 
-	String OpenAndGetFileName(const String& Title, const String& Filter);
+	std::vector<String> OpenAndGetFileName(const String& Title, const String& Filter, SelectMode FileCount);
 private:
 
 };

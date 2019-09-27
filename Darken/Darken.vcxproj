@@ -81,7 +81,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)bin</OutDir>
+    <OutDir>$(SolutionDir)bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -231,12 +231,13 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles</IncludePath>
     </QtMoc>
     <ClInclude Include="..\Sources\Runtime\Animation\Animation.h" />
+    <ClInclude Include="..\Sources\Runtime\Base\ComponentBase.h" />
     <ClInclude Include="..\Sources\Runtime\Base\Object.h" />
-    <ClInclude Include="..\Sources\Runtime\Base\ObjectComponent.h" />
-    <ClInclude Include="..\Sources\Runtime\Base\ObjectProperty.h" />
+    <ClInclude Include="..\Sources\Runtime\Base\PropertyBase.h" />
     <ClInclude Include="..\Sources\Runtime\Base\Transform.h" />
     <ClInclude Include="..\Sources\Runtime\Camera\Camera.h" />
     <ClInclude Include="..\Sources\Runtime\FileIO\FileIO.h" />
+    <ClInclude Include="..\Sources\Runtime\GlobalSystem\EngineRoot.h" />
     <ClInclude Include="..\Sources\Runtime\GlobalSystem\SystemContext.h" />
     <ClInclude Include="..\Sources\Runtime\GlobalSystem\SystemTextures.h" />
     <ClInclude Include="..\Sources\Runtime\GlobalSystem\TypeDefine.h" />
@@ -244,12 +245,13 @@
     <ClInclude Include="..\Sources\Runtime\Input\InputInterface.h" />
     <ClInclude Include="..\Sources\Runtime\Lights\Light.h" />
     <ClInclude Include="..\Sources\Runtime\Manager\BufferManager.h" />
+    <ClInclude Include="..\Sources\Runtime\Manager\MaterialManager.h" />
     <ClInclude Include="..\Sources\Runtime\Manager\SceneManager.h" />
     <ClInclude Include="..\Sources\Runtime\Material\Material.h" />
     <ClInclude Include="..\Sources\Runtime\Material\MaterialInstance.h" />
     <ClInclude Include="..\Sources\Runtime\Math\Quaternion.h" />
     <ClInclude Include="..\Sources\Runtime\Math\Util.h" />
-    <ClInclude Include="..\Sources\Runtime\Model\Model.h" />
+    <ClInclude Include="..\Sources\Runtime\Model\StaticMesh.h" />
     <ClInclude Include="..\Sources\Runtime\PostProcess\RectBufferObject.h" />
     <ClInclude Include="..\Sources\Runtime\ReflectionCapture\ReflectionCapture.h" />
     <ClInclude Include="..\Sources\Runtime\RenderPipeline\DeferRenderPipeline.h" />
@@ -270,26 +272,31 @@
     <ClCompile Include="..\Sources\Editor\MainWindow\OpenGLWindowWidget.cpp" />
     <ClCompile Include="..\Sources\Editor\MainWindow\WorldComponentWindow.cpp" />
     <ClCompile Include="..\Sources\Runtime\Animation\Animation.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Base\ComponentBase.cpp" />
     <ClCompile Include="..\Sources\Runtime\Base\Object.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Base\PropertyBase.cpp" />
     <ClCompile Include="..\Sources\Runtime\Base\Transform.cpp" />
     <ClCompile Include="..\Sources\Runtime\Camera\Camera.cpp" />
     <ClCompile Include="..\Sources\Runtime\FileIO\FileIO.cpp" />
+    <ClCompile Include="..\Sources\Runtime\GlobalSystem\EngineRoot.cpp" />
     <ClCompile Include="..\Sources\Runtime\GlobalSystem\glad.c" />
     <ClCompile Include="..\Sources\Runtime\GlobalSystem\SystemTextures.cpp" />
     <ClCompile Include="..\Sources\Runtime\Input\InputBase.cpp" />
     <ClCompile Include="..\Sources\Runtime\Lights\Light.cpp" />
     <ClCompile Include="..\Sources\Runtime\Manager\BufferManager.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Manager\MaterialManager.cpp" />
     <ClCompile Include="..\Sources\Runtime\Manager\SceneManager.cpp" />
     <ClCompile Include="..\Sources\Runtime\Material\Material.cpp" />
     <ClCompile Include="..\Sources\Runtime\Material\MaterialInstance.cpp" />
     <ClCompile Include="..\Sources\Runtime\Math\Quaternion.cpp" />
-    <ClCompile Include="..\Sources\Runtime\Model\Model.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Model\StaticMesh.cpp" />
     <ClCompile Include="..\Sources\Runtime\PostProcess\RectBufferObject.cpp" />
     <ClCompile Include="..\Sources\Runtime\ReflectionCapture\ReflectionCapture.cpp" />
     <ClCompile Include="..\Sources\Runtime\RenderPipeline\DeferRenderPipeline.cpp" />
     <ClCompile Include="..\Sources\Runtime\RenderPipeline\RenderPipelineBase.cpp" />
     <ClCompile Include="..\Sources\Runtime\SurroundBox\SurroundBox.cpp" />
     <ClCompile Include="..\Sources\Runtime\Texture\Texture.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Util\CommonFunctions.cpp" />
     <ClCompile Include="..\Sources\Runtime\ViewPort\MainViewPort.cpp" />
     <ClCompile Include="..\Sources\Runtime\ViewPort\ViewPortBase.cpp" />
     <ClCompile Include="Main.cpp" />

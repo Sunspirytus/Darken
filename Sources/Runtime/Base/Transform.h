@@ -1,11 +1,25 @@
 #pragma once
 
 #include "Util.h"
-#include "ObjectProperty.h"
-#include "ObjectComponent.h"
+#include "PropertyBase.h"
+#include "ComponentBase.h"
 #include <cmath>
 
-class TransformComponent : public PropertyBase, ComponentBase
+class TransformComponentBase : public ComponentBase
+{
+public:
+	TransformComponentBase(const Vector3f& position,
+		const Vector3f& eulerAngle,
+		const Vector3f& scale);
+	~TransformComponentBase();
+
+protected:
+	Vector3f Position;
+	Vector3f EulerAngle;
+	Vector3f Scale;
+};
+
+class TransformComponent : public TransformComponentBase
 {
 public:
 	TransformComponent(Vector3f position, Vector3f eulerAngle, Vector3f scale);
@@ -34,8 +48,6 @@ public:
 	Mat4f GetModelMatrix_PreFrame();
 	Mat4f GetModelMatrix_IT();
 
-	virtual void Save(String* Data);
-
 private:
 	Vector3f Forward;
 	Vector3f Upward;
@@ -48,10 +60,5 @@ private:
 	Mat4f ModelMatrix_IT;
 
 	void CalculateModelMatrix();
-
-	String Name;
-	Vector3f Position;
-	Vector3f EulerAngle;
-	Vector3f Scale;
 };
 

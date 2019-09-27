@@ -1,7 +1,6 @@
 //#include <glfw3.h>
 //#include <stb_image.h>
 #include "Texture.h"
-extern String AssetFolderPath;
 Texture::Texture()
 {
 	Width = -1;

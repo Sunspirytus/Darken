@@ -29,5 +29,7 @@ private:
 	MW_MenuBar* MenuBar;
 
 	String ProjectDir;
+
+	void SaveMaterials();
 };
 

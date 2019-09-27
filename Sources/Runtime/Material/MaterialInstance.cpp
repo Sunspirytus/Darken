@@ -1,9 +1,28 @@
 #include "MaterialInstance.h"
 #include "BufferManager.h"
 
-extern std::shared_ptr<BufferManager> _GPUBuffers;
+MaterialInstanceBase::MaterialInstanceBase()
+{
+}
+	
+MaterialInstanceBase::MaterialInstanceBase(const String& path, const String& parentName)
+		: Path(path)
+		, ParentName(parentName)
+{
+	AddProperty("Name", STRING, &Path);
+	AddProperty("ParentName", STRING, &ParentName);
+}
 
-MaterialInstance::MaterialInstance(std::shared_ptr<Material> parentMaterial)
+MaterialInstanceBase::~MaterialInstanceBase() 
+{
+}
+
+
+
+
+
+MaterialInstance::MaterialInstance(const String& path, std::shared_ptr<Material> parentMaterial)
+	:	MaterialInstanceBase(path, parentMaterial->GetPath())
 {
 	SetParent(parentMaterial);
 }
@@ -33,6 +52,7 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 	void* BlockData;
 	for(std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator ItBlock = ParentMaterial->MaterialProgram->Uniforms_Block.begin(); ItBlock != ParentMaterial->MaterialProgram->Uniforms_Block.end(); ItBlock++)
 	{
+		std::hash<String> hs;
 		BlockData = malloc(ItBlock->second->DataSize_Byte);
 		ItBlock->second->DataPtr = BlockData;
 		int32 BlockID = (int32) hs(ItBlock->first);
@@ -49,6 +69,7 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 	void * Data;
 	for (std::unordered_map<String, UniformItem_Basic>::iterator it = ParentMaterial->MaterialProgram->Uniforms_Basic.begin(); it != ParentMaterial->MaterialProgram->Uniforms_Basic.end(); it++)
 	{
+		std::hash<String> hs;
 		int32 ID = (int32) hs(it->first);
 		switch (it->second.DataType)
 		{
@@ -71,6 +92,7 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 	}
 	for (std::unordered_map<String, UniformItem_Texture>::iterator it = ParentMaterial->MaterialProgram->Uniforms_Texture.begin(); it != ParentMaterial->MaterialProgram->Uniforms_Texture.end(); it++)
 	{
+		std::hash<String> hs;
 		int32 ID = (int32)hs(it->first);
 		uint32 * textureID = new uint32;
 		it->second.IDPtr = textureID;

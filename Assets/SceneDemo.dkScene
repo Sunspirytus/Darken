@@ -1,9 +1,5 @@
 {
-	Name:;
-	Type:-1;
-	Component:Transform;
-	Position:(0.000000,0.000000,0.000000);
-	EulerAngle:(0.000000,0.000000,0.000000);
-	Scale:(1.000000,1.000000,1.000000);
+	Name:BasicModel\Cube.FBX;
+	Type:StaticMeshActor;
 }
 

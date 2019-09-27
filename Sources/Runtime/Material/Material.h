@@ -1,6 +1,8 @@
 #pragma once
 
 #include "TypeDefine.h"
+#include "PropertyBase.h"
+#include "CommonFunctions.h"
 #include <unordered_map>
 #include <vector>
 #include <string>
@@ -130,22 +132,34 @@ struct Program
 	std::unordered_map<String, UniformItem_Texture> Uniforms_Texture;
 };
 
-class Material
+class MaterialBase : public PropertyBase
 {
 public:
-	Material();
+	MaterialBase();
+	MaterialBase(const String& path, const std::vector<String>& shaderNames = std::vector<String>{});
+	~MaterialBase();
+
+	String GetPath();
+
+private:
+	String Path;
+	std::vector<String> ShaderNames;
+};
+
+class Material : public MaterialBase
+{
+public:
+	Material(const String& name, std::vector<String> shaderNames);
 	~Material();
 
-	std::shared_ptr<Program> MaterialProgram;
-
-	void CreateMaterial(std::vector<String>& shaderNames);
-	Material(std::vector<String> shaderNames);
+	std::shared_ptr<Program> MaterialProgram;	
 
 	void Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 Offset = 0, GLDrawType drawType = GLDrawType::OGL_ELEMENT);
 	void BindProgram();
 	void UnBindProgram();
 	void BindUniforms();
 	void BindSamplers();
+
 private:
 	void LoadAndCreateShaders(std::vector<String>& shaderNames);
 	void CreateProgram();
@@ -154,5 +168,6 @@ private:
 	void FindUniformInfos();
 	void LinkLocation();
 	uint32 CreateShaderGPUObjFromSrcCode(String & Code, ShaderType type);
+
 };
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "TypeDefine.h"
-#include "MaterialInstance.h"
+#include "MaterialManager.h"
 #include "RectBufferObject.h"
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
@@ -278,8 +278,8 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
-		std::shared_ptr<Material> FlipYMaterial = std::shared_ptr<Material>(new Material(std::vector<String> { "DrawRectVertShader.vsh", "FlipTextureYFragShader.fsh" }));
-		std::shared_ptr<MaterialInstance> FlipYMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(FlipYMaterial));
+		std::shared_ptr<Material> FlipYMaterial = _MaterialManager->CreateMaterial("FlipYMaterial", std::vector<String> { "DrawRectVertShader.vsh", "FlipTextureYFragShader.fsh" }, Internal);
+		std::shared_ptr<MaterialInstance> FlipYMaterialInst = _MaterialManager->CreateMaterialInstance("FlipYMaterialInst", FlipYMaterial, Internal);
 		std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());
 		FlipYMaterialInst->SetTextureID("MainTex", TextureID);
 		FlipYMaterialInst->GetParent()->Draw(QuadBufferObject->VAO, QuadBufferObject->NumFaces, QuadBufferObject->IndexType);
@@ -310,8 +310,8 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
-		std::shared_ptr<Material> CopyMaterial = std::shared_ptr<Material>(new Material(std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }));
-		std::shared_ptr<MaterialInstance> CopyMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(CopyMaterial));
+		std::shared_ptr<Material> CopyMaterial = _MaterialManager->CreateMaterial("CopyMaterial", std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }, Internal);
+		std::shared_ptr<MaterialInstance> CopyMaterialInst = _MaterialManager->CreateMaterialInstance("CopyMaterialInst", CopyMaterial, Internal);
 		std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());
 		CopyMaterialInst->SetTextureID("MainTex", SrcTextureID);
 		glViewport(0, 0, DestTexWidth, DestTexHeight);
@@ -348,8 +348,8 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
-		std::shared_ptr<Material> CopyMaterial = std::shared_ptr<Material>(new Material(std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }));
-		std::shared_ptr<MaterialInstance> CopyMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(CopyMaterial));
+		std::shared_ptr<Material> CopyMaterial = _MaterialManager->CreateMaterial("CopyMaterial", std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }, Internal);
+		std::shared_ptr<MaterialInstance> CopyMaterialInst = _MaterialManager->CreateMaterialInstance("CopyMaterialInst", CopyMaterial, Internal);
 		std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());
 		CopyMaterialInst->SetTextureID("MainTex", SrcTextureID);
 		glViewport(0, 0, DestTexWidth, DestTexHeight);

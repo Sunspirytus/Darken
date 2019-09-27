@@ -3,9 +3,6 @@
 #include "ReflectionCapture.h"
 #include "SystemTextures.h"
 
-extern std::shared_ptr<SystemTextureFactory> GlobalTextures;
-extern std::shared_ptr<BufferManager> _GPUBuffers;
-
 MainViewPort::MainViewPort()
 {
 }
@@ -17,20 +14,22 @@ MainViewPort::~MainViewPort()
 void MainViewPort::InitScene()
 {
 	_GPUBuffers = std::shared_ptr<BufferManager>(new BufferManager());
+	_MaterialManager = std::shared_ptr<MaterialManager>(new MaterialManager());
 	GlobalTextures = std::shared_ptr<SystemTextureFactory>(new SystemTextureFactory());
 	GlobalTextures->GeneratePreIntegratedGFTexture();
 
-	std::shared_ptr<Material> SimpleObjectShadowDepthMaterial = std::shared_ptr<Material>(new Material(std::vector<String>{ "ShadowDepthVertShader.vsh", "ShadowDepthFragShader.fsh" }));
-	std::shared_ptr<MaterialInstance> SimpleObjectShadowDepthMaterialInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectShadowDepthMaterial));
+	std::shared_ptr<Material> SimpleObjectShadowDepthMaterial = _MaterialManager->CreateMaterial("SimpleObjectShadowDepthMaterial", std::vector<String>{ "ShadowDepthVertShader.vsh", "ShadowDepthFragShader.fsh" }, UserDefine);
+	std::shared_ptr<MaterialInstance> SimpleObjectShadowDepthMaterialInst = _MaterialManager->CreateMaterialInstance("SimpleObjectShadowDepthMaterialInst", SimpleObjectShadowDepthMaterial, UserDefine);
 
+	//std::shared_ptr<Material> SimpleObjectShadowDepthMaterial2 = std::shared_ptr<Material>(new Material(*SimpleObjectShadowDepthMaterial));
 	{
 
-		std::shared_ptr<Material> SimpleObjectMaterial00 = std::shared_ptr<Material>(new Material(std::vector<String> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }));
-		std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst00 = std::shared_ptr<MaterialInstance>(new MaterialInstance(SimpleObjectMaterial00));
+		std::shared_ptr<Material> SimpleObjectMaterial00 = _MaterialManager->CreateMaterial("SimpleObjectMaterial00", std::vector<String> { "SimpleVertShader.vsh", "SimpleFragShader.fsh" }, UserDefine);
+		std::shared_ptr<MaterialInstance> SimpleObjectMaterialInst00 = _MaterialManager->CreateMaterialInstance("SimpleObjectMaterialInst00", SimpleObjectMaterial00, UserDefine);
 		SimpleObjectMaterialInst00->SetUniform<Vector3f>("ColorTest", Vector3f(1.0, 0.0, 0.0));
 		std::shared_ptr<SimpleObject> Cube00 = std::shared_ptr<SimpleObject>(new SimpleObject("BasicModel\\Cube.FBX", SimpleObjectShadowDepthMaterialInst, SimpleObjectMaterialInst00));
 		Cube00->Transform->SetPosition(Vector3f(0.0, 0.0, 0.0));
-		Scene->AddObj(ObjectType::StaticMesh, Cube00);
+		Scene->AddObj(ObjectType::StaticMeshActor, Cube00);
 	}
 
 	std::shared_ptr<Camera> ViewCamera = std::shared_ptr<Camera>(new Camera(Vector3f(0.0, 10.0, 0.0), Vector3f(0.0, 0.0, -90.0), Math::Radians(60.0), (float32)ViewPortSize.x / (float32)ViewPortSize.y, 0.1f, 100.0f, Vector2i(ViewPortSize.x, ViewPortSize.y)));

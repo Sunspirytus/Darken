@@ -44,6 +44,11 @@ void MW_MainWindow::SaveScene()
 	FIO.SaveFile(ProjectDir, "SceneDemo", FileType::WorldScene, SaveData);
 }
 
+void MW_MainWindow::SaveMaterials()
+{
+	
+}
+
 void MW_MainWindow::SaveProject()
 {
 	String SaveData;
@@ -58,11 +63,32 @@ void MW_MainWindow::SaveProject()
 	SaveScene();
 }
 
+enum test
+{
+	test1,
+	test2,
+	test3
+};
+
 void MW_MainWindow::LoadProject()
 {
 	FileDialog FD;
+	std::vector<String> ProjectFilePaths = FD.OpenAndGetFileName("Load Project", "ProjectFile(*.dkProject)", FileDialog::SelectMode::Single);
+	if (ProjectFilePaths.size())
+	{
+		QFileInfo FileInfo(ProjectFilePaths[0].c_str());
+		this->ProjectDir = QStringToString(FileInfo.absolutePath());
+		String a = GetNameFromPath(ProjectFilePaths[0]);
+		String b = GetNameExceptSuffix(a);
+		String c = GetNameFromPathExceptSuffix(ProjectFilePaths[0]);
+	}
+	DOCK_WorldComponent->GetTable()->UpdateComponent(DOCK_OpenGLView->GetView()->GetScene());
+
 	
+
 	
+
+	int b = 0;
 }
 
 

@@ -1,5 +1,5 @@
 #include "SceneManager.h"
-#include "Model.h"
+#include "StaticMesh.h"
 
 SceneManager::SceneManager()
 {
@@ -135,8 +135,8 @@ void SceneManager::UpdatePreFrameData()
 {
 	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
-		if (ObjectIterator->first != ObjectType::StaticMesh && ObjectIterator->first != ObjectType::DynamicMesh) continue;
-		Model* M = dynamic_cast<Model*>(ObjectIterator->second.get());
+		if (ObjectIterator->first != ObjectType::StaticMeshActor && ObjectIterator->first != ObjectType::DynamicMeshActor) continue;
+		StaticMesh* M = dynamic_cast<StaticMesh*>(ObjectIterator->second.get());
 		M->UpdatePreFrameModelMatrix();
 	}
 	GetCamera(CameraIndex::MainCamera)->SetViewMatrix_PreFrame(GetCamera(CameraIndex::MainCamera)->GetViewMatrix());
@@ -147,8 +147,8 @@ void SceneManager::PrepareShadowDepthMaterial()
 {
 	for(std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
-		if (ObjectIterator->first != ObjectType::StaticMesh && ObjectIterator->first != ObjectType::DynamicMesh) continue;
-		Model* M = dynamic_cast<Model*>(ObjectIterator->second.get());
+		if (ObjectIterator->first != ObjectType::StaticMeshActor && ObjectIterator->first != ObjectType::DynamicMeshActor) continue;
+		StaticMesh* M = dynamic_cast<StaticMesh*>(ObjectIterator->second.get());
 		M->BindShadowDepthMaterial();
 	}
 }
@@ -157,8 +157,8 @@ void SceneManager::PrepareLightingMaterial()
 {
 	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
-		if (ObjectIterator->first != ObjectType::StaticMesh && ObjectIterator->first != ObjectType::DynamicMesh) continue;
-		Model* M = dynamic_cast<Model*>(ObjectIterator->second.get());
+		if (ObjectIterator->first != ObjectType::StaticMeshActor && ObjectIterator->first != ObjectType::DynamicMeshActor) continue;
+		StaticMesh* M = dynamic_cast<StaticMesh*>(ObjectIterator->second.get());
 		M->BindLightingMaterial();
 	}
 }

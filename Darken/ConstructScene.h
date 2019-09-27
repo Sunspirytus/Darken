@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Model.h"
+#include "StaticMesh.h"
 #include "Texture.h"
 
-class SimpleObject : public Model
+class SimpleObject : public StaticMesh
 {
 public:
 	SimpleObject(String ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
+		:	StaticMesh(ModelFileName)
 	{
-		LoadModelFromAsset(ModelFileName);
 		BindMaterial(ShadowDepthMaterialInst, LightingMaterialInst);
 		Transform->SetScale(Vector3f(1.0, 1.0, 1.0));
 		Transform->SetEulerAngle(Vector3f(0.0, 0.0, 0.0));
@@ -24,10 +24,10 @@ private:
 };
 
 
-class DigitalHuman : public Model
+class DigitalHuman : public StaticMesh
 {
 public:
-	DigitalHuman(String ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
+	DigitalHuman(const String& ModelFileName, std::shared_ptr<MaterialInstance> ShadowDepthMaterialInst, std::shared_ptr<MaterialInstance> LightingMaterialInst)
 	{
 		LoadModelFromAsset(ModelFileName);
 		BindMaterial(ShadowDepthMaterialInst, LightingMaterialInst);

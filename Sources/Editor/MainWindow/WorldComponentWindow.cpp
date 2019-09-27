@@ -72,8 +72,9 @@ void WD_WorldComponentsTable::UpdateComponent(std::shared_ptr<SceneManager> Scen
 	for(int32 Index = 0; Index < Objects.size(); Index++)
 	{
 		Table_Components->insertRow(RowCount + Index);
-		//Table_Components->setItem(RowCount - 1, 0, new QTableWidgetItem(Objects[Index]->GetProperty()->Name.c_str()));
-		//Table_Components->setItem(RowCount - 1, 1, new QTableWidgetItem(ToString(Objects[Index]->GetProperty()->Type)));
+		//Table_Components->setItem(RowCount - 1, 0, new QTableWidgetItem(Objects[Index]->Properties[TO_String(Name)]->DatasInString[0].c_str()));
+		//std::shared_ptr<PropertyData> Data = Objects[Index]->Properties[TO_String(Type)];
+		//Table_Components->setItem(RowCount - 1, 1, new QTableWidgetItem(Data->DatasInString[Data->Data].c_str()));
 	}
 	
 }
@@ -117,4 +118,9 @@ DOCK_WorldComponentWindow::DOCK_WorldComponentWindow(QWidget* parent)
 
 DOCK_WorldComponentWindow::~DOCK_WorldComponentWindow()
 {
+}
+
+WD_WorldComponentsTable* DOCK_WorldComponentWindow::GetTable()
+{
+	return WD_ComponentsTable;
 }

@@ -9,17 +9,11 @@
 #include "ReflectionCapture.h"
 #include "SystemTextures.h"
 #include "Application.h"
+#include "MaterialManager.h"
 #include <thread>
 #include <conio.h>
 
 // settings
-String AssetFolderPath = "..\\Assets\\";
-
-std::shared_ptr<BufferManager> _GPUBuffers;
-std::shared_ptr<SystemTextureFactory> GlobalTextures;
-
-uint32 APP_DeltaTime = 0;
-unsigned long APP_FrameCount = 0;
 
 int32 main(int argc, char* argv[])
 {
