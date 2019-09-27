@@ -1,5 +1,4 @@
-#include "Material.h"
-#include "BufferManager.h"
+#include "EngineRoot.h"
 #include <algorithm>
 #include <fstream>
 #include <sstream>
@@ -161,7 +160,7 @@ void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 	for (uint32 i = 0; i < shaderNames.size(); i++)
 	{
 		std::ifstream ShaderFile;
-		ShaderFile.open(AssetFolderPath + shaderNames[i]);
+		ShaderFile.open(DKEngine::GetInstance().GetAssetFolderPath() + shaderNames[i]);
 
 		if (!ShaderFile)
 		{
@@ -211,7 +210,7 @@ void Material::FindShaderNames(std::vector<String>& shaderNames)
 	for (uint32 i = 0; i < shaderNames.size(); i++)
 	{
 		std::ifstream ShaderFile;
-		ShaderFile.open(AssetFolderPath + shaderNames[i]);
+		ShaderFile.open(DKEngine::GetInstance().GetAssetFolderPath() + shaderNames[i]);
 
 		std::stringstream ShaderStream;
 		ShaderStream << ShaderFile.rdbuf();
@@ -326,10 +325,10 @@ void Material::FindUniformInfos()
 		std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator it;
 		for(it = MaterialProgram->Uniforms_Block.begin(); it != MaterialProgram->Uniforms_Block.end(); it++)
 		{
-			it->second->Id = _GPUBuffers->CreateUniformBuffer(it->first, it->second);
+			it->second->Id = DKEngine::GetInstance().GetGPUBufferManager()->CreateUniformBuffer(it->first, it->second);
 			glBindBuffer(GL_UNIFORM_BUFFER, it->second->Id);
-			glUniformBlockBinding(MaterialProgram->Id, it->second->Index, _GPUBuffers->GetUniformBlockBindingPoint(it->first));
-			glBindBufferBase(GL_UNIFORM_BUFFER, _GPUBuffers->GetUniformBlockBindingPoint(it->first), it->second->Id);
+			glUniformBlockBinding(MaterialProgram->Id, it->second->Index, DKEngine::GetInstance().GetGPUBufferManager()->GetUniformBlockBindingPoint(it->first));
+			glBindBufferBase(GL_UNIFORM_BUFFER, DKEngine::GetInstance().GetGPUBufferManager()->GetUniformBlockBindingPoint(it->first), it->second->Id);
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);			
 		}
 	}

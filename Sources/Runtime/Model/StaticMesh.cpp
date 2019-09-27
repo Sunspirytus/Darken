@@ -1,5 +1,5 @@
 #include "StaticMesh.h"
-#include "BufferManager.h"
+#include "EngineRoot.h"
 
 StaticMeshBase::StaticMeshBase()
 {
@@ -37,7 +37,7 @@ StaticMesh::~StaticMesh()
 void StaticMesh::LoadModelFromAsset(String fileName, Vector3f scale, bool bPackToOneMesh)
 {
 	
-	LoadFromAssetWithAssimp(AssetFolderPath, fileName, scale, bPackToOneMesh);
+	LoadFromAssetWithAssimp(DKEngine::GetInstance().GetAssetFolderPath(), fileName, scale, bPackToOneMesh);
 	
 }
 
@@ -355,7 +355,7 @@ void StaticMesh::Draw()
 		Mat4f Model_ITMatrix = Math::Inverse(Math::Transpose(Transform->GetModelMatrix() * RenderGroup[Index]->ModelMatrix));
 		Mat4f Model_PreMatrix = Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix;
 		Mat4f Model_ITPreMatrix = Math::Inverse(Math::Transpose(Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix));
-		_GPUBuffers->UpdateModelBuffer(ModelMatrix, Model_ITMatrix, Model_PreMatrix, Model_ITPreMatrix);
+		DKEngine::GetInstance().GetGPUBufferManager()->UpdateModelBuffer(ModelMatrix, Model_ITMatrix, Model_PreMatrix, Model_ITPreMatrix);
 
 		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrixID, Transform->GetModelMatrix() *  RenderGroup[Index]->ModelMatrix);
 		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrix_PreID, Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix);

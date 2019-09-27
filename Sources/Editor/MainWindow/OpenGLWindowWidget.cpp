@@ -93,6 +93,7 @@ void WD_OpenGLWindowCore::SetOpenGLContext()
 void WD_OpenGLWindowCore::initializeGL()
 {
 	OpenGLContext::Init();
+	DKEngine::Init();
 	View->InitScene();
 }
 

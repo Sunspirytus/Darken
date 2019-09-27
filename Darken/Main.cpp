@@ -2,6 +2,7 @@
 #include <glfw3.h>
 #include <iostream>
 #include "SceneManager.h"
+#include "EngineRoot.h"
 #include "Quaternion.h"
 #include "ConstructScene.h"
 #include "DeferRenderPipeline.h"

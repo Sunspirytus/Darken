@@ -1,5 +1,5 @@
 #include "MaterialInstance.h"
-#include "BufferManager.h"
+#include "EngineRoot.h"
 
 MaterialInstanceBase::MaterialInstanceBase()
 {
@@ -139,6 +139,6 @@ int32 MaterialInstance::GetID(const String& ParameterName)
 
 void MaterialInstance::MarkDirty(int32 BlockID)
 {
-	_GPUBuffers->MarkBufferDirty(BlockID);
+	DKEngine::GetInstance().GetGPUBufferManager()->MarkBufferDirty(BlockID);
 }
 

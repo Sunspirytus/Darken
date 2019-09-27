@@ -2,6 +2,7 @@
 #include "DeferRenderPipeline.h"
 #include "ReflectionCapture.h"
 #include "SystemTextures.h"
+#include "EngineRoot.h"
 
 MainViewPort::MainViewPort()
 {
@@ -13,10 +14,9 @@ MainViewPort::~MainViewPort()
 
 void MainViewPort::InitScene()
 {
-	_GPUBuffers = std::shared_ptr<BufferManager>(new BufferManager());
-	_MaterialManager = std::shared_ptr<MaterialManager>(new MaterialManager());
-	GlobalTextures = std::shared_ptr<SystemTextureFactory>(new SystemTextureFactory());
-	GlobalTextures->GeneratePreIntegratedGFTexture();
+	std::shared_ptr<BufferManager> _GPUBuffers = DKEngine::GetInstance().GetGPUBufferManager();
+	std::shared_ptr<MaterialManager> _MaterialManager = DKEngine::GetInstance().GetMaterialManager();
+	std::shared_ptr<SystemTextureFactory> GlobalTextures = DKEngine::GetInstance().GetGlobalTextures();
 
 	std::shared_ptr<Material> SimpleObjectShadowDepthMaterial = _MaterialManager->CreateMaterial("SimpleObjectShadowDepthMaterial", std::vector<String>{ "ShadowDepthVertShader.vsh", "ShadowDepthFragShader.fsh" }, UserDefine);
 	std::shared_ptr<MaterialInstance> SimpleObjectShadowDepthMaterialInst = _MaterialManager->CreateMaterialInstance("SimpleObjectShadowDepthMaterialInst", SimpleObjectShadowDepthMaterial, UserDefine);

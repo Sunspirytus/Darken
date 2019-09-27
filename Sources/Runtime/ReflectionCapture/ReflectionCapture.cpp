@@ -2,6 +2,7 @@
 #include "ReflectionCapture.h"
 #include "DeferRenderPipeline.h"
 
+
 SphereReflectionCapture::SphereReflectionCapture(std::shared_ptr<SceneManager> Scene, const Vector3f &position, const float32 &radius, const float32& brightness)
 	:	InfluenceRadius(radius)
 	,	Brightness(brightness)
@@ -80,8 +81,8 @@ void SphereReflectionCapture::CaptureWithPipeLine(DeferRenderPipeline* Pipeline)
 {
 	for(int32 FaceIndex = 0; FaceIndex < 6; FaceIndex++)
 	{
-		_GPUBuffers->UpdateViewBuffer(CaptureCamera.get());
-		_GPUBuffers->UpdateCustomBufferData();
+		DKEngine::GetInstance().GetGPUBufferManager()->UpdateViewBuffer(CaptureCamera.get());
+		DKEngine::GetInstance().GetGPUBufferManager()->UpdateCustomBufferData();
 
 		Pipeline->SceneWaitRender->PrepareShadowDepthMaterial();
 		Pipeline->RenderShadowDepthPass(StaticMeshActor);
@@ -129,8 +130,8 @@ void SphereReflectionCapture::CalReflectionCubeTexAvgBrightness()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//Create Material
-	std::shared_ptr<Material> CalculateMaterial = _MaterialManager->CreateMaterial("CalculateReflectionBrightnessMaterial", std::vector<String> { "DrawRectVertShader.vsh", "ComputeAverageBrightnessFragShader.fsh" }, Internal);
-	std::shared_ptr<MaterialInstance> ComputeMaterialInst = _MaterialManager->CreateMaterialInstance("CalculateReflectionBrightnessMaterialInst", CalculateMaterial, Internal);
+	std::shared_ptr<Material> CalculateMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("CalculateReflectionBrightnessMaterial", std::vector<String> { "DrawRectVertShader.vsh", "ComputeAverageBrightnessFragShader.fsh" }, Internal);
+	std::shared_ptr<MaterialInstance> ComputeMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("CalculateReflectionBrightnessMaterialInst", CalculateMaterial, Internal);
 
 	//Create Quad Geometry
 	std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());

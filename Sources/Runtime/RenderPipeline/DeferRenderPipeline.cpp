@@ -67,8 +67,8 @@ void DeferRenderPipeline::Render(std::shared_ptr<Camera> camera)
 {
 	TAAPass->UpdateJitter();
 
-	_GPUBuffers->UpdateViewBuffer(SceneWaitRender->GetCamera(CameraIndex::MainCamera).get());
-	_GPUBuffers->UpdateCustomBufferData();
+	DKEngine::GetInstance().GetGPUBufferManager()->UpdateViewBuffer(SceneWaitRender->GetCamera(CameraIndex::MainCamera).get());
+	DKEngine::GetInstance().GetGPUBufferManager()->UpdateCustomBufferData();
 
 	SceneWaitRender->PrepareShadowDepthMaterial();
 	RenderShadowDepthPass(StaticMeshActor | DynamicMeshActor);
@@ -535,13 +535,13 @@ void Lighting::Render(std::shared_ptr<Camera> camera, uint32 typeFlags)
 			ShadowBuffer.bDirectLight = 0;
 		}
 	
-		_GPUBuffers->UpdateShadowBuffer(ShadowBuffer);
+		DKEngine::GetInstance().GetGPUBufferManager()->UpdateShadowBuffer(ShadowBuffer);
 
 		LightData LightBuffer;
 
 		ShadowMappingPass->Lights[LightIndex]->GetShaderData(LightBuffer);
 		LightBuffer.bLastLight = (LightIndex == Lights.size() - 1) ? 1 : 0;
-		_GPUBuffers->UpdateLightBuffer(LightBuffer);
+		DKEngine::GetInstance().GetGPUBufferManager()->UpdateLightBuffer(LightBuffer);
 		for (uint32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
 		{
 			StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
@@ -579,14 +579,14 @@ SubSurfaceShading::SubSurfaceShading(std::shared_ptr<Camera> camera)
 	CreateResources();
 	InitSubsurfaceProfileEntries();
 
-	std::shared_ptr<Material> SSSSetupMaterial = _MaterialManager->CreateMaterial("SSSSetupMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceSetup.fsh"}, Internal);
-	SSSSetupMaterialInst = _MaterialManager->CreateMaterialInstance("SSSSetupMaterialInst", SSSSetupMaterial, Internal);
+	std::shared_ptr<Material> SSSSetupMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("SSSSetupMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceSetup.fsh"}, Internal);
+	SSSSetupMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("SSSSetupMaterialInst", SSSSetupMaterial, Internal);
 
-	std::shared_ptr<Material> SSSScateringMaterial = _MaterialManager->CreateMaterial("SSSScateringMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceScatering.fsh"}, Internal);
-	SSSScateringMaterialInst = _MaterialManager->CreateMaterialInstance("SSSScateringMaterialInst", SSSScateringMaterial, Internal);
+	std::shared_ptr<Material> SSSScateringMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("SSSScateringMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceScatering.fsh"}, Internal);
+	SSSScateringMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("SSSScateringMaterialInst", SSSScateringMaterial, Internal);
 
-	std::shared_ptr<Material> SSSRecombineMaterial = _MaterialManager->CreateMaterial("SSSRecombineMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceRecombine.fsh"}, Internal);
-	SSSRecombineMaterialInst = _MaterialManager->CreateMaterialInstance("SSSRecombineMaterialInst", SSSRecombineMaterial, Internal);
+	std::shared_ptr<Material> SSSRecombineMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("SSSRecombineMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceRecombine.fsh"}, Internal);
+	SSSRecombineMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("SSSRecombineMaterialInst", SSSRecombineMaterial, Internal);
 
 	SSSSetupMaterialInst->SetUniform<Vector2f>("CameraNearFar", Vector2f(ViewCamera->GetNearClipPlaneDis(), ViewCamera->GetFarClipPlaneDis()));
 
@@ -1103,8 +1103,8 @@ void UE4TemporalAA::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 
 void UE4TemporalAA::CreateTAAPassMaterial()
 {
-	std::shared_ptr<Material> TAAMaterial = _MaterialManager->CreateMaterial("TAAMaterial", std::vector<String> {"DrawRectVertShader.vsh", "UE4TemporalAAFragShader.fsh"}, Internal);
-	TAAPassMaterialInst = _MaterialManager->CreateMaterialInstance("TAAMaterialInst", TAAMaterial, Internal);
+	std::shared_ptr<Material> TAAMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("TAAMaterial", std::vector<String> {"DrawRectVertShader.vsh", "UE4TemporalAAFragShader.fsh"}, Internal);
+	TAAPassMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("TAAMaterialInst", TAAMaterial, Internal);
 	TAAPassMaterialInst->SetBlockUniform<Vector2f>("TestBlock", "Color2", Vector4f(1.0, 1.0, 0.0, 1.0));
 }
 
@@ -1269,15 +1269,15 @@ ToneMapping::~ToneMapping()
 
 void ToneMapping::CreateToneMappingPassMaterial()
 {
-	std::shared_ptr<Material> ToneMappingMaterial = _MaterialManager->CreateMaterial("ToneMappingMaterial", std::vector<String> {"ToneMappingVertShader.vsh", "ToneMappingFragShader.fsh"}, Internal);
-	ToneMappingMaterialInst = _MaterialManager->CreateMaterialInstance("ToneMappingMaterialInst", ToneMappingMaterial, Internal);
+	std::shared_ptr<Material> ToneMappingMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("ToneMappingMaterial", std::vector<String> {"ToneMappingVertShader.vsh", "ToneMappingFragShader.fsh"}, Internal);
+	ToneMappingMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("ToneMappingMaterialInst", ToneMappingMaterial, Internal);
 }
 
 void ToneMapping::GenerateLUTTexture(std::shared_ptr<RectBufferObject> pPObj)
 {
 	//Prepare LUT render Material
-	std::shared_ptr<Material> LUTMaterial = _MaterialManager->CreateMaterial("LUTMaterial", std::vector<String> {"LUTVertShader.vsh", "LUTFragShader.fsh"}, Internal);
-	std::shared_ptr<MaterialInstance> LUTMaterialInst = _MaterialManager->CreateMaterialInstance("LUTMaterialInst", LUTMaterial, Internal);
+	std::shared_ptr<Material> LUTMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("LUTMaterial", std::vector<String> {"LUTVertShader.vsh", "LUTFragShader.fsh"}, Internal);
+	std::shared_ptr<MaterialInstance> LUTMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("LUTMaterialInst", LUTMaterial, Internal);
 
 	//Prepare LUT Texture
 	static const int32 LUT_TEX_Size = 32;
@@ -1357,13 +1357,13 @@ int32 LayerIndex = 0;
 void ToneMapping::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	if (APP_FrameCount % 5 == 0)
+	if (DKEngine::GetInstance().GetFrameCount() % 5 == 0)
 	{
 		LayerIndex++;
 		LayerIndex %= 32;
 	}
 
-	Vector2f GrainRandomFull = GrainRandomFromFrame(APP_FrameCount % 8);
+	Vector2f GrainRandomFull = GrainRandomFromFrame(DKEngine::GetInstance().GetFrameCount() % 8);
 	ToneMappingMaterialInst->SetUniform<Vector2f>(ToneMappingUniformDatas->GrainRandomFullID, GrainRandomFull);
 	ToneMappingMaterialInst->GetParent()->Draw(VAO, NumFaces, indexType);
 }

@@ -20,17 +20,11 @@ private:
 	std::shared_ptr<SystemTextureFactory> _GlobalTextures;
 
 	uint32 APP_DeltaTime = 0;
-	uint64 APP_FrameCount = 0;
-
-
-
+	uint64 FrameCount = 0;
 
 public:
-	static DKEngine& GetInstance()
-	{
-		static DKEngine instance;
-		return instance;
-	}
+	static DKEngine& GetInstance();
+	static void Init();
 
 	std::shared_ptr<MaterialManager> GetMaterialManager();
 	std::shared_ptr<BufferManager> GetGPUBufferManager();

@@ -1,5 +1,7 @@
 #include "Camera.h"
 #include "Quaternion.h"
+#include "Util.h"
+#include <cmath>
 
 Camera::Camera()
 {

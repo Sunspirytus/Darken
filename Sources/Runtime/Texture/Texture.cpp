@@ -1,6 +1,7 @@
 //#include <glfw3.h>
 //#include <stb_image.h>
 #include "Texture.h"
+#include "EngineRoot.h"
 Texture::Texture()
 {
 	Width = -1;
@@ -28,9 +29,9 @@ Texture::Texture()
 	#define GL_UNSIGNED_INT_24_8_EXT 0x84FA
 Texture::Texture(String file, TextureParameter minParm, TextureParameter magParm, TextureParameter wrapParmU, TextureParameter wrapParmV)
 {
-	LoadTextureFromAsset(AssetFolderPath + file);
+	LoadTextureFromAsset(DKEngine::GetInstance().GetAssetFolderPath() + file);
 	CreateGPUObject(minParm, magParm, wrapParmU, wrapParmV);
-	//	String  path = (AssetFolderPath + file);
+	//	String  path = (DKEngine::GetInstance().GetAssetFolderPath() + file);
 	//	{
 	//#define GL_COMPRESSED_RGB_S3TC_DXT1_EXT 0x83F0
 	//#define GL_COMPRESSED_RGBA_S3TC_DXT1_EXT 0x83F1
@@ -878,7 +879,7 @@ void Texture::LoadTextureFromAsset(String const&file)
 //	{
 //		if (!glIsTexture(this->GPUId))
 //		{
-//			LoadTextureFromAsset(AssetFolderPath + compositeTexFilePath);
+//			LoadTextureFromAsset(DKEngine::GetInstance().GetAssetFolderPath() + compositeTexFilePath);
 //			CreateGPUObject(Linear_Mip_Linear, Linear_Mip_Linear, Clamp_To_Edge, Clamp_To_Edge);
 //
 //		}
@@ -980,7 +981,7 @@ void Texture::LoadTextureFromAsset(String const&file)
 //		glViewport(PrevViewport[0], PrevViewport[1], PrevViewport[2], PrevViewport[3]);
 //		return composite_RT->getBufferHandle(FBO_COLOR0);
 //	}
-//	uint8 *composite_tex_data = stbi_load((AssetFolderPath + compositeTexFilePath).c_str(), &width, &height, &nrComponents, 0);
+//	uint8 *composite_tex_data = stbi_load((DKEngine::GetInstance().GetAssetFolderPath() + compositeTexFilePath).c_str(), &width, &height, &nrComponents, 0);
 //	RawTextureDataPtrs.reserve(1);
 //	RawTextureDataPtrs.resize(1);
 //	int32 MipWidth = width;

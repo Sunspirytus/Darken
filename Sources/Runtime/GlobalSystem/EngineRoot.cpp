@@ -8,6 +8,21 @@ DKEngine::~DKEngine()
 {
 }
 
+DKEngine& DKEngine::GetInstance()
+{
+	static DKEngine instance;
+	return instance;
+}
+
+void DKEngine::Init()
+{
+	DKEngine& Engine = DKEngine::GetInstance();
+	Engine._GPUBuffers = std::shared_ptr<BufferManager>(new BufferManager());
+	Engine._MaterialManager = std::shared_ptr<MaterialManager>(new MaterialManager());
+	Engine._GlobalTextures = std::shared_ptr<SystemTextureFactory>(new SystemTextureFactory());
+	Engine._GlobalTextures->GeneratePreIntegratedGFTexture();
+}
+
 std::shared_ptr<MaterialManager> DKEngine::GetMaterialManager()
 {
 	return _MaterialManager;
@@ -25,7 +40,7 @@ std::shared_ptr<SystemTextureFactory> DKEngine::GetGlobalTextures()
 
 uint64 DKEngine::GetFrameCount()
 {
-	return APP_FrameCount;
+	return FrameCount;
 }
 
 String DKEngine::GetAssetFolderPath()

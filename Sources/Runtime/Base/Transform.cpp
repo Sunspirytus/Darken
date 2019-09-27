@@ -1,6 +1,8 @@
 #include "Transform.h"
 #include "Quaternion.h"
 #include "CommonFunctions.h"
+#include "Util.h"
+#include <cmath>
 
 TransformComponentBase::TransformComponentBase(const Vector3f& position,
 	const Vector3f& eulerAngle,

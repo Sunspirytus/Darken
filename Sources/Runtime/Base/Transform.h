@@ -1,9 +1,7 @@
 #pragma once
 
-#include "Util.h"
 #include "PropertyBase.h"
 #include "ComponentBase.h"
-#include <cmath>
 
 class TransformComponentBase : public ComponentBase
 {

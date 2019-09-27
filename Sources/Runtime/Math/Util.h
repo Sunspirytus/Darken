@@ -1,6 +1,6 @@
 #pragma once
 #include "TypeDefine.h"
-#include "MaterialManager.h"
+#include "EngineRoot.h"
 #include "RectBufferObject.h"
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
@@ -10,8 +10,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
-
 
 struct Math
 {
@@ -278,8 +276,8 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
-		std::shared_ptr<Material> FlipYMaterial = _MaterialManager->CreateMaterial("FlipYMaterial", std::vector<String> { "DrawRectVertShader.vsh", "FlipTextureYFragShader.fsh" }, Internal);
-		std::shared_ptr<MaterialInstance> FlipYMaterialInst = _MaterialManager->CreateMaterialInstance("FlipYMaterialInst", FlipYMaterial, Internal);
+		std::shared_ptr<Material> FlipYMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("FlipYMaterial", std::vector<String> { "DrawRectVertShader.vsh", "FlipTextureYFragShader.fsh" }, Internal);
+		std::shared_ptr<MaterialInstance> FlipYMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("FlipYMaterialInst", FlipYMaterial, Internal);
 		std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());
 		FlipYMaterialInst->SetTextureID("MainTex", TextureID);
 		FlipYMaterialInst->GetParent()->Draw(QuadBufferObject->VAO, QuadBufferObject->NumFaces, QuadBufferObject->IndexType);
@@ -310,8 +308,8 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
-		std::shared_ptr<Material> CopyMaterial = _MaterialManager->CreateMaterial("CopyMaterial", std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }, Internal);
-		std::shared_ptr<MaterialInstance> CopyMaterialInst = _MaterialManager->CreateMaterialInstance("CopyMaterialInst", CopyMaterial, Internal);
+		std::shared_ptr<Material> CopyMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("CopyMaterial", std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }, Internal);
+		std::shared_ptr<MaterialInstance> CopyMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("CopyMaterialInst", CopyMaterial, Internal);
 		std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());
 		CopyMaterialInst->SetTextureID("MainTex", SrcTextureID);
 		glViewport(0, 0, DestTexWidth, DestTexHeight);
@@ -348,8 +346,8 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
-		std::shared_ptr<Material> CopyMaterial = _MaterialManager->CreateMaterial("CopyMaterial", std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }, Internal);
-		std::shared_ptr<MaterialInstance> CopyMaterialInst = _MaterialManager->CreateMaterialInstance("CopyMaterialInst", CopyMaterial, Internal);
+		std::shared_ptr<Material> CopyMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("CopyMaterial", std::vector<String> { "DrawRectVertShader.vsh", "DrawRectFragShader.fsh" }, Internal);
+		std::shared_ptr<MaterialInstance> CopyMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("CopyMaterialInst", CopyMaterial, Internal);
 		std::shared_ptr<RectBufferObject> QuadBufferObject = std::shared_ptr<RectBufferObject>(new RectBufferObject());
 		CopyMaterialInst->SetTextureID("MainTex", SrcTextureID);
 		glViewport(0, 0, DestTexWidth, DestTexHeight);
