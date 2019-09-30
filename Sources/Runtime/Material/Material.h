@@ -143,6 +143,7 @@ public:
 
 private:
 	String Path;
+	int32 ShaderCount;
 	std::vector<String> ShaderNames;
 };
 

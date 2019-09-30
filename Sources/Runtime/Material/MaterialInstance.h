@@ -11,7 +11,9 @@ public:
 	MaterialInstanceBase(const String& path, const String& parentName );
 	~MaterialInstanceBase();
 
-private:
+	String GetName();
+
+protected:
 	String Path;
 	String ParentName;
 };

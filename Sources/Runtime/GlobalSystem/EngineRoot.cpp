@@ -43,7 +43,12 @@ uint64 DKEngine::GetFrameCount()
 	return FrameCount;
 }
 
-String DKEngine::GetAssetFolderPath()
+String DKEngine::GetWorkingFolderPath()
 {
-	return AssetFolderPath;
+	return FolderPath;
+}
+
+void DKEngine::SetWorkingFolderPath(const String& Path)
+{
+	FolderPath = Path;
 }

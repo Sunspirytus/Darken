@@ -13,6 +13,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;F:\Darken\3rdParty\lib\SOIL;F:\Darken\3rdParty\lib\GLFW;F:\Darken\3rdParty\lib\Glad;F:\Darken\3rdParty\lib\freeimage;F:\Darken\3rdParty\lib\Assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;FreeImage.lib;assimp-vc140-mt.lib;glfw3.lib;GLAD.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
     <QtMoc>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>

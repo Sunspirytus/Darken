@@ -1,0 +1,4 @@
+Path:SimpleObjectShadowDepthMaterial;
+ShaderCount:2;
+Shader0:ShadowDepthVertShader.vsh;
+Shader1:ShadowDepthFragShader.fsh;

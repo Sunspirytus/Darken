@@ -3,7 +3,7 @@
 ViewPortBase::ViewPortBase()
 	: ViewPortSize(Vector2i(50, 50))
 {
-	Scene = std::shared_ptr<SceneManager>(new SceneManager());
+	Scene = std::shared_ptr<World>(new World());
 }
 
 ViewPortBase::~ViewPortBase()
@@ -15,7 +15,7 @@ void ViewPortBase::SizeChange(Vector2i newSize)
 	OnSizeChange();
 }
 
-std::shared_ptr<SceneManager> ViewPortBase::GetScene()
+std::shared_ptr<World> ViewPortBase::GetScene()
 {
 	return Scene;
 }

@@ -12,8 +12,8 @@ MaterialBase::MaterialBase(const String& path, const std::vector<String>& shader
 	: Path(path)
 	, ShaderNames(shaderNames)
 {
-	AddProperty("Name", STRING, &Path);
-	int32 ShaderCount = (int32)ShaderNames.size();
+	AddProperty("Path", STRING, &Path);
+	ShaderCount = (int32)ShaderNames.size();
 	AddProperty("ShaderCount", INT_32, &ShaderCount);
 	for(int32 Index = 0; Index < ShaderCount; Index++)
 	{
@@ -160,7 +160,7 @@ void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 	for (uint32 i = 0; i < shaderNames.size(); i++)
 	{
 		std::ifstream ShaderFile;
-		ShaderFile.open(DKEngine::GetInstance().GetAssetFolderPath() + shaderNames[i]);
+		ShaderFile.open(DKEngine::GetInstance().GetWorkingFolderPath() + shaderNames[i]);
 
 		if (!ShaderFile)
 		{
@@ -210,7 +210,7 @@ void Material::FindShaderNames(std::vector<String>& shaderNames)
 	for (uint32 i = 0; i < shaderNames.size(); i++)
 	{
 		std::ifstream ShaderFile;
-		ShaderFile.open(DKEngine::GetInstance().GetAssetFolderPath() + shaderNames[i]);
+		ShaderFile.open(DKEngine::GetInstance().GetWorkingFolderPath() + shaderNames[i]);
 
 		std::stringstream ShaderStream;
 		ShaderStream << ShaderFile.rdbuf();
@@ -318,6 +318,7 @@ void Material::FindUniformInfos()
 				UniformInBlock.Size = Size;
 				Block->Uniforms.insert(std::pair<uint32, UniformItem_WithinBlock>(UniformInBlock.Offset_Byte, UniformInBlock));
 			}
+			delete[] UniformInBlockName;
 			delete[] InUniformIndices;
 		}
 		delete[] UniformBlockName;

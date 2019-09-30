@@ -29,7 +29,7 @@ Texture::Texture()
 	#define GL_UNSIGNED_INT_24_8_EXT 0x84FA
 Texture::Texture(String file, TextureParameter minParm, TextureParameter magParm, TextureParameter wrapParmU, TextureParameter wrapParmV)
 {
-	LoadTextureFromAsset(DKEngine::GetInstance().GetAssetFolderPath() + file);
+	LoadTextureFromAsset(DKEngine::GetInstance().GetWorkingFolderPath() + file);
 	CreateGPUObject(minParm, magParm, wrapParmU, wrapParmV);
 	//	String  path = (DKEngine::GetInstance().GetAssetFolderPath() + file);
 	//	{

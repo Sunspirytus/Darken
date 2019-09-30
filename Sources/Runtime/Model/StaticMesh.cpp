@@ -2,16 +2,30 @@
 #include "EngineRoot.h"
 
 StaticMeshBase::StaticMeshBase()
+	: Object()
 {
-}
-
-StaticMeshBase::StaticMeshBase(const String& path)
-	:	Object(path, StaticMeshActor)
-{
+	Type = StaticMeshActor;
+	AddProperty("MeshPath", STRING, &MeshPath);
+	AddProperty("MaterialName", STRING, &MaterialName);
 }
 
 StaticMeshBase::~StaticMeshBase()
 {
+}
+
+void StaticMeshBase::SetMaterialName(const String& name)
+{
+	MaterialName = name;
+}
+
+void StaticMeshBase::Save(String* Data)
+{
+	Object::Save(Data);
+}
+
+void StaticMeshBase::Load(const String& Data)
+{
+	Object::Load(Data);
 }
 
 StaticMesh::StaticMesh()
@@ -19,8 +33,10 @@ StaticMesh::StaticMesh()
 }
 
 StaticMesh::StaticMesh(const String& fileName, Vector3f scale, bool bPackToOneMesh)
-	:	StaticMeshBase(fileName)
+	:	StaticMeshBase()
 {
+	Path = fileName;
+	MeshPath = fileName;
 	LoadModelFromAsset(fileName, scale, bPackToOneMesh);
 }
 
@@ -37,7 +53,7 @@ StaticMesh::~StaticMesh()
 void StaticMesh::LoadModelFromAsset(String fileName, Vector3f scale, bool bPackToOneMesh)
 {
 	
-	LoadFromAssetWithAssimp(DKEngine::GetInstance().GetAssetFolderPath(), fileName, scale, bPackToOneMesh);
+	LoadFromAssetWithAssimp(DKEngine::GetInstance().GetWorkingFolderPath(), fileName, scale, bPackToOneMesh);
 	
 }
 
@@ -320,6 +336,7 @@ void StaticMesh::BindMaterial(std::shared_ptr<MaterialInstance> shadowDepthMater
 	ShadowDepthMaterial = shadowDepthMaterial;
 	LightingMaterial = lightingMaterial;
 	MaterialInstData = std::shared_ptr<MaterialData>(new MaterialData());
+	SetMaterialName(LightingMaterial->GetName());
 }
 
 void StaticMesh::BindShadowDepthMaterial()

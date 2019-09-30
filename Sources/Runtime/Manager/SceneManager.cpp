@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include "StaticMesh.h"
+#include "FileIO.h"
 
 SceneManager::SceneManager()
 {
@@ -160,15 +161,5 @@ void SceneManager::PrepareLightingMaterial()
 		if (ObjectIterator->first != ObjectType::StaticMeshActor && ObjectIterator->first != ObjectType::DynamicMeshActor) continue;
 		StaticMesh* M = dynamic_cast<StaticMesh*>(ObjectIterator->second.get());
 		M->BindLightingMaterial();
-	}
-}
-
-void SceneManager::GetSaveInfo(String* Infos)
-{
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
-	{
-		Infos->append("{\n");
-		ObjectIterator->second->Save(Infos);
-		Infos->append("}\n\n");
 	}
 }

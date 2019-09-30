@@ -20,6 +20,7 @@ MW_MainWindow::MW_MainWindow(QWidget *parent)
 
 		QMetaObject::Connection Connection;
 		Connection = connect(MenuBar, SIGNAL(saveScene()), this, SLOT(SaveScene()));
+		Connection = connect(MenuBar, SIGNAL(openScene()), this, SLOT(OpenScene()));
 		Connection = connect(MenuBar, SIGNAL(saveProject()), this, SLOT(SaveProject()));
 		Connection = connect(MenuBar, SIGNAL(loadProject()), this, SLOT(LoadProject()));
 	}
@@ -38,15 +39,18 @@ MW_MainWindow::MW_MainWindow(QWidget *parent)
 
 void MW_MainWindow::SaveScene()
 {
-	String SaveData;
-	DOCK_OpenGLView->GetView()->GetScene()->GetSaveInfo(&SaveData);
-	FileIO FIO;
-	FIO.SaveFile(ProjectDir, "SceneDemo", FileType::WorldScene, SaveData);
+	DOCK_OpenGLView->GetView()->GetScene()->Save();
+	SaveMaterials();
 }
 
-void MW_MainWindow::SaveMaterials()
+void MW_MainWindow::OpenScene()
 {
-	
+	FileDialog FD;
+	std::vector<String> ProjectFilePaths = FD.OpenAndGetFileName("Open Scene", "SceneFile(*" + FileTypeSuffixMap[FileType::F_WorldScene] + ")", FileDialog::SelectMode::Single);
+	if (ProjectFilePaths.size())
+	{
+		DOCK_OpenGLView->GetView()->GetScene()->Load(ProjectFilePaths[0]);
+	}
 }
 
 void MW_MainWindow::SaveProject()
@@ -58,26 +62,20 @@ void MW_MainWindow::SaveProject()
 	};
 
 	FileIO FIO;
-	FIO.SaveFile(ProjectDir, "PrjDemo", FileType::Project, SaveData);
+	FIO.SaveFile(ProjectDir, "PrjDemo", FileType::F_Project, SaveData);
 
 	SaveScene();
 }
 
-enum test
-{
-	test1,
-	test2,
-	test3
-};
-
 void MW_MainWindow::LoadProject()
 {
 	FileDialog FD;
-	std::vector<String> ProjectFilePaths = FD.OpenAndGetFileName("Load Project", "ProjectFile(*.dkProject)", FileDialog::SelectMode::Single);
+	std::vector<String> ProjectFilePaths = FD.OpenAndGetFileName("Load Project", "ProjectFile(*" + FileTypeSuffixMap[FileType::F_Project] + ")", FileDialog::SelectMode::Single);
 	if (ProjectFilePaths.size())
 	{
 		QFileInfo FileInfo(ProjectFilePaths[0].c_str());
 		this->ProjectDir = QStringToString(FileInfo.absolutePath());
+		DKEngine::GetInstance().SetWorkingFolderPath(this->ProjectDir);
 		String a = GetNameFromPath(ProjectFilePaths[0]);
 		String b = GetNameExceptSuffix(a);
 		String c = GetNameFromPathExceptSuffix(ProjectFilePaths[0]);
@@ -90,6 +88,12 @@ void MW_MainWindow::LoadProject()
 
 	int b = 0;
 }
+
+void MW_MainWindow::SaveMaterials()
+{
+	DKEngine::GetInstance().GetMaterialManager()->Save();
+}
+
 
 
 

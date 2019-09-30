@@ -150,9 +150,6 @@
     <ClInclude Include="..\Sources\Runtime\ViewPort\MainViewPort.h">
       <Filter>源文件\Runtime\ViewPort</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPort.h">
-      <Filter>源文件\Runtime\ViewPort</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPortBase.h">
       <Filter>源文件\Runtime\ViewPort</Filter>
     </ClInclude>
@@ -176,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Runtime\GlobalSystem\EngineRoot.h">
       <Filter>源文件\Runtime\GlobalSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Runtime\ViewPort\World.h">
+      <Filter>源文件\Runtime\ViewPort</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Runtime\GlobalSystem\EngineRoot.cpp">
       <Filter>源文件\Runtime\GlobalSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Runtime\ViewPort\World.cpp">
+      <Filter>源文件\Runtime\ViewPort</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

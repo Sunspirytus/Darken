@@ -65,7 +65,7 @@ void WD_WorldComponentsTable::resizeEvent(QResizeEvent* event)
 	this->setBaseSize(ParentSize);
 }
 #define ToString(x) #x
-void WD_WorldComponentsTable::UpdateComponent(std::shared_ptr<SceneManager> Scene)
+void WD_WorldComponentsTable::UpdateComponent(std::shared_ptr<World> Scene)
 {
 	std::vector<std::shared_ptr<Object>> Objects = Scene->GetObjects(ObjectType::Default);
 	int32 RowCount = Table_Components->rowCount();

@@ -260,8 +260,8 @@
     <ClInclude Include="..\Sources\Runtime\Texture\Texture.h" />
     <ClInclude Include="..\Sources\Runtime\Util\CommonFunctions.h" />
     <ClInclude Include="..\Sources\Runtime\ViewPort\MainViewPort.h" />
-    <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPort.h" />
     <ClInclude Include="..\Sources\Runtime\ViewPort\ViewPortBase.h" />
+    <ClInclude Include="..\Sources\Runtime\ViewPort\World.h" />
     <ClInclude Include="ConstructScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -299,6 +299,7 @@
     <ClCompile Include="..\Sources\Runtime\Util\CommonFunctions.cpp" />
     <ClCompile Include="..\Sources\Runtime\ViewPort\MainViewPort.cpp" />
     <ClCompile Include="..\Sources\Runtime\ViewPort\ViewPortBase.cpp" />
+    <ClCompile Include="..\Sources\Runtime\ViewPort\World.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

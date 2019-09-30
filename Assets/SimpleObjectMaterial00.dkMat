@@ -1,0 +1,4 @@
+Path:SimpleObjectMaterial00;
+ShaderCount:2;
+Shader0:SimpleVertShader.vsh;
+Shader1:SimpleFragShader.fsh;

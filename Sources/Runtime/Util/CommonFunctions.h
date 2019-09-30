@@ -10,6 +10,57 @@ inline String DataToString(T Data)
 	return std::to_string(Data);
 }
 
+template<class T>
+T StringToData(const String& Str)
+{
+	if(typeid(T) == typeid(float32))
+	{
+		return (T)std::stof(Str);
+	}
+	else if(typeid(T) == typeid(float64))
+	{
+		return (T)std::stod(Str);
+	}
+	else if (typeid(T) == typeid(int8))
+	{
+		int32 D = std::stoi(Str);
+		return (T)D;
+	}
+	else if (typeid(T) == typeid(int16))
+	{
+		int32 D = std::stoi(Str);
+		return (T)D;
+	}
+	else if (typeid(T) == typeid(int32))
+	{
+		return (T)std::stoi(Str);
+	}
+	else if (typeid(T) == typeid(int64))
+	{
+		return (T)std::stoll(Str);
+	}
+	else if (typeid(T) == typeid(uint8))
+	{
+		int32 D = std::stoi(Str);
+		return (T)D;
+	}
+	else if (typeid(T) == typeid(uint16))
+	{
+		int32 D = std::stoi(Str);
+		return (T)D;
+	}
+	else if (typeid(T) == typeid(uint32))
+	{
+		uint64 D = std::stoull(Str);
+		return (T)D;
+	}
+	else if (typeid(T) == typeid(uint64))
+	{
+		return std::stoull(Str);
+	}
+}
+
+std::vector<String> split(const String& str, const String& delim); 
 
 String GetNameFromPath(const String& Path);
 String GetNameFromPathExceptSuffix(const String& Path);

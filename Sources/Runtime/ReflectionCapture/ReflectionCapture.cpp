@@ -3,7 +3,7 @@
 #include "DeferRenderPipeline.h"
 
 
-SphereReflectionCapture::SphereReflectionCapture(std::shared_ptr<SceneManager> Scene, const Vector3f &position, const float32 &radius, const float32& brightness)
+SphereReflectionCapture::SphereReflectionCapture(std::shared_ptr<World> Scene, const Vector3f &position, const float32 &radius, const float32& brightness)
 	:	InfluenceRadius(radius)
 	,	Brightness(brightness)
 	,	CaptureTexSize(512)

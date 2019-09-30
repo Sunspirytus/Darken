@@ -1,4 +1,6 @@
 #include "MaterialManager.h"
+#include "EngineRoot.h"
+#include "FileIO.h"
 
 MaterialManager::MaterialManager()
 {
@@ -88,4 +90,28 @@ std::shared_ptr<MaterialInstance> MaterialManager::CreateMaterialInstance(const 
 		}
 	}
 	return MatInst;
+}
+
+
+void MaterialManager::Save()
+{
+	String FolderPath = DKEngine::GetInstance().GetWorkingFolderPath();
+	for(std::map<String, std::shared_ptr<Material>>::iterator it =  Materials_User.begin(); it != Materials_User.end(); it++)
+	{
+		String MaterialPath = it->first;
+		std::shared_ptr<Material> Material = it->second;
+		FileIO FIO;
+		String Data;
+		Material->Save(&Data);
+		FIO.SaveFile(FolderPath, MaterialPath, FileType::F_Material, Data);
+	}
+	for (std::map<String, std::shared_ptr<MaterialInstance>>::iterator it = MaterialInsts_User.begin(); it != MaterialInsts_User.end(); it++)
+	{
+		String MaterialInstPath = it->first;
+		std::shared_ptr<MaterialInstance> MaterialInst = it->second;
+		FileIO FIO;
+		String Data;
+		MaterialInst->Save(&Data);
+		FIO.SaveFile(FolderPath, MaterialInstPath, FileType::F_MaterialInstance, Data);
+	}
 }

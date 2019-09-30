@@ -1,30 +1,33 @@
-#include <glad.h>
-#include <glfw3.h>
-#include <iostream>
-#include "SceneManager.h"
-#include "EngineRoot.h"
-#include "Quaternion.h"
-#include "ConstructScene.h"
-#include "DeferRenderPipeline.h"
-#include "BufferManager.h"
-#include "ReflectionCapture.h"
-#include "SystemTextures.h"
 #include "Application.h"
-#include "MaterialManager.h"
-#include <thread>
-#include <conio.h>
+#include <qlabel.h>
 
-// settings
+#define _CRTDBG_MAP_ALLOC 
+#include <stdlib.h>
+#include <crtdbg.h>
+
+
+#ifdef _DEBUG
+#define new   new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
+
+inline void EnableMemLeakCheck()
+{
+	//该语句在程序退出时自动调用 _CrtDumpMemoryLeaks(),用于多个退出出口的情况.
+	//如果只有一个退出位置，可以在程序退出之前调用 _CrtDumpMemoryLeaks()
+	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
+}
 
 int32 main(int argc, char* argv[])
 {
-	unsigned long long x = 999;
-	char str[256];
-	sprintf_s(str, "%llu", x);
-	String s = String(str);
-
-	dkApplication a(argc, argv);
-	return a.exec();
+	EnableMemLeakCheck();
+	//_CrtSetBreakAlloc(260703);
+	//String a = "1,2,3";
+	//std::vector<String> b = split(a, ",");
+	
+	dkApplication App(argc, argv);
+	App.exec();
+	return 0;
 }
 
 //void framebuffer_size_callback(GLFWwindow* window, int32 width, int32 height);

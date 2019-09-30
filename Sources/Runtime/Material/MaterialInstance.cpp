@@ -9,15 +9,18 @@ MaterialInstanceBase::MaterialInstanceBase(const String& path, const String& par
 		: Path(path)
 		, ParentName(parentName)
 {
-	AddProperty("Name", STRING, &Path);
-	AddProperty("ParentName", STRING, &ParentName);
+	AddProperty("Path", STRING, &Path);
+	AddProperty("ParentPath", STRING, &ParentName);
 }
 
 MaterialInstanceBase::~MaterialInstanceBase() 
 {
 }
 
-
+String MaterialInstanceBase::GetName()
+{
+	return Path;
+}
 
 
 

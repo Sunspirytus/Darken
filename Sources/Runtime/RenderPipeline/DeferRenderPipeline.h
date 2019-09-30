@@ -53,7 +53,7 @@ public:
 	//ToneMapping
 	std::shared_ptr<ToneMapping> ToneMappingPass;
 
-	virtual void Init(std::shared_ptr<SceneManager> Scene) final;
+	virtual void Init(std::shared_ptr<World> Scene) final;
 	virtual void Render(std::shared_ptr<Camera> camera) final;
 	virtual void RenderTextureSizeChange(Vector2i newSize) final;
 
@@ -81,7 +81,7 @@ struct ShadowDepthMaterialDataIDs
 class ShadowDepth : public RenderPassBase
 {
 public:
-	ShadowDepth(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights);
+	ShadowDepth(std::shared_ptr<World> scene, std::vector<Light*> lights);
 	~ShadowDepth();
 	std::vector<uint32> ShadowDepth_Texs2D;
 	std::vector<uint32> ShadowDepth_TexsCube;
@@ -102,7 +102,7 @@ private:
 	void RenderPointLightDepth(int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects);
 	void RenderSpotLightDepth(int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects);
 
-	std::shared_ptr<SceneManager> Scene;
+	std::shared_ptr<World> Scene;
 public:
 	virtual void RenderTextureSizeChange(Vector2i newSize) final {};
 };
@@ -142,7 +142,7 @@ struct LightingMaterialDataIDs
 class Lighting : public RenderPassBase
 {
 public:
-	Lighting(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights);
+	Lighting(std::shared_ptr<World> scene, std::vector<Light*> lights);
 	~Lighting();
 
 	std::vector<Light*> Lights;
@@ -164,7 +164,7 @@ private:
 	void CreateLightingPassResources();
 	
 	std::shared_ptr<LightingMaterialDataIDs> MaterialDataIDs;
-	std::shared_ptr<SceneManager> Scene;
+	std::shared_ptr<World> Scene;
 public:
 	virtual void RenderTextureSizeChange(Vector2i newSize) final;
 };

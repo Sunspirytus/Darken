@@ -11,7 +11,7 @@ DeferRenderPipeline::~DeferRenderPipeline()
 {
 }
 
-void DeferRenderPipeline::Init(std::shared_ptr<SceneManager> scene)
+void DeferRenderPipeline::Init(std::shared_ptr<World> scene)
 {
 	SceneWaitRender = scene;
 	PPObj = std::shared_ptr<RectBufferObject>(new RectBufferObject());
@@ -121,7 +121,7 @@ void DeferRenderPipeline::RenderTextureSizeChange(Vector2i newSize)
 	ToneMappingPass->RenderTextureSizeChange(newSize);
 }
 
-ShadowDepth::ShadowDepth(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights) :
+ShadowDepth::ShadowDepth(std::shared_ptr<World> scene, std::vector<Light*> lights) :
 	ShadowDepthTexWidth(2048),
 	ShadowDepthTexHeight(2048)
 {
@@ -347,7 +347,7 @@ void ShadowDepth::RenderSpotLightDepth(int32 LightIndex, const std::vector<std::
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-Lighting::Lighting(std::shared_ptr<SceneManager> scene, std::vector<Light*> lights)
+Lighting::Lighting(std::shared_ptr<World> scene, std::vector<Light*> lights)
 {
 	Scene = scene;
 	Lights = lights;

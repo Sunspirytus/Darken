@@ -41,11 +41,16 @@ class StaticMeshBase : public Object
 {
 public:
 	StaticMeshBase();
-	StaticMeshBase(const String& path);
 	~StaticMeshBase();
 
-private:
+	void SetMaterialName(const String& name);
+
+	virtual void Save(String* Data);
+	virtual void Load(const String& Data);
+
+protected:
 	String MeshPath;
+	String MaterialName;
 };
 
 class StaticMesh : public StaticMeshBase

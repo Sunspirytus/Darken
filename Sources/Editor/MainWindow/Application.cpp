@@ -13,4 +13,5 @@ dkApplication::dkApplication(int& argc, char** argv)
 
 dkApplication::~dkApplication()
 {
+	delete MainWindow;
 }

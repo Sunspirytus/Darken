@@ -17,13 +17,19 @@ enum ObjectType
 	NavigationSystemActor = 1 << 6,
 };
 
+enum PropertyType
+{
+	ObjectInfo = 1,
+	ComponentInfo
+};
+
 class ObjectBase : public PropertyBase
 {
 public:
 	ObjectBase();
-	ObjectBase(const String& path, ObjectType type);
 	~ObjectBase();
 
+protected:
 	String Path;
 	ObjectType Type;
 };
@@ -32,8 +38,9 @@ class Object : public ObjectBase
 {
 public:
 	Object();
-	Object(const String& name, ObjectType type);
 	~Object();
+
+	static ObjectType GetType(const String& ObjectInfo);
 
 	std::shared_ptr<TransformComponent> Transform;
 	
@@ -48,8 +55,13 @@ public:
 	virtual void Draw() = 0;
 
 	virtual void Save(String* Data);
+	virtual void Load(const String& Data);
 
 private:
+	void BeginWriteProperty(String* Data, PropertyType type);
+	void EndWriteProperty(String* Data, PropertyType type);
+	void BeginReadProperty(String* PartData, const String& Data, PropertyType type);
+	void EndReadProperty(String* PartData, const String& Data, PropertyType type);
 };
 
 

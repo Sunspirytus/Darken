@@ -17,6 +17,7 @@ public:
 
 private slots:
 	void SaveScene();
+	void OpenScene();
 	void SaveProject();
 	void LoadProject();
 
