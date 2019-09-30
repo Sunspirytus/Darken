@@ -292,7 +292,6 @@ void Material::FindUniformInfos()
 
 			std::hash<String> hs;
 			std::shared_ptr<UniformItem_Block> Block = std::shared_ptr<UniformItem_Block>(new UniformItem_Block());
-			Block->HashCode = (int32)hs(UniformBlockName);
 			Block->DataSize_Byte = DataSize;
 			Block->Index = UniformBlockIndex;
 			MaterialProgram->Uniforms_Block.insert(std::pair<String, std::shared_ptr<UniformItem_Block>>(UniformBlockName, Block));

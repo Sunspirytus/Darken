@@ -1,2 +1,13 @@
-Path:SimpleObjectShadowDepthMaterialInst;
-ParentPath:SimpleObjectShadowDepthMaterial;
+{
+    Path:SimpleObjectShadowDepthMaterialInst;
+    ParentPath:SimpleObjectShadowDepthMaterial;
+    [
+        LightCamera_ZBufferParams:(2.000000,700.000000,0.069813,1.000000);
+        LightSpaceVPMatrix:
+            (23.967154,10.629766,0.404453,0.402148,
+             14.330123,-6.345082,-0.841746,-0.836950,
+             -6.344920,25.822142,-0.373330,-0.371203,
+             63.406254,-258.168457,371.481567,373.353485);
+        bDirectLight:0;
+    ]
+}

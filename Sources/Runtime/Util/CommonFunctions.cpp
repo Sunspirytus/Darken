@@ -10,11 +10,11 @@ std::vector<String> split(const String& str, const String& delim) {
 	char* d = new char[delim.length() + 1];
 	strcpy_s(d, strlen(d), delim.c_str());
 
-	char* p = strtok_s(strs, d, nullptr);
+	char* p = strtok_s(strs, d, &strs);
 	while (p) {
 		String s = p; 
 		res.push_back(s);
-		p = strtok_s(nullptr, d, nullptr);
+		p = strtok_s(nullptr, d, &strs);
 	}
 
 	return res;

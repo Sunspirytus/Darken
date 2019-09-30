@@ -1,2 +1,11 @@
-Path:SimpleObjectMaterialInst00;
-ParentPath:SimpleObjectMaterial00;
+{
+    Path:SimpleObjectMaterialInst00;
+    ParentPath:SimpleObjectMaterial00;
+    [
+        AverageBrightness:-431602080.000000;
+        bReflect:-842150451;
+        Brightness:-431602080.000000;
+        ColorTest:(1.000000,0.000000,0.000000);
+        CapturePositionAndInfluenceRadius:(-431602080.000000,-431602080.000000,-431602080.000000,-431602080.000000);
+    ]
+}

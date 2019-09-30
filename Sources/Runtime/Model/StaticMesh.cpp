@@ -32,12 +32,12 @@ StaticMesh::StaticMesh()
 {
 }
 
-StaticMesh::StaticMesh(const String& fileName, Vector3f scale, bool bPackToOneMesh)
+StaticMesh::StaticMesh(const String& fileName)
 	:	StaticMeshBase()
 {
 	Path = fileName;
 	MeshPath = fileName;
-	LoadModelFromAsset(fileName, scale, bPackToOneMesh);
+	LoadModelFromAsset(fileName);
 }
 
 StaticMesh::~StaticMesh()
@@ -50,14 +50,14 @@ StaticMesh::~StaticMesh()
 	}
 }
 
-void StaticMesh::LoadModelFromAsset(String fileName, Vector3f scale, bool bPackToOneMesh)
+void StaticMesh::LoadModelFromAsset(String fileName)
 {
 	
-	LoadFromAssetWithAssimp(DKEngine::GetInstance().GetWorkingFolderPath(), fileName, scale, bPackToOneMesh);
+	LoadFromAssetWithAssimp(DKEngine::GetInstance().GetWorkingFolderPath(), fileName);
 	
 }
 
-void StaticMesh::LoadFromAssetWithAssimp(String folderPath, String fileName, Vector3f scale, bool bPackToOneMesh)
+void StaticMesh::LoadFromAssetWithAssimp(String folderPath, String fileName)
 {
 	String file = folderPath + fileName;
 	const aiScene* scene = import.ReadFile(file, aiProcess_Triangulate);
@@ -439,4 +439,10 @@ std::shared_ptr<MaterialInstance> StaticMesh::GetRenderMaterial()
 void StaticMesh::Save(String* Data)
 {
 	Object::Save(Data);
+}
+
+void StaticMesh::Load(const String& Data)
+{
+	Object::Load(Data);
+	LoadModelFromAsset(MeshPath);
 }

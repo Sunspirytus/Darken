@@ -191,14 +191,139 @@ String PropertyBase::PropertyToString(const String& name, std::shared_ptr<Proper
 		break;
 	}
 	case MAT2_F:
-	case MAT3_F:
-	case MAT4_F:
-	case MAT2_D:
-	case MAT3_D:
-	case MAT4_D:
-		std::cout << "do not support save mat now" << std::endl;
+	{
+		Mat2f* D = (Mat2f*)Data;
+		DataString.append("\n");
+		int32 Row = 2, Col = 2;
+		for (int32 i = 0; i < Row; i++)
+		{
+			AddTab(&DataString);
+			DataString.append("    ");
+
+			if (i == 0) DataString.append("(");
+			else DataString.append(" ");
+			for (int32 j = 0; j < Col; j++)
+			{
+				DataString.append(DataToString((*D)[i][j]));
+				if (i != Row - 1 || j != Col - 1) DataString.append(",");
+			}
+			if (i == Row - 1)DataString.append(")");
+			else DataString.append("\n");
+		}
 		break;
+	}
+	case MAT3_F:
+	{
+		Mat3f* D = (Mat3f*)Data;
+		DataString.append("\n");
+		int32 Row = 3, Col = 3;
+		for (int32 i = 0; i < Row; i++)
+		{
+			AddTab(&DataString);
+			DataString.append("    ");
+
+			if (i == 0) DataString.append("(");
+			else DataString.append(" ");
+			for (int32 j = 0; j < Col; j++)
+			{
+				DataString.append(DataToString((*D)[i][j]));
+				if (i != Row - 1 || j != Col - 1) DataString.append(",");
+			}
+			if (i == Row - 1)DataString.append(")");
+			else DataString.append("\n");
+		}
+		break;
+	}
+	case MAT4_F:
+	{
+		Mat4f* D = (Mat4f*)Data;
+		DataString.append("\n");
+		int32 Row = 4, Col = 4;
+		for (int32 i = 0; i < Row; i++)
+		{
+			AddTab(&DataString);
+			DataString.append("    ");
+
+			if (i == 0) DataString.append("(");
+			else DataString.append(" ");
+			for (int32 j = 0; j < Col; j++)			
+			{
+				DataString.append(DataToString((*D)[i][j]));
+				if (i != Row - 1 || j != Col - 1) DataString.append(",");
+			}
+			if (i == Row - 1)DataString.append(")");
+			else DataString.append("\n");
+		}
+		break;
+	}
+	case MAT2_D:
+	{
+		Mat2d* D = (Mat2d*)Data;
+		DataString.append("\n");
+		int32 Row = 2, Col = 2;
+		for (int32 i = 0; i < Row; i++)
+		{
+			AddTab(&DataString);
+			DataString.append("    ");
+
+			if (i == 0) DataString.append("(");
+			else DataString.append(" ");
+			for (int32 j = 0; j < Col; j++)
+			{
+				DataString.append(DataToString((*D)[i][j]));
+				if (i != Row - 1 || j != Col - 1) DataString.append(",");
+			}
+			if (i == Row - 1)DataString.append(")");
+			else DataString.append("\n");
+		}
+		break;
+	}
+	case MAT3_D:
+	{
+		Mat3d* D = (Mat3d*)Data;
+		DataString.append("\n");
+		int32 Row = 3, Col = 3;
+		for (int32 i = 0; i < Row; i++)
+		{
+			AddTab(&DataString);
+			DataString.append("    ");
+
+			if (i == 0) DataString.append("(");
+			else DataString.append(" ");
+			for (int32 j = 0; j < Col; j++)
+			{
+				DataString.append(DataToString((*D)[i][j]));
+				if (i != Row - 1 || j != Col - 1) DataString.append(",");
+			}
+			if (i == Row - 1)DataString.append(")");
+			else DataString.append("\n");
+		}
+		break;
+	}
+	case MAT4_D:
+	{
+		Mat4d* D = (Mat4d*)Data;
+		DataString.append("\n");
+		int32 Row = 4, Col = 4;
+		for (int32 i = 0; i < Row; i++)
+		{
+			AddTab(&DataString);
+			DataString.append("    ");
+
+			if (i == 0) DataString.append("(");
+			else DataString.append(" ");
+			for (int32 j = 0; j < Col; j++)
+			{
+				DataString.append(DataToString((*D)[i][j]));
+				if (i != Row - 1 || j != Col - 1) DataString.append(",");
+			}
+			if (i == Row - 1)DataString.append(")");
+			else DataString.append("\n");
+		}
+		break;
+	}
 	default:
+		std::cout << "Unknow Property Type!!" << std::endl;
 		break;
 	}
 	return name + ":" + DataString + ";\n";
@@ -301,57 +426,92 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 	}
 	case VECTOR2_F:
 	{
-	
-		Vector2f* D = (Vector2f*)Data;
-		//DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + ")";
+		String D = StrData.substr(1, StrData.length() - 2);
+		std::vector<String> VectorD = split(D, ",");
+		float32 X = StringToData<float32>(VectorD[0]);
+		float32 Y = StringToData<float32>(VectorD[1]);
+		*(Vector2f*)Data = Vector2f(X, Y);
 		break;
 	}
 	case VECTOR3_F:
 	{
-		Vector3f* D = (Vector3f*)Data;
-		//DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + ")";
+		String D = StrData.substr(1, StrData.length() - 2);
+		std::vector<String> VectorD = split(D, ",");
+		float32 X = StringToData<float32>(VectorD[0]);
+		float32 Y = StringToData<float32>(VectorD[1]);
+		float32 Z = StringToData<float32>(VectorD[2]);
+		*(Vector3f*)Data = Vector3f(X, Y, Z);
 		break;
 	}
 	case VECTOR4_F:
 	{
-		Vector4f* D = (Vector4f*)Data;
-		//DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + "," + DataToString(D->w) + ")";
+		String D = StrData.substr(1, StrData.length() - 2);
+		std::vector<String> VectorD = split(D, ",");
+		float32 X = StringToData<float32>(VectorD[0]);
+		float32 Y = StringToData<float32>(VectorD[1]);
+		float32 Z = StringToData<float32>(VectorD[2]);
+		float32 W = StringToData<float32>(VectorD[3]);
+		*(Vector4f*)Data = Vector4f(X, Y, Z, W);
 		break;
 	}
 	case VECTOR2_D:
 	{
-		Vector2d* D = (Vector2d*)Data;
-		//DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + ")";
+		String D = StrData.substr(1, StrData.length() - 2);
+		std::vector<String> VectorD = split(D, ",");
+		float64 X = StringToData<float64>(VectorD[0]);
+		float64 Y = StringToData<float64>(VectorD[1]);
+		*(Vector2d*)Data = Vector2d(X, Y);
 		break;
 	}
 	case VECTOR3_D:
 	{
-		Vector3d* D = (Vector3d*)Data;
-		//DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + ")";
+		String D = StrData.substr(1, StrData.length() - 2);
+		std::vector<String> VectorD = split(D, ",");
+		float64 X = StringToData<float64>(VectorD[0]);
+		float64 Y = StringToData<float64>(VectorD[1]);
+		float64 Z = StringToData<float64>(VectorD[2]);
+		*(Vector3d*)Data = Vector3d(X, Y, Z);
 		break;
 	}
 	case VECTOR4_D:
 	{
-		Vector4d* D = (Vector4d*)Data;
-		//DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + "," + DataToString(D->w) + ")";
+		String D = StrData.substr(1, StrData.length() - 2);
+		std::vector<String> VectorD = split(D, ",");
+		float64 X = StringToData<float64>(VectorD[0]);
+		float64 Y = StringToData<float64>(VectorD[1]);
+		float64 Z = StringToData<float64>(VectorD[2]);
+		float64 W = StringToData<float64>(VectorD[3]);
+		*(Vector4d*)Data = Vector4d(X, Y, Z, W);
 		break;
 	}
 	case VECTOR2_I:
 	{
-		Vector2i* D = (Vector2i*)Data;
-		//DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + ")";
+		String D = StrData.substr(1, StrData.length() - 2);
+		std::vector<String> VectorD = split(D, ",");
+		int32 X = StringToData<int32>(VectorD[0]);
+		int32 Y = StringToData<int32>(VectorD[1]);
+		*(Vector2i*)Data = Vector2i(X, Y);
 		break;
 	}
 	case VECTOR3_I:
 	{
-		Vector3i* D = (Vector3i*)Data;
-		//DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + ")";
+		String D = StrData.substr(1, StrData.length() - 2);
+		std::vector<String> VectorD = split(D, ",");
+		int32 X = StringToData<int32>(VectorD[0]);
+		int32 Y = StringToData<int32>(VectorD[1]);
+		int32 Z = StringToData<int32>(VectorD[2]);
+		*(Vector3i*)Data = Vector3i(X, Y, Z);
 		break;
 	}
 	case VECTOR4_I:
 	{
-		Vector4i* D = (Vector4i*)Data;
-		//DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + "," + DataToString(D->w) + ")";
+		String D = StrData.substr(1, StrData.length() - 2);
+		std::vector<String> VectorD = split(D, ",");
+		int32 X = StringToData<int32>(VectorD[0]);
+		int32 Y = StringToData<int32>(VectorD[1]);
+		int32 Z = StringToData<int32>(VectorD[2]);
+		int32 W = StringToData<int32>(VectorD[3]);
+		*(Vector4i*)Data = Vector4i(X, Y, Z, W);
 		break;
 	}
 	case MAT2_F:
@@ -372,5 +532,110 @@ void PropertyBase::AddTab(String* Data)
 	for(int32 i = 0; i < TabCount; i++)
 	{
 		Data->append("    ");
+	}
+}
+
+void PropertyBase::PrepareToWrite(String* Data)
+{
+	Data->append("{\n");
+}
+
+void PropertyBase::FinishWrite(String* Data)
+{
+	Data->append("}");
+}
+
+void PropertyBase::BeginWriteProperty(String* Data, PropertyType type)
+{
+	switch (type)
+	{
+	case BaseInfo:
+		TabCount = BaseInfo;
+		break;
+	case ComponentInfo:
+	{
+		TabCount = ComponentInfo - 1;
+		AddTab(Data);
+		Data->append("[\n");
+		TabCount = ComponentInfo;
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void PropertyBase::EndWriteProperty(String* Data, PropertyType type)
+{
+	switch (type)
+	{
+	case BaseInfo:
+		TabCount = 0;
+		break;
+	case ComponentInfo:
+	{
+		TabCount = ComponentInfo - 1;
+		AddTab(Data);
+		Data->append("]\n");
+		TabCount = 0;
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+
+void PropertyBase::BeginReadProperty(String* OutDataToProcess, const String& Data, PropertyType type)
+{
+	switch (type)
+	{
+	case BaseInfo:
+	{
+		int32 BeginPos, EndPos = -1;
+		String BeginTag = "{\n";
+		String EndTag = "[\n";
+		BeginPos = Data.find(BeginTag);
+		EndPos = Data.find(EndTag);
+		*OutDataToProcess = Data.substr(BeginPos + BeginTag.length(), EndPos - BeginPos - BeginTag.length());
+		break;
+	}
+	case ComponentInfo:
+	{
+		int32 BeginPos, EndPos = -1;
+		String BeginTag = "[\n";
+		String EndTag = "]\n";
+		BeginPos = Data.find(BeginTag);
+		EndPos = Data.find(EndTag);
+		*OutDataToProcess = Data.substr(BeginPos + BeginTag.length(), EndPos - BeginPos - BeginTag.length());
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void PropertyBase::EndReadProperty(String* OutDataToProcess, PropertyType type)
+{
+	switch (type)
+	{
+	case BaseInfo:
+	{
+		int32 BeginPos = -1;
+		String BeginTag = "[\n";
+		BeginPos = OutDataToProcess->find(BeginTag);
+		*OutDataToProcess = OutDataToProcess->substr(BeginPos, OutDataToProcess->length() - BeginPos);
+		break;
+	}
+	case ComponentInfo:
+	{
+		int32 BeginPos = -1;
+		String BeginTag = "]\n";
+		BeginPos = OutDataToProcess->find(BeginTag);
+		*OutDataToProcess = OutDataToProcess->substr(BeginPos + BeginTag.length(), OutDataToProcess->length() - BeginPos - BeginTag.length());
+		break;
+	}
+	default:
+		break;
 	}
 }

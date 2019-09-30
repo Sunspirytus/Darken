@@ -17,12 +17,6 @@ enum ObjectType
 	NavigationSystemActor = 1 << 6,
 };
 
-enum PropertyType
-{
-	ObjectInfo = 1,
-	ComponentInfo
-};
-
 class ObjectBase : public PropertyBase
 {
 public:
@@ -58,10 +52,7 @@ public:
 	virtual void Load(const String& Data);
 
 private:
-	void BeginWriteProperty(String* Data, PropertyType type);
-	void EndWriteProperty(String* Data, PropertyType type);
-	void BeginReadProperty(String* PartData, const String& Data, PropertyType type);
-	void EndReadProperty(String* PartData, const String& Data, PropertyType type);
+	
 };
 
 

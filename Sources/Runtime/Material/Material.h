@@ -10,6 +10,7 @@
 #include <memory>
 #include <map>
 
+extern int32 TabCount;
 
 enum ShaderType
 {
@@ -54,7 +55,8 @@ enum GLDrawType
 	OGL_LINE_STRIP
 };
 
-static std::unordered_map<uint32, UniformType> UniformTypeMap = {
+static std::unordered_map<uint32, UniformType> UniformTypeMap = 
+{
 	{ GL_INT,   UniformType::GLSL_INT },
 	{ GL_UNSIGNED_INT, UniformType::GLSL_UINT},
 	{ GL_FLOAT, UniformType::GLSL_FLOAT},
@@ -69,7 +71,26 @@ static std::unordered_map<uint32, UniformType> UniformTypeMap = {
 	{ GL_SAMPLER_2D, UniformType::GLSL_TEXTURE2D },
 	{ GL_SAMPLER_CUBE, UniformType::GLSL_TEXTURECUBE },
 	{ GL_SAMPLER_3D, UniformType::GLSL_TEXTURE3D },
-	{ GL_SAMPLER_2D_ARRAY, UniformType::GLSL_TEXTURE_2D_ARRAY}
+	{ GL_SAMPLER_2D_ARRAY, UniformType::GLSL_TEXTURE_2D_ARRAY }
+};
+
+static std::unordered_map<UniformType, VariableType> GPU_CPU_TypeMap =
+{
+	{ UniformType::GLSL_INT, VariableType::INT_32 },
+	{ UniformType::GLSL_UINT, VariableType::UINT_32 },
+	{ UniformType::GLSL_FLOAT, VariableType::FLOAT_32 },
+	{ UniformType::GLSL_VEC2, VariableType:: VECTOR2_F },
+	{ UniformType::GLSL_VEC3, VariableType::VECTOR3_F },
+	{ UniformType::GLSL_VEC4, VariableType::VECTOR4_F },
+	{ UniformType::GLSL_IVEC2, VariableType::VECTOR2_I },
+	{ UniformType::GLSL_IVEC3, VariableType::VECTOR3_I },
+	{ UniformType::GLSL_IVEC4, VariableType::VECTOR4_I },
+	{ UniformType::GLSL_MAT3, VariableType::MAT3_F },
+	{ UniformType::GLSL_MAT4, VariableType::MAT4_F },
+	{ UniformType::GLSL_TEXTURE2D, VariableType::INT_32 },
+	{ UniformType::GLSL_TEXTURECUBE, VariableType::INT_32 },
+	{ UniformType::GLSL_TEXTURE3D, VariableType::INT_32 },
+	{ UniformType::GLSL_TEXTURE_2D_ARRAY, VariableType::INT_32 }
 };
 
 struct AttribItem
@@ -90,7 +111,6 @@ struct UniformItem_WithinBlock
 struct UniformItem_Block
 {
 	int32 Id;
-	int32 HashCode;
 	uint32 DataSize_Byte;
 	void * DataPtr;
 	uint32 Index;

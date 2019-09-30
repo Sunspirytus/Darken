@@ -1,7 +1,5 @@
 #include "Object.h"
 
-extern int32 TabCount;
-
 ObjectBase::ObjectBase()
 {
 	AddProperty("Path", STRING, &Path);
@@ -26,91 +24,30 @@ Object::~Object()
 
 void Object::Save(String* Data)
 {
-	Data->append("{\n");
+	PropertyBase::PrepareToWrite(Data);
 
-	BeginWriteProperty(Data, ObjectInfo);
+	PropertyBase::BeginWriteProperty(Data, BaseInfo);
 	PropertyBase::Save(Data);
-	EndWriteProperty(Data, ObjectInfo);
+	PropertyBase::EndWriteProperty(Data, BaseInfo);
 
-	BeginWriteProperty(Data, ComponentInfo);
+	PropertyBase::BeginWriteProperty(Data, ComponentInfo);
 	Transform->Save(Data);
-	EndWriteProperty(Data, ComponentInfo);
+	PropertyBase::EndWriteProperty(Data, ComponentInfo);
 
-	Data->append("}\n");
+	PropertyBase::FinishWrite(Data);
 }
 
 void Object::Load(const String& Data)
 {
-	String PartData;
-	BeginReadProperty(&PartData, Data, ObjectInfo);
-	PropertyBase::Load(PartData);
-}
+	String ReserveData = Data;
+	String DataWaitProcess;
+	BeginReadProperty(&DataWaitProcess, ReserveData, BaseInfo);
+	PropertyBase::Load(DataWaitProcess);
+	EndReadProperty(&ReserveData, BaseInfo);
 
-void Object::BeginWriteProperty(String* Data, PropertyType type)
-{
-	switch (type)
-	{
-	case ObjectInfo:
-		TabCount = ObjectInfo;
-		break;
-	case ComponentInfo:
-	{
-		TabCount = ComponentInfo - 1;
-		AddTab(Data);
-		Data->append("[\n");
-		TabCount = ComponentInfo;
-		break;
-	}
-	default:
-		break;
-	}
-}
-
-void Object::EndWriteProperty(String* Data, PropertyType type)
-{
-	switch (type)
-	{
-	case ObjectInfo:
-		TabCount = 0;
-		break;
-	case ComponentInfo:
-	{
-		TabCount = ComponentInfo - 1;
-		AddTab(Data);
-		Data->append("]\n");
-		TabCount = 0;
-		break;
-	}
-	default:
-		break;
-	}
-}
-
-
-void Object::BeginReadProperty(String* PartData, const String& Data, PropertyType type)
-{
-	switch (type)
-	{
-	case ObjectInfo:
-	{
-		int32 BeginPos, EndPos = -1;
-		String BeginTag = "{\n";
-		String EndTag = "[\n";
-		BeginPos = Data.find(BeginTag);
-		EndPos = Data.find(EndTag);
-		*PartData = Data.substr(BeginPos + BeginTag.length(), EndPos - BeginPos - BeginTag.length());
-		break; 
-	}
-	case ComponentInfo:
-		break;
-	default:
-		break;
-	}
-}
-
-void Object::EndReadProperty(String* PartData, const String& Data, PropertyType type)
-{
-
+	BeginReadProperty(&DataWaitProcess, ReserveData,ComponentInfo);
+	Transform->Load(DataWaitProcess);
+	EndReadProperty(&ReserveData, ComponentInfo);
 }
 
 ObjectType Object::GetType(const String& ObjectInfo)

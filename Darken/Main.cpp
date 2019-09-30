@@ -22,9 +22,7 @@ int32 main(int argc, char* argv[])
 {
 	EnableMemLeakCheck();
 	//_CrtSetBreakAlloc(260703);
-	//String a = "1,2,3";
-	//std::vector<String> b = split(a, ",");
-	
+
 	dkApplication App(argc, argv);
 	App.exec();
 	return 0;

@@ -56,7 +56,12 @@ T StringToData(const String& Str)
 	}
 	else if (typeid(T) == typeid(uint64))
 	{
-		return std::stoull(Str);
+		return (T)std::stoull(Str);
+	}
+	else
+	{
+		std::cout << "StringToData: convert not-support type" << std::endl;
+		return (T)0;
 	}
 }
 
