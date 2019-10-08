@@ -4,6 +4,7 @@
 #include <memory>
 #include "FreeImage.h"
 #include "TypeDefine.h"
+#include "PropertyBase.h"
 #ifndef PI
 #define PI 3.1415926535897932384626433832795028841968f
 #endif
@@ -298,7 +299,20 @@ private:
 	// normalized, means the sum of it should be 1.0f
 	float32 KernelWeights[MaxKernelExtend * MaxKernelExtend];
 };
-class Texture
+
+class TextureBase : public PropertyBase
+{
+public:
+	TextureBase();
+	~TextureBase();
+
+	String GetPath();
+protected:
+	String Path;
+};
+
+
+class Texture : public TextureBase
 {
 public:
 	uint32 GPUId;

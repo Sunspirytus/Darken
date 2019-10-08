@@ -87,10 +87,10 @@ static std::unordered_map<UniformType, VariableType> GPU_CPU_TypeMap =
 	{ UniformType::GLSL_IVEC4, VariableType::VECTOR4_I },
 	{ UniformType::GLSL_MAT3, VariableType::MAT3_F },
 	{ UniformType::GLSL_MAT4, VariableType::MAT4_F },
-	{ UniformType::GLSL_TEXTURE2D, VariableType::INT_32 },
-	{ UniformType::GLSL_TEXTURECUBE, VariableType::INT_32 },
-	{ UniformType::GLSL_TEXTURE3D, VariableType::INT_32 },
-	{ UniformType::GLSL_TEXTURE_2D_ARRAY, VariableType::INT_32 }
+	{ UniformType::GLSL_TEXTURE2D, VariableType::STRING },
+	{ UniformType::GLSL_TEXTURECUBE, VariableType::STRING },
+	{ UniformType::GLSL_TEXTURE3D, VariableType::STRING },
+	{ UniformType::GLSL_TEXTURE_2D_ARRAY, VariableType::STRING }
 };
 
 struct AttribItem

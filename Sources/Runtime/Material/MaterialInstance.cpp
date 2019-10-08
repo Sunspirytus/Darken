@@ -161,6 +161,7 @@ void MaterialInstance::Save(String* Data)
 
 	PropertyBase::BeginWriteProperty(Data, ComponentInfo);
 	WriteInstanceData(Data, UNIFORM);
+	WriteInstanceData(Data, TEXTURE);
 	PropertyBase::EndWriteProperty(Data, ComponentInfo);
 
 	PropertyBase::FinishWrite(Data);
@@ -180,6 +181,15 @@ void MaterialInstance::WriteInstanceData(String* Data, DataGroup type)
 		break;
 	}
 	case MaterialInstance::TEXTURE:
+		for (std::unordered_map<String, UniformItem_Texture>::iterator it = ParentMaterial->MaterialProgram->Uniforms_Texture.begin(); it != ParentMaterial->MaterialProgram->Uniforms_Texture.end(); it++)
+		{
+			PropertyBase::AddTab(Data);
+			std::hash<String> hs;
+			int32 TextureID = hs(it->first);
+			std::shared_ptr<Texture> Tex = TextureUniformID_DataPtrMap.find(TextureID)->second->Tex;
+			Data->append(PropertyToString(it->first, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[it->second.DataType], &Tex->GetPath()))));
+;		}
+		break;
 		break;
 	case MaterialInstance::UNIFORMBUFFER:
 		break;

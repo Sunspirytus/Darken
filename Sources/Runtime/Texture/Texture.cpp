@@ -2,7 +2,25 @@
 //#include <stb_image.h>
 #include "Texture.h"
 #include "EngineRoot.h"
+
+TextureBase::TextureBase()
+	:	Path("UnSpecific")
+{
+	AddProperty("Path", STRING, &Path);
+}
+
+TextureBase::~TextureBase()
+{
+}
+
+String TextureBase::GetPath()
+{
+	return Path;
+}
+
+
 Texture::Texture()
+	:	TextureBase()
 {
 	Width = -1;
 	Height = -1;
@@ -29,6 +47,8 @@ Texture::Texture()
 	#define GL_UNSIGNED_INT_24_8_EXT 0x84FA
 Texture::Texture(String file, TextureParameter minParm, TextureParameter magParm, TextureParameter wrapParmU, TextureParameter wrapParmV)
 {
+	Path = file;
+
 	LoadTextureFromAsset(DKEngine::GetInstance().GetWorkingFolderPath() + file);
 	CreateGPUObject(minParm, magParm, wrapParmU, wrapParmV);
 	//	String  path = (DKEngine::GetInstance().GetAssetFolderPath() + file);
