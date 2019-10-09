@@ -15,7 +15,7 @@ World::~World()
 
 void World::Save()
 {
-	String FolderPath = DKEngine::GetInstance().GetWorkingFolderPath();
+	String FolderPath = DKEngine::GetInstance().GetProjectWorkingPath();
 	String SaveData;
 	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{

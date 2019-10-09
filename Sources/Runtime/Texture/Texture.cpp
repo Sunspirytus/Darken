@@ -49,7 +49,7 @@ Texture::Texture(String file, TextureParameter minParm, TextureParameter magParm
 {
 	Path = file;
 
-	LoadTextureFromAsset(DKEngine::GetInstance().GetWorkingFolderPath() + file);
+	LoadTextureFromAsset(DKEngine::GetInstance().GetProjectWorkingPath() + file);
 	CreateGPUObject(minParm, magParm, wrapParmU, wrapParmV);
 	//	String  path = (DKEngine::GetInstance().GetAssetFolderPath() + file);
 	//	{

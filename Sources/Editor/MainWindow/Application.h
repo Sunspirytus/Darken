@@ -11,7 +11,7 @@ public:
 	
 private:
 	MW_MainWindow* MainWindow;
-
+	QString ApplicaionDir;
 };
 
 

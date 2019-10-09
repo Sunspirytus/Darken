@@ -161,8 +161,16 @@ void MaterialInstance::Save(String* Data)
 
 	PropertyBase::BeginWriteProperty(Data, ComponentInfo);
 	WriteInstanceData(Data, UNIFORM);
+	PropertyBase::EndWriteProperty(Data, ComponentInfo);
+
+	PropertyBase::BeginWriteProperty(Data, ComponentInfo);
 	WriteInstanceData(Data, TEXTURE);
 	PropertyBase::EndWriteProperty(Data, ComponentInfo);
+
+	PropertyBase::BeginWriteProperty(Data, ComponentInfo);
+	WriteInstanceData(Data, UNIFORMBUFFER);
+	PropertyBase::EndWriteProperty(Data, ComponentInfo);
+	
 
 	PropertyBase::FinishWrite(Data);
 }
@@ -190,27 +198,22 @@ void MaterialInstance::WriteInstanceData(String* Data, DataGroup type)
 			Data->append(PropertyToString(it->first, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[it->second.DataType], &Tex->GetPath()))));
 ;		}
 		break;
-		break;
 	case MaterialInstance::UNIFORMBUFFER:
+		for (std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator it = ParentMaterial->MaterialProgram->Uniforms_Block.begin(); it != ParentMaterial->MaterialProgram->Uniforms_Block.end(); it++)
+		{
+			String BlockName = it->first;
+			std::map<uint32, UniformItem_WithinBlock> Uniforms;
+			for(std::map<uint32, UniformItem_WithinBlock>::iterator UniformsIt = it->second->Uniforms.begin(); UniformsIt != it->second->Uniforms.end(); UniformsIt++)
+			{
+				String UniformName = UniformsIt->second.Name;
+				PropertyBase::AddTab(Data);
+				String PropertyName = BlockName + "," + UniformName;
+				Data->append(PropertyToString(PropertyName, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[UniformsIt->second.DataType], (void*) ((Address)it->second->DataPtr + UniformsIt->second.Offset_Byte)))));
+			}
+		}
 		break;
 	default:
 		break;
-	}
-	
-
-
-
-
-	for(std::map<int32, std::shared_ptr<TextureUniformData>>::iterator it = TextureUniformID_DataPtrMap.begin(); it != TextureUniformID_DataPtrMap.end(); it++)
-	{
-	
-	}
-
-
-	
-	for(std::map<int32, std::map<int32, std::shared_ptr<BlockUniformData>>>::iterator it = BlockID_UniformID_DataPtrMap.begin(); it != BlockID_UniformID_DataPtrMap.end(); it++)
-	{
-		
 	}
 }
 

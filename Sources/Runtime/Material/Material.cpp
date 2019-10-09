@@ -17,6 +17,7 @@ MaterialBase::MaterialBase(const String& path, const std::vector<String>& shader
 	AddProperty("ShaderCount", INT_32, &ShaderCount);
 	for(int32 Index = 0; Index < ShaderCount; Index++)
 	{
+		ShaderNames[Index] = GetNameFromPath(ShaderNames[Index]);
 		AddProperty("Shader" + DataToString(Index), STRING, &ShaderNames[Index]);
 	}
 };
@@ -160,7 +161,7 @@ void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 	for (uint32 i = 0; i < shaderNames.size(); i++)
 	{
 		std::ifstream ShaderFile;
-		ShaderFile.open(DKEngine::GetInstance().GetWorkingFolderPath() + shaderNames[i]);
+		ShaderFile.open(shaderNames[i]);
 
 		if (!ShaderFile)
 		{
@@ -171,7 +172,7 @@ void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 		ShaderStream << ShaderFile.rdbuf();
 		String SourceCode = ShaderStream.str();
 
-		int32 loc =(int32) shaderNames[i].find('.');
+		int32 loc =(int32) shaderNames[i].rfind('.');
 		const int8 ShaderType = shaderNames[i][loc + 1];
 
 		switch (ShaderType)
@@ -210,7 +211,7 @@ void Material::FindShaderNames(std::vector<String>& shaderNames)
 	for (uint32 i = 0; i < shaderNames.size(); i++)
 	{
 		std::ifstream ShaderFile;
-		ShaderFile.open(DKEngine::GetInstance().GetWorkingFolderPath() + shaderNames[i]);
+		ShaderFile.open(shaderNames[i]);
 
 		std::stringstream ShaderStream;
 		ShaderStream << ShaderFile.rdbuf();

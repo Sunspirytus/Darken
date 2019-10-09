@@ -35,6 +35,24 @@ std::shared_ptr<Material> MaterialManager::CreateMaterial(const String& name, st
 
 	if(!Mat)
 	{
+		String FolderPath;
+		switch (belong)
+		{
+		case Internal:
+			FolderPath = DKEngine::GetInstance().GeInternalShaderPath();
+			break;
+		case UserDefine:
+			FolderPath = DKEngine::GetInstance().GetProjectWorkingPath();
+			break;
+		default:
+			break;
+		}
+
+		for(int32 ShaderIndex = 0; ShaderIndex < (int32) shaderNames.size(); ShaderIndex++)
+		{
+			shaderNames[ShaderIndex] = FolderPath + shaderNames[ShaderIndex];
+		}
+
 		Mat = std::shared_ptr<Material>(new Material(name, shaderNames));
 		switch (belong)
 		{
@@ -95,7 +113,7 @@ std::shared_ptr<MaterialInstance> MaterialManager::CreateMaterialInstance(const 
 
 void MaterialManager::Save()
 {
-	String FolderPath = DKEngine::GetInstance().GetWorkingFolderPath();
+	String FolderPath = DKEngine::GetInstance().GetProjectWorkingPath();
 	for(std::map<String, std::shared_ptr<Material>>::iterator it =  Materials_User.begin(); it != Materials_User.end(); it++)
 	{
 		String MaterialPath = it->first;

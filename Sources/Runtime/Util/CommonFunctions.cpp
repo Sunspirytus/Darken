@@ -23,8 +23,15 @@ std::vector<String> split(const String& str, const String& delim) {
 String GetNameFromPath(const String& Path)
 {
 	int32 Pos = Path.rfind('/');
-	String Name = Path.substr(Pos + 1, Path.length() - Pos);
+	String Name = Path.substr((int)(Pos + 1), Path.length() - Pos);
 	return Name;
+}
+
+String GetSuperPathFromPath(const String& Path)
+{
+	int32 Pos = Path.rfind('/');
+	String SuperPath = Path.substr(0, Pos);
+	return SuperPath;
 }
 
 String GetNameFromPathExceptSuffix(const String& Path)

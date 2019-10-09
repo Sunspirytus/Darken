@@ -75,7 +75,7 @@ void MW_MainWindow::LoadProject()
 	{
 		QFileInfo FileInfo(ProjectFilePaths[0].c_str());
 		this->ProjectDir = QStringToString(FileInfo.absolutePath());
-		DKEngine::GetInstance().SetWorkingFolderPath(this->ProjectDir);
+		DKEngine::GetInstance().SetProjectWorkingPath(this->ProjectDir);
 		String a = GetNameFromPath(ProjectFilePaths[0]);
 		String b = GetNameExceptSuffix(a);
 		String c = GetNameFromPathExceptSuffix(ProjectFilePaths[0]);

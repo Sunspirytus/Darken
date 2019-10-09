@@ -43,12 +43,28 @@ uint64 DKEngine::GetFrameCount()
 	return FrameCount;
 }
 
-String DKEngine::GetWorkingFolderPath()
+void DKEngine::SetProjectWorkingPath(const String& Path)
+{
+	FolderPath = Path;
+}
+
+void DKEngine::SetEngineRunningPath(const String& Path)
+{
+	EngineRunningPath = Path;
+	InternalShaderPath = GetSuperPathFromPath(Path) + "/Sources/Shaders/";
+}
+
+String DKEngine::GetProjectWorkingPath()
 {
 	return FolderPath;
 }
 
-void DKEngine::SetWorkingFolderPath(const String& Path)
+String DKEngine::GetEngineRunningPath()
 {
-	FolderPath = Path;
+	return EngineRunningPath;
+}
+
+String DKEngine::GeInternalShaderPath()
+{
+	return InternalShaderPath;
 }

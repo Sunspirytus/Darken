@@ -13,7 +13,9 @@ private:
 	DKEngine(const DKEngine&);
 	DKEngine& operator=(const DKEngine& engine);
 
-	String FolderPath = "..\\Assets\\";
+	String FolderPath = "../Assets/";
+	String InternalShaderPath;
+	String EngineRunningPath;
 
 	std::shared_ptr<MaterialManager> _MaterialManager;
 	std::shared_ptr<BufferManager> _GPUBuffers;
@@ -26,12 +28,17 @@ public:
 	static DKEngine& GetInstance();
 	static void Init();
 
-	void SetWorkingFolderPath(const String& Path);
+	void SetProjectWorkingPath(const String& Path);
+	void SetEngineRunningPath(const String& Path);
+	
 
 	std::shared_ptr<MaterialManager> GetMaterialManager();
 	std::shared_ptr<BufferManager> GetGPUBufferManager();
 	std::shared_ptr<SystemTextureFactory> GetGlobalTextures();
 	uint64 GetFrameCount();
-	String GetWorkingFolderPath();
+
+	String GetProjectWorkingPath();
+	String GetEngineRunningPath();
+	String GeInternalShaderPath();
 };
 

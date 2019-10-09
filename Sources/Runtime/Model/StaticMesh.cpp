@@ -53,7 +53,7 @@ StaticMesh::~StaticMesh()
 void StaticMesh::LoadModelFromAsset(String fileName)
 {
 	
-	LoadFromAssetWithAssimp(DKEngine::GetInstance().GetWorkingFolderPath(), fileName);
+	LoadFromAssetWithAssimp(DKEngine::GetInstance().GetProjectWorkingPath(), fileName);
 	
 }
 
@@ -374,9 +374,9 @@ void StaticMesh::Draw()
 		Mat4f Model_ITPreMatrix = Math::Inverse(Math::Transpose(Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix));
 		DKEngine::GetInstance().GetGPUBufferManager()->UpdateModelBuffer(ModelMatrix, Model_ITMatrix, Model_PreMatrix, Model_ITPreMatrix);
 
-		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrixID, Transform->GetModelMatrix() *  RenderGroup[Index]->ModelMatrix);
-		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrix_PreID, Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix);
-		RenderMaterial->SetUniform<Mat4f>(MaterialInstData->ModelMatrix_ITID, Math::Inverse(Math::Transpose(Transform->GetModelMatrix() * RenderGroup[Index]->ModelMatrix)));
+		RenderMaterial->SetBlockUniform<Mat4f>(MaterialInstData->ModelBlockID, MaterialInstData->ModelMatrixID, Transform->GetModelMatrix() *  RenderGroup[Index]->ModelMatrix);
+		RenderMaterial->SetBlockUniform<Mat4f>(MaterialInstData->ModelBlockID, MaterialInstData->ModelMatrix_PreID, Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix);
+		RenderMaterial->SetBlockUniform<Mat4f>(MaterialInstData->ModelBlockID, MaterialInstData->ModelMatrix_ITID, Math::Inverse(Math::Transpose(Transform->GetModelMatrix() * RenderGroup[Index]->ModelMatrix)));
 
 		RenderMaterial->GetParent()->Draw(RenderGroup[Index]->VAO, RenderGroup[Index]->NumFaces, RenderGroup[Index]->IBOIndexSizeType, 0, OGL_ELEMENT);
 	}	

@@ -68,5 +68,6 @@ T StringToData(const String& Str)
 std::vector<String> split(const String& str, const String& delim); 
 
 String GetNameFromPath(const String& Path);
+String GetSuperPathFromPath(const String& Path);
 String GetNameFromPathExceptSuffix(const String& Path);
 String GetNameExceptSuffix(const String& FullName);
