@@ -23,7 +23,7 @@ int32 main(int argc, char* argv[])
 	EnableMemLeakCheck();
 	//_CrtSetBreakAlloc(260703);
 
-	dkApplication App(argc, argv);
+	dkApplication& App = dkApplication::GetInstance();
 	App.exec();
 	return 0;
 }

@@ -39,10 +39,10 @@ std::shared_ptr<Material> MaterialManager::CreateMaterial(const String& name, st
 		switch (belong)
 		{
 		case Internal:
-			FolderPath = DKEngine::GetInstance().GeInternalShaderPath();
+			FolderPath = DKEngine::GetInstance().GetInternalShaderPath();
 			break;
 		case UserDefine:
-			FolderPath = DKEngine::GetInstance().GetProjectWorkingPath();
+			FolderPath = DKEngine::GetInstance().GetAssetFolderPath();
 			break;
 		default:
 			break;
@@ -113,23 +113,21 @@ std::shared_ptr<MaterialInstance> MaterialManager::CreateMaterialInstance(const 
 
 void MaterialManager::Save()
 {
-	String FolderPath = DKEngine::GetInstance().GetProjectWorkingPath();
+	String FolderPath = DKEngine::GetInstance().GetAssetFolderPath();
 	for(std::map<String, std::shared_ptr<Material>>::iterator it =  Materials_User.begin(); it != Materials_User.end(); it++)
 	{
 		String MaterialPath = it->first;
 		std::shared_ptr<Material> Material = it->second;
-		FileIO FIO;
 		String Data;
 		Material->Save(&Data);
-		FIO.SaveFile(FolderPath, MaterialPath, FileType::F_Material, Data);
+		FileIO::SaveFile(FolderPath, MaterialPath, FileType::F_Material, Data);
 	}
 	for (std::map<String, std::shared_ptr<MaterialInstance>>::iterator it = MaterialInsts_User.begin(); it != MaterialInsts_User.end(); it++)
 	{
 		String MaterialInstPath = it->first;
 		std::shared_ptr<MaterialInstance> MaterialInst = it->second;
-		FileIO FIO;
 		String Data;
 		MaterialInst->Save(&Data);
-		FIO.SaveFile(FolderPath, MaterialInstPath, FileType::F_MaterialInstance, Data);
+		FileIO::SaveFile(FolderPath, MaterialInstPath, FileType::F_MaterialInstance, Data);
 	}
 }

@@ -5,9 +5,6 @@
 #include "glad.h"
 #include "glfw3.h"
 
-#define TO_String(x)	#x
-
-
 enum VariableType
 {
 	STRING,

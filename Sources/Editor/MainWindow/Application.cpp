@@ -19,3 +19,10 @@ dkApplication::~dkApplication()
 {
 	delete MainWindow;
 }
+
+dkApplication& dkApplication::GetInstance()
+{
+	static int argc = 0;
+	static dkApplication instance(argc, nullptr);
+	return instance;
+}

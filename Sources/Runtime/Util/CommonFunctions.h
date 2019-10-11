@@ -3,6 +3,7 @@
 #include <string>
 
 #define QStringToString(x)  x.toUtf8().constData()
+#define TO_String(x)	#x
 
 template<class T>
 inline String DataToString(T Data)
@@ -71,3 +72,5 @@ String GetNameFromPath(const String& Path);
 String GetSuperPathFromPath(const String& Path);
 String GetNameFromPathExceptSuffix(const String& Path);
 String GetNameExceptSuffix(const String& FullName);
+
+//String SearchFileFromPath(const String& Path);

@@ -15,22 +15,20 @@ World::~World()
 
 void World::Save()
 {
-	String FolderPath = DKEngine::GetInstance().GetProjectWorkingPath();
+	String FolderPath = DKEngine::GetInstance().GetAssetFolderPath();
 	String SaveData;
 	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
 		ObjectIterator->second->Save(&SaveData);
 	}
-	FileIO FIO;
-	FIO.SaveFile(FolderPath, Name, FileType::F_WorldScene, SaveData);
+	FileIO::SaveFile(FolderPath, Name, FileType::F_WorldScene, SaveData);
 }
 
 void World::Load(const String& Path)
 {
 	Name = GetNameFromPathExceptSuffix(Path);
 	String Data;
-	FileIO FIO;
-	FIO.LoadFile(Path, &Data);
+	FileIO::LoadFile(Path, &Data);
 	std::vector<String> ObjectsInfo = SeperateObject(Data);
 	for(int Index = 0; Index < ObjectsInfo.size(); Index++)
 	{

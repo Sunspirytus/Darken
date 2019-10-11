@@ -53,7 +53,7 @@ StaticMesh::~StaticMesh()
 void StaticMesh::LoadModelFromAsset(String fileName)
 {
 	
-	LoadFromAssetWithAssimp(DKEngine::GetInstance().GetProjectWorkingPath(), fileName);
+	LoadFromAssetWithAssimp(DKEngine::GetInstance().GetAssetFolderPath(), fileName);
 	
 }
 

@@ -26,8 +26,8 @@ public:
 	FileIO();
 	~FileIO();
 
-	void SaveFile(const String& path, const String& name, FileType type, const String& content);
-	void LoadFile(const String& path, String* outData);
+	static void SaveFile(const String& path, const String& name, FileType type, const String& content);
+	static void LoadFile(const String& path, String* outData);
 
 private:
 

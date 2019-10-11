@@ -249,6 +249,7 @@
     <ClInclude Include="..\Sources\Runtime\Manager\SceneManager.h" />
     <ClInclude Include="..\Sources\Runtime\Material\Material.h" />
     <ClInclude Include="..\Sources\Runtime\Material\MaterialInstance.h" />
+    <ClInclude Include="..\Sources\Runtime\Material\ShaderHelper.h" />
     <ClInclude Include="..\Sources\Runtime\Math\Quaternion.h" />
     <ClInclude Include="..\Sources\Runtime\Math\Util.h" />
     <ClInclude Include="..\Sources\Runtime\Model\StaticMesh.h" />
@@ -288,6 +289,7 @@
     <ClCompile Include="..\Sources\Runtime\Manager\SceneManager.cpp" />
     <ClCompile Include="..\Sources\Runtime\Material\Material.cpp" />
     <ClCompile Include="..\Sources\Runtime\Material\MaterialInstance.cpp" />
+    <ClCompile Include="..\Sources\Runtime\Material\ShaderHelper.cpp" />
     <ClCompile Include="..\Sources\Runtime\Math\Quaternion.cpp" />
     <ClCompile Include="..\Sources\Runtime\Model\StaticMesh.cpp" />
     <ClCompile Include="..\Sources\Runtime\PostProcess\RectBufferObject.cpp" />

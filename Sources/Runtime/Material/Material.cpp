@@ -50,7 +50,7 @@ Material::~Material()
 
 void Material::BindProgram()
 {
-	glUseProgram(MaterialProgram->Id);
+	glUseProgram(ProgramGPU->Id);
 }
 void Material::UnBindProgram()
 {
@@ -59,7 +59,7 @@ void Material::UnBindProgram()
 void Material::BindUniforms()
 {
 	//for (std::unordered_map<String, UniformItem_Basic>::iterator it = MaterialProgram->Uniforms_Basic.begin(); it != MaterialProgram->Uniforms_Basic.end(); it++)
-	for(auto& uniformitempair: MaterialProgram->Uniforms_Basic)
+	for(auto& uniformitempair: ProgramGPU->Uniforms_Basic)
 	{
 		auto& uniformitem = uniformitempair.second;
 		if (uniformitem.DataPtr)
@@ -87,7 +87,7 @@ void Material::BindUniforms()
 void Material::BindSamplers()
 {
 	//for (std::unordered_map<String, UniformItem_Texture>::iterator it = MaterialProgram->Uniforms_Texture.begin(); it != MaterialProgram->Uniforms_Texture.end(); it++)
-	for (auto& uniformitempair : MaterialProgram->Uniforms_Texture)
+	for (auto& uniformitempair : ProgramGPU->Uniforms_Texture)
 	{
 		auto& uniformitem = uniformitempair.second;
 		int32 Location      = uniformitem.Location;
@@ -152,11 +152,11 @@ void Material::Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 O
 
 void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 {
-	if (!MaterialProgram)
+	if (!ProgramGPU)
 	{
-		MaterialProgram = std::shared_ptr<Program>(new Program);
+		ProgramGPU = std::shared_ptr<Program>(new Program);
 	}
-	MaterialProgram->shaders = std::vector<Shader>(shaderNames.size());
+	ProgramGPU->Shaders = std::vector<Shader>(shaderNames.size());
 
 	for (uint32 i = 0; i < shaderNames.size(); i++)
 	{
@@ -177,26 +177,26 @@ void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 
 		switch (ShaderType)
 		{
-		case 'v': { MaterialProgram->shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::VertexShader);
-			MaterialProgram->shaders[i].type = ShaderType::VertexShader;
+		case 'v': { ProgramGPU->Shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::VertexShader);
+			ProgramGPU->Shaders[i].Type = ShaderType::VertexShader;
 			break; }
-		case 'f': { MaterialProgram->shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::FragmentShader);
-			MaterialProgram->shaders[i].type = ShaderType::FragmentShader;
+		case 'f': { ProgramGPU->Shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::FragmentShader);
+			ProgramGPU->Shaders[i].Type = ShaderType::FragmentShader;
 			break; }
-		case 'g': { MaterialProgram->shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::GeometryShader);
-			MaterialProgram->shaders[i].type = ShaderType::GeometryShader;
+		case 'g': { ProgramGPU->Shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::GeometryShader);
+			ProgramGPU->Shaders[i].Type = ShaderType::GeometryShader;
 			break; }
-		case 'e': { MaterialProgram->shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::TessEvaluationShader);
-			MaterialProgram->shaders[i].type = ShaderType::TessEvaluationShader;
+		case 'e': { ProgramGPU->Shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::TessEvaluationShader);
+			ProgramGPU->Shaders[i].Type = ShaderType::TessEvaluationShader;
 			break; }
 		case 'c': {
 			if (shaderNames[i][loc - 1] == 't') {
-				MaterialProgram->shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::TessControlShader);
-				MaterialProgram->shaders[i].type = ShaderType::TessControlShader;
+				ProgramGPU->Shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::TessControlShader);
+				ProgramGPU->Shaders[i].Type = ShaderType::TessControlShader;
 			}
 			else {
-				MaterialProgram->shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::ComputeShader);
-				MaterialProgram->shaders[i].type = ShaderType::ComputeShader;
+				ProgramGPU->Shaders[i].Id = CreateShaderGPUObjFromSrcCode(SourceCode, ShaderType::ComputeShader);
+				ProgramGPU->Shaders[i].Type = ShaderType::ComputeShader;
 			}
 			break;
 		}
@@ -204,6 +204,31 @@ void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 			break;
 		}
 	}
+}
+
+std::vector<String>  Material::CreateShadersSourceCode()
+{
+	std::vector<String> ShadersCode;
+	for (uint32 i = 0; i < ProgramGPU->Shaders.size(); i++)
+	{
+		String ShaderName = ProgramGPU->Shaders[i].Name;
+		std::ifstream ShaderFile;
+		ShaderFile.open(ShaderName);
+
+		if (!ShaderFile)
+		{
+			std::cout << "Open Shader: " << ShaderName << " Fail" << std::endl;
+		}
+
+		std::stringstream ShaderStream;
+		ShaderStream << ShaderFile.rdbuf();
+		String SourceCode = ShaderStream.str();
+
+		ShaderHelper::InsertIncludeCode(&SourceCode);
+		
+		ShadersCode.push_back(SourceCode);
+	}
+	return ShadersCode;
 }
 
 void Material::FindShaderNames(std::vector<String>& shaderNames)
@@ -217,32 +242,32 @@ void Material::FindShaderNames(std::vector<String>& shaderNames)
 		ShaderStream << ShaderFile.rdbuf();
 		String SourceCode = ShaderStream.str();
 
-		MaterialProgram->shaders[i].Name = shaderNames[i];
+		ProgramGPU->Shaders[i].Name = shaderNames[i];
 	}
 }
 
 void Material::CreateProgram()
 {
-	MaterialProgram->Id = glCreateProgram();
-	for (uint32 i = 0; i < MaterialProgram->shaders.size(); i++)
+	ProgramGPU->Id = glCreateProgram();
+	for (uint32 i = 0; i < ProgramGPU->Shaders.size(); i++)
 	{
-		glAttachShader(MaterialProgram->Id, MaterialProgram->shaders[i].Id);
+		glAttachShader(ProgramGPU->Id, ProgramGPU->Shaders[i].Id);
 	}
-	glLinkProgram(MaterialProgram->Id);
+	glLinkProgram(ProgramGPU->Id);
 
 	GLint glStatus;
 
-	glGetProgramiv(MaterialProgram->Id, GL_LINK_STATUS, &glStatus);
+	glGetProgramiv(ProgramGPU->Id, GL_LINK_STATUS, &glStatus);
 	String default_infolog;
 	String& infolog = default_infolog;
 	if (!glStatus)
 	{
 		int32_t infoLogLength, charWriten;
-		glGetProgramiv(MaterialProgram->Id, GL_INFO_LOG_LENGTH, &infoLogLength);
+		glGetProgramiv(ProgramGPU->Id, GL_INFO_LOG_LENGTH, &infoLogLength);
 		infolog.resize(infoLogLength);
 		if (infoLogLength)
 		{
-			glGetProgramInfoLog(MaterialProgram->Id, infoLogLength, &charWriten, &infolog[0]);
+			glGetProgramInfoLog(ProgramGPU->Id, infoLogLength, &charWriten, &infolog[0]);
 			std::cout << "Failed to link program with infolog" << infolog << std::endl;
 		}
 		std::cout << "Failed to link shader" << std::endl;
@@ -253,8 +278,8 @@ void Material::FindAttibInfos()
 {
 	int32 AttribCount;
 	int32 AttribName_MaxLength;
-	glGetProgramiv(MaterialProgram->Id, GL_ACTIVE_ATTRIBUTES, &AttribCount);
-	glGetProgramiv(MaterialProgram->Id, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &AttribName_MaxLength);
+	glGetProgramiv(ProgramGPU->Id, GL_ACTIVE_ATTRIBUTES, &AttribCount);
+	glGetProgramiv(ProgramGPU->Id, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &AttribName_MaxLength);
 	int8 * AttribName = new int8[AttribName_MaxLength];
 	for (int32 AttribIndex = 0; AttribIndex < AttribCount; AttribIndex++)
 	{
@@ -262,8 +287,8 @@ void Material::FindAttibInfos()
 		int32 NameLength;
 		int32 AttribSize;
 		uint32 AttribType;
-		glGetActiveAttrib(MaterialProgram->Id, AttribIndex, AttribName_MaxLength, &NameLength, &AttribSize, &AttribType, AttribName);
-		MaterialProgram->Attribs.insert(std::pair<String, AttribItem>(String(AttribName), Attrib));
+		glGetActiveAttrib(ProgramGPU->Id, AttribIndex, AttribName_MaxLength, &NameLength, &AttribSize, &AttribType, AttribName);
+		ProgramGPU->Attribs.insert(std::pair<String, AttribItem>(String(AttribName), Attrib));
 	}
 	delete[] AttribName;
 }
@@ -271,31 +296,31 @@ void Material::FindAttibInfos()
 void Material::FindUniformInfos()
 {
 	int32 UniformBlockCount;
-	glGetProgramiv(MaterialProgram->Id, GL_ACTIVE_UNIFORM_BLOCKS, &UniformBlockCount);
+	glGetProgramiv(ProgramGPU->Id, GL_ACTIVE_UNIFORM_BLOCKS, &UniformBlockCount);
 	if (UniformBlockCount > 0) {
 		int32 UniformBlockName_MaxLength;
-		glGetProgramiv(MaterialProgram->Id, GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, &UniformBlockName_MaxLength);
+		glGetProgramiv(ProgramGPU->Id, GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, &UniformBlockName_MaxLength);
 		int8* UniformBlockName = new int8[UniformBlockName_MaxLength];
 		for (int32 UniformBlockIndex = 0; UniformBlockIndex < UniformBlockCount; UniformBlockIndex++)
 		{
 			int32 NameLength;
-			glGetActiveUniformBlockName(MaterialProgram->Id, UniformBlockIndex, UniformBlockName_MaxLength, &NameLength, UniformBlockName);
+			glGetActiveUniformBlockName(ProgramGPU->Id, UniformBlockIndex, UniformBlockName_MaxLength, &NameLength, UniformBlockName);
 
 			int32 UniformCountInBlock;
-			glGetActiveUniformBlockiv(MaterialProgram->Id, UniformBlockIndex, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &UniformCountInBlock);
+			glGetActiveUniformBlockiv(ProgramGPU->Id, UniformBlockIndex, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &UniformCountInBlock);
 			int32* InUniformIndices = new int32[UniformCountInBlock];
-			glGetActiveUniformBlockiv(MaterialProgram->Id, UniformBlockIndex, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, InUniformIndices);
+			glGetActiveUniformBlockiv(ProgramGPU->Id, UniformBlockIndex, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, InUniformIndices);
 			int32 UniformInBlockName_MaxLength;
-			glGetProgramiv(MaterialProgram->Id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &UniformInBlockName_MaxLength);
+			glGetProgramiv(ProgramGPU->Id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &UniformInBlockName_MaxLength);
 
 			int32 DataSize;
-			glGetActiveUniformBlockiv(MaterialProgram->Id, UniformBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &DataSize);
+			glGetActiveUniformBlockiv(ProgramGPU->Id, UniformBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &DataSize);
 
 			std::hash<String> hs;
 			std::shared_ptr<UniformItem_Block> Block = std::shared_ptr<UniformItem_Block>(new UniformItem_Block());
 			Block->DataSize_Byte = DataSize;
 			Block->Index = UniformBlockIndex;
-			MaterialProgram->Uniforms_Block.insert(std::pair<String, std::shared_ptr<UniformItem_Block>>(UniformBlockName, Block));
+			ProgramGPU->Uniforms_Block.insert(std::pair<String, std::shared_ptr<UniformItem_Block>>(UniformBlockName, Block));
 
 			int8* UniformInBlockName = new int8[UniformInBlockName_MaxLength];
 			for (int32 Index = 0; Index < UniformCountInBlock; Index++)
@@ -306,8 +331,8 @@ void Material::FindUniformInfos()
 				int32 Size;
 				uint32 Type;
 				int32 Offset;
-				glGetActiveUniform(MaterialProgram->Id, InUniformIndex, UniformInBlockName_MaxLength, &NameLength, &Size, &Type, UniformInBlockName);
-				glGetActiveUniformsiv(MaterialProgram->Id, 1, &InUniformIndex, GL_UNIFORM_OFFSET, &Offset);
+				glGetActiveUniform(ProgramGPU->Id, InUniformIndex, UniformInBlockName_MaxLength, &NameLength, &Size, &Type, UniformInBlockName);
+				glGetActiveUniformsiv(ProgramGPU->Id, 1, &InUniformIndex, GL_UNIFORM_OFFSET, &Offset);
 
 				UniformInBlockName[NameLength - 3] = Size > 1 ? '\0' : UniformInBlockName[NameLength - 3]; //Multi Size variable's name is "abcd[0]". We delete [0] here, and we can also get location with "abcd".
 
@@ -324,31 +349,31 @@ void Material::FindUniformInfos()
 		delete[] UniformBlockName;
 		
 		std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator it;
-		for(it = MaterialProgram->Uniforms_Block.begin(); it != MaterialProgram->Uniforms_Block.end(); it++)
+		for(it = ProgramGPU->Uniforms_Block.begin(); it != ProgramGPU->Uniforms_Block.end(); it++)
 		{
 			it->second->Id = DKEngine::GetInstance().GetGPUBufferManager()->CreateUniformBuffer(it->first, it->second);
 			glBindBuffer(GL_UNIFORM_BUFFER, it->second->Id);
-			glUniformBlockBinding(MaterialProgram->Id, it->second->Index, DKEngine::GetInstance().GetGPUBufferManager()->GetUniformBlockBindingPoint(it->first));
+			glUniformBlockBinding(ProgramGPU->Id, it->second->Index, DKEngine::GetInstance().GetGPUBufferManager()->GetUniformBlockBindingPoint(it->first));
 			glBindBufferBase(GL_UNIFORM_BUFFER, DKEngine::GetInstance().GetGPUBufferManager()->GetUniformBlockBindingPoint(it->first), it->second->Id);
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);			
 		}
 	}
 
 	int32 UniformCount;
-	glGetProgramiv(MaterialProgram->Id, GL_ACTIVE_UNIFORMS, &UniformCount);
+	glGetProgramiv(ProgramGPU->Id, GL_ACTIVE_UNIFORMS, &UniformCount);
 	int32 UniformName_MaxLength;
-	glGetProgramiv(MaterialProgram->Id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &UniformName_MaxLength);
+	glGetProgramiv(ProgramGPU->Id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &UniformName_MaxLength);
 	int8* UniformName = new int8[UniformName_MaxLength];
 	for (int32 UniformIndex = 0; UniformIndex < UniformCount; UniformIndex++)
 	{
 		int32 NameLength;
 		int32 Size;
 		uint32 Type;
-		glGetActiveUniform(MaterialProgram->Id, UniformIndex, UniformName_MaxLength, &NameLength, &Size, &Type, UniformName);
+		glGetActiveUniform(ProgramGPU->Id, UniformIndex, UniformName_MaxLength, &NameLength, &Size, &Type, UniformName);
 
 		UniformName[NameLength - 3] = Size > 1 ? '\0' : UniformName[NameLength - 3]; //Multi Size variable's name is "abcd[0]". We delete [0] here, and we can also get location with "abcd".
 
-		if (-1 == glGetUniformLocation(MaterialProgram->Id, UniformName)) continue;	//Uniform is in uniform block	
+		if (-1 == glGetUniformLocation(ProgramGPU->Id, UniformName)) continue;	//Uniform is in uniform block	
 
 		UniformType T = UniformTypeMap[Type];
 		if (T < UniformType::GLSL_TEXTURE2D)
@@ -356,13 +381,13 @@ void Material::FindUniformInfos()
 			UniformItem_Basic UniformBasic;
 			UniformBasic.Size = Size;
 			UniformBasic.DataType = T;
-			MaterialProgram->Uniforms_Basic.insert(std::pair<String, UniformItem_Basic>(UniformName, UniformBasic));
+			ProgramGPU->Uniforms_Basic.insert(std::pair<String, UniformItem_Basic>(UniformName, UniformBasic));
 		}
 		else
 		{
 			UniformItem_Texture UniformTexture;
 			UniformTexture.DataType = T;
-			MaterialProgram->Uniforms_Texture.insert(std::pair<String, UniformItem_Texture>(UniformName, UniformTexture));
+			ProgramGPU->Uniforms_Texture.insert(std::pair<String, UniformItem_Texture>(UniformName, UniformTexture));
 		}
 	}
 	delete[] UniformName;
@@ -370,30 +395,30 @@ void Material::FindUniformInfos()
 
 void Material::LinkLocation()
 {
-	glUseProgram(MaterialProgram->Id);
-	for (std::unordered_map<String, AttribItem>::iterator it = MaterialProgram->Attribs.begin(); it != MaterialProgram->Attribs.end(); it++)
+	glUseProgram(ProgramGPU->Id);
+	for (std::unordered_map<String, AttribItem>::iterator it = ProgramGPU->Attribs.begin(); it != ProgramGPU->Attribs.end(); it++)
 	{
 		String name = it->first;;
-		GLint loc = glGetAttribLocation(MaterialProgram->Id, name.c_str());
-		MaterialProgram->Attribs[name].Location = loc;
+		GLint loc = glGetAttribLocation(ProgramGPU->Id, name.c_str());
+		ProgramGPU->Attribs[name].Location = loc;
 	}
 
-	for (std::unordered_map<String, UniformItem_Basic>::iterator it = MaterialProgram->Uniforms_Basic.begin(); it != MaterialProgram->Uniforms_Basic.end(); it++)
+	for (std::unordered_map<String, UniformItem_Basic>::iterator it = ProgramGPU->Uniforms_Basic.begin(); it != ProgramGPU->Uniforms_Basic.end(); it++)
 	{
 		String name = it->first;
-		GLint loc = glGetUniformLocation(MaterialProgram->Id, name.c_str());
-		MaterialProgram->Uniforms_Basic[name].Location = loc;
+		GLint loc = glGetUniformLocation(ProgramGPU->Id, name.c_str());
+		ProgramGPU->Uniforms_Basic[name].Location = loc;
 	}
 
 	int32 newLoc;
 	std::unordered_map<String, UniformItem_Texture>::iterator it;
-	for (it = MaterialProgram->Uniforms_Texture.begin(), newLoc = 0; it != MaterialProgram->Uniforms_Texture.end(); it++, newLoc++)
+	for (it = ProgramGPU->Uniforms_Texture.begin(), newLoc = 0; it != ProgramGPU->Uniforms_Texture.end(); it++, newLoc++)
 	{
 		String name = it->first;
-		GLint loc = glGetUniformLocation(MaterialProgram->Id, name.c_str());
+		GLint loc = glGetUniformLocation(ProgramGPU->Id, name.c_str());
 		if (loc == -1) continue;
 		glUniform1i(loc, newLoc);
-		MaterialProgram->Uniforms_Texture[name].Location = newLoc;
+		ProgramGPU->Uniforms_Texture[name].Location = newLoc;
 	}
 
 	glUseProgram(0);
@@ -441,4 +466,39 @@ uint32 Material::CreateShaderGPUObjFromSrcCode(String & srcCode, ShaderType type
 	}
 
 	return outShader;
+}
+
+void Material::Save(String* Data)
+{
+	PropertyBase::Save(Data);
+	std::vector<String> SourceCodes = CreateShadersSourceCode();
+	for(int32 ShaderIndex = 0; ShaderIndex < ProgramGPU->Shaders.size(); ShaderIndex++)
+	{
+		SaveShaderSourceCode(Data, ProgramGPU->Shaders[ShaderIndex].Type, SourceCodes[ShaderIndex]);
+	}
+}
+
+void Material::Load(const String& Data)
+{
+
+}
+
+void Material::SaveShaderSourceCode(String* OutData, ShaderType Type, const String& sourceCode)
+{
+	String SplitTag = "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"\
+					  "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n";
+	OutData->append(SplitTag);
+	switch (Type)
+	{
+	case VertexShader: OutData->append(TO_String(VertexShader)); break;
+	case FragmentShader: OutData->append(TO_String(FragmentShader)); break;
+	case GeometryShader: OutData->append(TO_String(GeometryShader)); break;
+	case TessEvaluationShader: OutData->append(TO_String(TessEvaluationShader)); break;
+	case TessControlShader: OutData->append(TO_String(TessControlShader)); break;
+	case ComputeShader: OutData->append(TO_String(ComputeShader)); break;
+	default:
+		break;
+	}
+	OutData->append(SplitTag + "\n");
+	OutData->append(sourceCode);
 }

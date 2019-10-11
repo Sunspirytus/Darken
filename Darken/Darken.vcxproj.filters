@@ -177,6 +177,9 @@
     <ClInclude Include="..\Sources\Runtime\ViewPort\World.h">
       <Filter>源文件\Runtime\ViewPort</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Runtime\Material\ShaderHelper.h">
+      <Filter>源文件\Runtime\Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -286,6 +289,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Runtime\ViewPort\World.cpp">
       <Filter>源文件\Runtime\ViewPort</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Runtime\Material\ShaderHelper.cpp">
+      <Filter>源文件\Runtime\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

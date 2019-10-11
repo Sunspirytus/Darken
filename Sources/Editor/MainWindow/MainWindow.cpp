@@ -61,8 +61,7 @@ void MW_MainWindow::SaveProject()
 		"PrjDemo"
 	};
 
-	FileIO FIO;
-	FIO.SaveFile(ProjectDir, "PrjDemo", FileType::F_Project, SaveData);
+	FileIO::SaveFile(ProjectDir, "PrjDemo", FileType::F_Project, SaveData);
 
 	SaveScene();
 }
@@ -75,7 +74,7 @@ void MW_MainWindow::LoadProject()
 	{
 		QFileInfo FileInfo(ProjectFilePaths[0].c_str());
 		this->ProjectDir = QStringToString(FileInfo.absolutePath());
-		DKEngine::GetInstance().SetProjectWorkingPath(this->ProjectDir);
+		DKEngine::GetInstance().SetAssetFolderPath(this->ProjectDir);
 		String a = GetNameFromPath(ProjectFilePaths[0]);
 		String b = GetNameExceptSuffix(a);
 		String c = GetNameFromPathExceptSuffix(ProjectFilePaths[0]);

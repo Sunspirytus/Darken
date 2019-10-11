@@ -1,4 +1,5 @@
 #include "ComponentBase.h"
+#include "CommonFunctions.h"
 
 ComponentBase::ComponentBase(ComponentType type)
 	:	Type(type)

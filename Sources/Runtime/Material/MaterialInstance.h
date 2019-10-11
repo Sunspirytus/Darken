@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Material.h"
-#include "Texture.h"
-#include <map>
+#include "Material.h" 
+#include "Texture.h" 
+#include <map> 
 #include <unordered_map>
 
 class MaterialInstanceBase : public PropertyBase

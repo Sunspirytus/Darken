@@ -28,7 +28,7 @@ public:
 	static DKEngine& GetInstance();
 	static void Init();
 
-	void SetProjectWorkingPath(const String& Path);
+	void SetAssetFolderPath(const String& Path);
 	void SetEngineRunningPath(const String& Path);
 	
 
@@ -37,8 +37,8 @@ public:
 	std::shared_ptr<SystemTextureFactory> GetGlobalTextures();
 	uint64 GetFrameCount();
 
-	String GetProjectWorkingPath();
+	String GetAssetFolderPath();
 	String GetEngineRunningPath();
-	String GeInternalShaderPath();
+	String GetInternalShaderPath();
 };
 

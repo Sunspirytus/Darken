@@ -3,6 +3,7 @@
 #include "TypeDefine.h"
 #include "PropertyBase.h"
 #include "CommonFunctions.h"
+#include "ShaderHelper.h"
 #include <unordered_map>
 #include <vector>
 #include <string>
@@ -11,16 +12,6 @@
 #include <map>
 
 extern int32 TabCount;
-
-enum ShaderType
-{
-	VertexShader,
-	FragmentShader,
-	GeometryShader,
-	TessEvaluationShader,
-	TessControlShader,
-	ComputeShader
-};
 
 enum IndexSizeType
 {
@@ -138,14 +129,14 @@ struct Shader
 {
 	uint32 Id;
 	String Name;
-	ShaderType type;
+	ShaderType Type;
 	Shader() {}
 };
 
 struct Program
 {
 	uint32 Id;
-	std::vector<Shader> shaders;
+	std::vector<Shader> Shaders;
 	std::unordered_map<String, AttribItem> Attribs;
 	std::unordered_map<String, std::shared_ptr<UniformItem_Block>> Uniforms_Block;
 	std::unordered_map<String, UniformItem_Basic> Uniforms_Basic;
@@ -173,7 +164,7 @@ public:
 	Material(const String& name, std::vector<String> shaderNames);
 	~Material();
 
-	std::shared_ptr<Program> MaterialProgram;	
+	std::shared_ptr<Program> ProgramGPU;	
 
 	void Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 Offset = 0, GLDrawType drawType = GLDrawType::OGL_ELEMENT);
 	void BindProgram();
@@ -181,8 +172,13 @@ public:
 	void BindUniforms();
 	void BindSamplers();
 
+	virtual void Save(String* Data);
+	virtual void Load(const String& Data);
+
 private:
 	void LoadAndCreateShaders(std::vector<String>& shaderNames);
+	std::vector<String> CreateShadersSourceCode();
+	void CreateShaders();
 	void CreateProgram();
 	void FindShaderNames(std::vector<String>& shaderNames);
 	void FindAttibInfos();
@@ -190,5 +186,7 @@ private:
 	void LinkLocation();
 	uint32 CreateShaderGPUObjFromSrcCode(String & Code, ShaderType type);
 
+
+	void SaveShaderSourceCode(String* OutData, ShaderType Type, const String& sourceCode);
 };
 

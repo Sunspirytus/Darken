@@ -23,6 +23,11 @@ void FileIO::LoadFile(const String& path, String* outData)
 {
 	std::ifstream InFile;
 	InFile.open(path, std::istream::in);
+	if(InFile.fail())
+	{
+		std::cout << "Load File: " << path << " Fail" << std::endl;
+		return;
+	}
 
 	String Line;
 	while (!InFile.eof())
