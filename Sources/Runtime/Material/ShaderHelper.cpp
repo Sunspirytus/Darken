@@ -28,7 +28,8 @@ void ShaderHelper::InsertIncludeCode(String* SourceCode)
 	for(int32 ShaderIndex = 0; ShaderIndex < InternalShaderNames.size(); ShaderIndex++)
 	{
 		String InsertShaderCode;
-		FileIO::LoadFile(InternalShaderFolder + InternalShaderNames[ShaderIndex], &InsertShaderCode);
+		FileIO File;
+		File.LoadFile(InternalShaderFolder + InternalShaderNames[ShaderIndex], &InsertShaderCode);
 		String ReShaderTag = ReShaderTag_Internal + DataToString(ShaderIndex);
 		int32 InsertPos = SourceCode->find(ReShaderTag);
 		if(InsertPos == -1)
@@ -41,7 +42,8 @@ void ShaderHelper::InsertIncludeCode(String* SourceCode)
 	for (int32 ShaderIndex = 0; ShaderIndex < ExternalShaderNames.size(); ShaderIndex++)
 	{
 		String InsertShaderCode;
-		FileIO::LoadFile(AssetFolder + ExternalShaderNames[ShaderIndex], &InsertShaderCode);
+		FileIO File;
+		File.LoadFile(AssetFolder + ExternalShaderNames[ShaderIndex], &InsertShaderCode);
 		String ReShaderTag = ReShaderTag_External + DataToString(ShaderIndex);
 		int32 InsertPos = SourceCode->find(ReShaderTag);
 		if (InsertPos == -1)

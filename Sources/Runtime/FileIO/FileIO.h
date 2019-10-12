@@ -14,10 +14,10 @@ enum FileType
 
 static std::map<FileType, String> FileTypeSuffixMap = 
 {
-	std::pair<FileType, String>(FileType::F_Material, ".dkMat"),
-	std::pair<FileType, String>(FileType::F_MaterialInstance, ".dkMatInst"),
-	std::pair<FileType, String>(FileType::F_Project, ".dkProject"),
-	std::pair<FileType, String>(FileType::F_WorldScene, ".dkScene")
+	std::pair<FileType, String>(FileType::F_Material, ".dkmat"),
+	std::pair<FileType, String>(FileType::F_MaterialInstance, ".dkmatinst"),
+	std::pair<FileType, String>(FileType::F_Project, ".dkproject"),
+	std::pair<FileType, String>(FileType::F_WorldScene, ".dkscene")
 };
 
 class FileIO
@@ -26,11 +26,11 @@ public:
 	FileIO();
 	~FileIO();
 
-	static void SaveFile(const String& path, const String& name, FileType type, const String& content);
-	static void LoadFile(const String& path, String* outData);
+	void SaveFile(const String& path, const String& name, FileType type, const String& content);
+	void SaveFile(const String& path, FileType type, const String& content);
+	void LoadFile(const String& path, String* outData);
 
-private:
-
+	FileType Type;
 };
 
 

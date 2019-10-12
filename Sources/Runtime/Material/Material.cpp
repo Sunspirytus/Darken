@@ -6,21 +6,23 @@
 
 MaterialBase::MaterialBase()
 {
+	AddProperty("Path", STRING, &Path);
+	AddPropertyArray("Shaders", STRING, &ShaderNames);
 };
 
-MaterialBase::MaterialBase(const String& path, const std::vector<String>& shaderNames)
-	: Path(path)
-	, ShaderNames(shaderNames)
-{
-	AddProperty("Path", STRING, &Path);
-	ShaderCount = (int32)ShaderNames.size();
-	AddProperty("ShaderCount", INT_32, &ShaderCount);
-	for(int32 Index = 0; Index < ShaderCount; Index++)
-	{
-		ShaderNames[Index] = GetNameFromPath(ShaderNames[Index]);
-		AddProperty("Shader" + DataToString(Index), STRING, &ShaderNames[Index]);
-	}
-};
+//MaterialBase::MaterialBase(const String& path, const std::vector<String>& shaderNames)
+//	: Path(path)
+//	, ShaderNames(shaderNames)
+//{
+//	AddProperty("Path", STRING, &Path);
+//	ShaderCount = (int32)ShaderNames.size();
+//	AddProperty("ShaderCount", INT_32, &ShaderCount);
+//	for(int32 Index = 0; Index < ShaderCount; Index++)
+//	{
+//		ShaderNames[Index] = ShaderNames[Index];
+//		AddProperty("Shader" + DataToString(Index), STRING, &ShaderNames[Index]);
+//	}
+//};
 
 MaterialBase::~MaterialBase() 
 {
@@ -31,10 +33,23 @@ String MaterialBase::GetPath()
 	return Path;
 }
 
+void MaterialBase::Save(String* Data)
+{
+	PropertyBase::Save(Data);
+}
+
+Material::Material()
+	: MaterialBase()
+{
+
+}
 
 Material::Material(const String& name, std::vector<String> shaderNames)
-	: MaterialBase(name, shaderNames)
+	: MaterialBase()
 {
+	Path = name;
+	ShaderNames = shaderNames;
+
 	LoadAndCreateShaders(shaderNames);
 	FindShaderNames(shaderNames);
 	CreateProgram();
@@ -119,7 +134,7 @@ void Material::Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 O
 	BindSamplers();
 
 	int32 IndexSize = 0;
-	int32 GL_IndexType;
+	int32 GL_IndexType = 0;
 	switch (indexSize)
 	{
 	case Index16Bits:
@@ -426,7 +441,7 @@ void Material::LinkLocation()
 
 uint32 Material::CreateShaderGPUObjFromSrcCode(String & srcCode, ShaderType type)
 {
-	uint32 outShader;
+	uint32 outShader = 0;
 
 	switch (type)
 	{
@@ -480,13 +495,15 @@ void Material::Save(String* Data)
 
 void Material::Load(const String& Data)
 {
+	LoadBaseInfo(Data);
+	std::vector<String> Source = LoadShaderSourceCode(Data);
 
 }
 
-void Material::SaveShaderSourceCode(String* OutData, ShaderType Type, const String& sourceCode)
+void Material::SaveShaderSourceCode(String* OutData, ShaderType Type, const String& SourceCode)
 {
-	String SplitTag = "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"\
-					  "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n";
+	static String SplitTag = "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"\
+							 "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n";
 	OutData->append(SplitTag);
 	switch (Type)
 	{
@@ -500,5 +517,34 @@ void Material::SaveShaderSourceCode(String* OutData, ShaderType Type, const Stri
 		break;
 	}
 	OutData->append(SplitTag + "\n");
-	OutData->append(sourceCode);
+	OutData->append(SourceCode);
+}
+
+
+std::vector<String> Material::LoadShaderSourceCode(const String& SourceCode)
+{
+	std::vector<String> ShaderSourceCodes;
+	String SubCode = SourceCode;
+	static String SplitTag = "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"\
+							"\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n";
+	while (true)
+	{
+		int32 Pos0 = SubCode.find(SplitTag);
+		if (Pos0 == -1) break;
+		Pos0 = SubCode.find(SplitTag, SplitTag.length());
+		int32 Pos1 = SubCode.find(SplitTag, (int64)Pos0 + 1);
+		if (Pos1 == -1) Pos1 = SubCode.length();
+		String ShaderStr = SubCode.substr(Pos0 + SplitTag.length(), (int64)Pos1 - Pos0 - SplitTag.length());
+		ShaderSourceCodes.push_back(ShaderStr);
+		SubCode.erase(0, Pos1);
+	}
+}
+
+void Material::LoadBaseInfo(const String& SourceCode)
+{
+	static String SplitTag = "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"\
+							"\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n";
+	int32 BaseInfoPos = SourceCode.find(SplitTag);
+	String BaseInfo = SourceCode.substr(0, BaseInfoPos);
+	PropertyBase::Load(BaseInfo);
 }

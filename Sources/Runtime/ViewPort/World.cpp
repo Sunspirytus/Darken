@@ -21,14 +21,16 @@ void World::Save()
 	{
 		ObjectIterator->second->Save(&SaveData);
 	}
-	FileIO::SaveFile(FolderPath, Name, FileType::F_WorldScene, SaveData);
+	FileIO File;
+	File.SaveFile(FolderPath, Name, FileType::F_WorldScene, SaveData);
 }
 
 void World::Load(const String& Path)
 {
 	Name = GetNameFromPathExceptSuffix(Path);
 	String Data;
-	FileIO::LoadFile(Path, &Data);
+	FileIO File;
+	File.LoadFile(Path, &Data);
 	std::vector<String> ObjectsInfo = SeperateObject(Data);
 	for(int Index = 0; Index < ObjectsInfo.size(); Index++)
 	{

@@ -2,7 +2,7 @@
     Path:BasicModel\Cube.FBX;
     Type:StaticMeshActor;
     MeshPath:BasicModel\Cube.FBX;
-    MaterialName:SimpleObjectMaterialInst00;
+    MaterialName:../Assets/SimpleObjectMaterialInst00;
     [
         Component:CPT_Transform;
         Position:(0.000000,0.000000,0.000000);

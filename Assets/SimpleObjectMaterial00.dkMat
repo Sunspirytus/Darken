@@ -1,7 +1,7 @@
-Path:SimpleObjectMaterial00;
-ShaderCount:2;
-Shader0:SimpleVertShader.vsh;
-Shader1:SimpleFragShader.fsh;
+Path:../Assets/SimpleObjectMaterial00;
+Shaders:(2)
+    <../Assets/SimpleVertShader.vsh>
+    <../Assets/SimpleFragShader.fsh>;
 
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

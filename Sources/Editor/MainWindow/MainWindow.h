@@ -32,5 +32,6 @@ private:
 	String ProjectDir;
 
 	void SaveMaterials();
+	void LoadMaterials();
 };
 

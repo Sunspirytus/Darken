@@ -35,7 +35,7 @@ enum VariableType
 	MAT4_F,
 	MAT2_D,
 	MAT3_D,
-	MAT4_D
+	MAT4_D,
 };
 
 using half_float::half;

@@ -111,9 +111,26 @@ std::shared_ptr<MaterialInstance> MaterialManager::CreateMaterialInstance(const 
 }
 
 
-void MaterialManager::Save()
+void MaterialManager::Save(const String& Name)
 {
-	String FolderPath = DKEngine::GetInstance().GetAssetFolderPath();
+	std::map<String, std::shared_ptr<Material>>::iterator MatToSave = Materials_User.find(Name);
+	if(MatToSave != Materials_User.end())
+	{
+		String Data;
+		MatToSave->second->Save(&Data);
+		FileIO File;
+		File.SaveFile(Name, FileType::F_Material, Data);
+	}
+	std::map<String, std::shared_ptr<MaterialInstance>>::iterator MatInstToSave = MaterialInsts_User.find(Name);
+	if (MatInstToSave != MaterialInsts_User.end())
+	{
+		String Data;
+		MatInstToSave->second->Save(&Data);
+		FileIO File;
+		File.SaveFile(Name, FileType::F_MaterialInstance, Data);
+	}
+
+	/*String FolderPath = DKEngine::GetInstance().GetAssetFolderPath();
 	for(std::map<String, std::shared_ptr<Material>>::iterator it =  Materials_User.begin(); it != Materials_User.end(); it++)
 	{
 		String MaterialPath = it->first;
@@ -129,5 +146,24 @@ void MaterialManager::Save()
 		String Data;
 		MaterialInst->Save(&Data);
 		FileIO::SaveFile(FolderPath, MaterialInstPath, FileType::F_MaterialInstance, Data);
+	}*/
+}
+
+void MaterialManager::Load(const String& Name)
+{
+	String PathWithouExtension = GetNameFromPathExceptSuffix(Name);
+	FileIO FIO;
+	String Data;
+	FIO.LoadFile(Name, &Data);
+	switch (FIO.Type)
+	{
+	case F_Material:
+	{
+		std::shared_ptr<Material> NewMaterial = std::shared_ptr<Material>(new Material());
+		NewMaterial->Load(Data);
+	}
+	case F_MaterialInstance:
+	default:
+		break;
 	}
 }

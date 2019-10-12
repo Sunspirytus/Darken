@@ -49,3 +49,10 @@ String GetNameExceptSuffix(const String& FullName)
 	assert(Name.find('.') == -1);
 	return Name;
 }
+
+String GetSuffixFromPath(const String& Path)
+{
+	int32 Pos = Path.rfind('.');
+	return Path.substr(Pos, Path.length() - Pos);
+}
+

@@ -147,20 +147,22 @@ class MaterialBase : public PropertyBase
 {
 public:
 	MaterialBase();
-	MaterialBase(const String& path, const std::vector<String>& shaderNames = std::vector<String>{});
+	//MaterialBase(const String& path, const std::vector<String>& shaderNames = std::vector<String>{});
 	~MaterialBase();
 
 	String GetPath();
 
-private:
+	virtual void Save(String* Data);
+
+protected:
 	String Path;
-	int32 ShaderCount;
 	std::vector<String> ShaderNames;
 };
 
 class Material : public MaterialBase
 {
 public:
+	Material();
 	Material(const String& name, std::vector<String> shaderNames);
 	~Material();
 
@@ -187,6 +189,8 @@ private:
 	uint32 CreateShaderGPUObjFromSrcCode(String & Code, ShaderType type);
 
 
-	void SaveShaderSourceCode(String* OutData, ShaderType Type, const String& sourceCode);
+	void SaveShaderSourceCode(String* OutData, ShaderType Type, const String& SourceCode);
+	void LoadBaseInfo(const String& SourceCode);
+	std::vector<String> LoadShaderSourceCode(const String& SourceCode);
 };
 

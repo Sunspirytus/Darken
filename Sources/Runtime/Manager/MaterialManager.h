@@ -13,7 +13,8 @@ public:
 	MaterialManager();
 	~MaterialManager();
 
-	void Save();
+	void Save(const String& Name);
+	void Load(const String& Name);
 
 	std::shared_ptr<Material> CreateMaterial(const String& name, std::vector<String> shaderNames, MaterialBelong belong);
 	std::shared_ptr<MaterialInstance> CreateMaterialInstance(const String& name, std::shared_ptr<Material> parentMaterial, MaterialBelong belong);

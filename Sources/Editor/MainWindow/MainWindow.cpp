@@ -51,6 +51,7 @@ void MW_MainWindow::OpenScene()
 	{
 		DOCK_OpenGLView->GetView()->GetScene()->Load(ProjectFilePaths[0]);
 	}
+	LoadMaterials();
 }
 
 void MW_MainWindow::SaveProject()
@@ -61,7 +62,8 @@ void MW_MainWindow::SaveProject()
 		"PrjDemo"
 	};
 
-	FileIO::SaveFile(ProjectDir, "PrjDemo", FileType::F_Project, SaveData);
+	FileIO File;
+	File.SaveFile(ProjectDir, "PrjDemo", FileType::F_Project, SaveData);
 
 	SaveScene();
 }
@@ -90,7 +92,12 @@ void MW_MainWindow::LoadProject()
 
 void MW_MainWindow::SaveMaterials()
 {
-	DKEngine::GetInstance().GetMaterialManager()->Save();
+	DKEngine::GetInstance().GetMaterialManager()->Save("../Assets/SimpleObjectMaterial00");
+}
+
+void MW_MainWindow::LoadMaterials()
+{
+	DKEngine::GetInstance().GetMaterialManager()->Load("../Assets/SimpleObjectMaterial00.dkMat");
 }
 
 

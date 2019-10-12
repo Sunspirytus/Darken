@@ -72,5 +72,6 @@ String GetNameFromPath(const String& Path);
 String GetSuperPathFromPath(const String& Path);
 String GetNameFromPathExceptSuffix(const String& Path);
 String GetNameExceptSuffix(const String& FullName);
+String GetSuffixFromPath(const String& Path);
 
 //String SearchFileFromPath(const String& Path);
