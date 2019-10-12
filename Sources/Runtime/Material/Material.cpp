@@ -4,6 +4,15 @@
 #include <sstream>
 #include <iostream>
 
+Shader::Shader()
+{
+}
+
+Shader::~Shader()
+{
+	glDeleteShader(Id);
+}
+
 MaterialBase::MaterialBase()
 {
 	AddProperty("Path", STRING, &Path);
@@ -44,23 +53,75 @@ Material::Material()
 
 }
 
-Material::Material(const String& name, std::vector<String> shaderNames)
+Material::Material(const String& name)
+	: MaterialBase()
+{
+	Path = name;
+
+	ShaderNames.resize(2);
+	ShaderNames[0] = DKEngine::GetInstance().GetInternalShaderPath() + DefaultVertShaderName;
+	ShaderNames[1] = DKEngine::GetInstance().GetInternalShaderPath() + DefaultFragShaderName;
+	
+	ProgramGPU = std::shared_ptr<Program>(new Program);
+}
+
+Material::Material(const String& name, const std::vector<String>& shaderNames)
 	: MaterialBase()
 {
 	Path = name;
 	ShaderNames = shaderNames;
 
-	LoadAndCreateShaders(shaderNames);
-	FindShaderNames(shaderNames);
-	CreateProgram();
+	ProgramGPU = std::shared_ptr<Program>(new Program);
+
+	LoadAndCreateShaders(ShaderNames);
+	CreateGPUProgram();
 	FindAttibInfos();
 	FindUniformInfos();
 	LinkLocation();
 }
 
-
 Material::~Material()
 {
+}
+
+void Material::ReCreate()
+{
+	std::vector<String> SourceCodes = CreateShadersSourceCode();
+
+}
+
+void Material::CreateGPUShaders(const std::vector<String>& SrcCodes)
+{
+	for(int32 Index = 0; Index < ProgramGPU->Shaders.size(); Index++)
+	{
+		ProgramGPU->Shaders[Index].Id = CreateShaderGPUObjFromSrcCode(SrcCodes[Index], ProgramGPU->Shaders[Index].Type);
+	}
+}
+
+void Material::CreateFromShaders(const std::vector<String>& shaderNames)
+{
+	ShaderNames = shaderNames;
+
+	BindNewShaders(ShaderNames);
+	ReCreate();
+
+	std::vector<String> SourceCodes = CreateShadersSourceCode();
+
+	CreateGPUProgram();
+	FindAttibInfos();
+	FindUniformInfos();
+	LinkLocation();
+}
+
+void Material::BindNewShaders(const std::vector<String>& shaderNames)
+{
+	ShaderNames = shaderNames;
+	ProgramGPU->Shaders.clear();
+	ProgramGPU->Shaders.resize(shaderNames.size());
+	for (int32 Index = 0; Index < ShaderNames.size(); Index++)
+	{
+		ProgramGPU->Shaders[Index].Type = ShaderHelper::GetShaderType(ShaderNames[Index]);
+	}
 }
 
 void Material::BindProgram()
@@ -167,10 +228,6 @@ void Material::Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 O
 
 void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 {
-	if (!ProgramGPU)
-	{
-		ProgramGPU = std::shared_ptr<Program>(new Program);
-	}
 	ProgramGPU->Shaders = std::vector<Shader>(shaderNames.size());
 
 	for (uint32 i = 0; i < shaderNames.size(); i++)
@@ -221,12 +278,12 @@ void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 	}
 }
 
-std::vector<String>  Material::CreateShadersSourceCode()
+std::vector<String> Material::CreateShadersSourceCode()
 {
 	std::vector<String> ShadersCode;
 	for (uint32 i = 0; i < ProgramGPU->Shaders.size(); i++)
 	{
-		String ShaderName = ProgramGPU->Shaders[i].Name;
+		String ShaderName = ShaderNames[i];
 		std::ifstream ShaderFile;
 		ShaderFile.open(ShaderName);
 
@@ -246,22 +303,17 @@ std::vector<String>  Material::CreateShadersSourceCode()
 	return ShadersCode;
 }
 
-void Material::FindShaderNames(std::vector<String>& shaderNames)
+void Material::CreateShadersFromSrcCode(const std::vector<String>& SourceCodes)
 {
-	for (uint32 i = 0; i < shaderNames.size(); i++)
+	for(int32 Index = 0 ; Index < ShaderNames.size(); Index++)
 	{
-		std::ifstream ShaderFile;
-		ShaderFile.open(shaderNames[i]);
-
-		std::stringstream ShaderStream;
-		ShaderStream << ShaderFile.rdbuf();
-		String SourceCode = ShaderStream.str();
-
-		ProgramGPU->Shaders[i].Name = shaderNames[i];
+		ShaderType Type = ShaderHelper::GetShaderType(ShaderNames[Index]);
+		ProgramGPU->Shaders[Index].Type = Type;
+		ProgramGPU->Shaders[Index].Id = CreateShaderGPUObjFromSrcCode(SourceCodes[Index], Type);
 	}
 }
 
-void Material::CreateProgram()
+void Material::CreateGPUProgram()
 {
 	ProgramGPU->Id = glCreateProgram();
 	for (uint32 i = 0; i < ProgramGPU->Shaders.size(); i++)
@@ -439,7 +491,7 @@ void Material::LinkLocation()
 	glUseProgram(0);
 }
 
-uint32 Material::CreateShaderGPUObjFromSrcCode(String & srcCode, ShaderType type)
+uint32 Material::CreateShaderGPUObjFromSrcCode(const String & srcCode, ShaderType type)
 {
 	uint32 outShader = 0;
 
@@ -496,8 +548,15 @@ void Material::Save(String* Data)
 void Material::Load(const String& Data)
 {
 	LoadBaseInfo(Data);
-	std::vector<String> Source = LoadShaderSourceCode(Data);
+	ProgramGPU->Shaders.resize(ShaderNames.size());
+	std::vector<String> SourceCodes = LoadShaderSourceCode(Data);
+	assert(ShaderNames.size() == SourceCodes.size());
 
+	CreateShadersFromSrcCode(SourceCodes);
+	CreateGPUProgram();
+	FindAttibInfos();
+	FindUniformInfos();
+	LinkLocation();
 }
 
 void Material::SaveShaderSourceCode(String* OutData, ShaderType Type, const String& SourceCode)
@@ -538,6 +597,7 @@ std::vector<String> Material::LoadShaderSourceCode(const String& SourceCode)
 		ShaderSourceCodes.push_back(ShaderStr);
 		SubCode.erase(0, Pos1);
 	}
+	return ShaderSourceCodes;
 }
 
 void Material::LoadBaseInfo(const String& SourceCode)

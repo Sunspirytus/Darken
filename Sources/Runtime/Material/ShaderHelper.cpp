@@ -104,12 +104,15 @@ ShaderType ShaderHelper::GetShaderType(const String& ShaderName)
 
 	switch (ShaderType)
 	{
-	case 'v': return ShaderType::VertexShader;		break; 
-	case 'f': return ShaderType::FragmentShader;	break; 
-	case 'g': return ShaderType::GeometryShader;	break;
+	case 'v': return ShaderType::VertexShader;
+	case 'f': return ShaderType::FragmentShader;
+	case 'g': return ShaderType::GeometryShader;
+	case 'e': return ShaderType::TessEvaluationShader;
+	case 'c': 
+		if (ShaderName[loc - 1] == 't') return ShaderType::TessControlShader; 
+		else return ShaderType::ComputeShader;
 	default:
 		std::cout << "UnSupport Shader Type: " << ShaderName << std::endl;
 		return VertexShader;
-		break;
 	}
 }

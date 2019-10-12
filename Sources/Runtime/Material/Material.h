@@ -11,7 +11,9 @@
 #include <memory>
 #include <map>
 
-extern int32 TabCount;
+
+static String DefaultVertShaderName = "DefaultVertShader.vsh";
+static String DefaultFragShaderName = "DefaultFragShader.fsh";
 
 enum IndexSizeType
 {
@@ -125,12 +127,13 @@ struct UniformItem_Texture
 	UniformItem_Texture() : Location(-1) {}
 };
 
-struct Shader
+class Shader
 {
+public:
 	uint32 Id;
-	String Name;
 	ShaderType Type;
-	Shader() {}
+	Shader();
+	~Shader();
 };
 
 struct Program
@@ -163,10 +166,14 @@ class Material : public MaterialBase
 {
 public:
 	Material();
-	Material(const String& name, std::vector<String> shaderNames);
+	Material(const String& name);
+	Material(const String& name, const std::vector<String>& shaderNames);
 	~Material();
 
-	std::shared_ptr<Program> ProgramGPU;	
+	std::shared_ptr<Program> ProgramGPU;
+
+	void CreateFromShaders(const std::vector<String>& shaderNames);
+	void BindNewShaders(const std::vector<String>& shaderNames);
 
 	void Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 Offset = 0, GLDrawType drawType = GLDrawType::OGL_ELEMENT);
 	void BindProgram();
@@ -179,18 +186,23 @@ public:
 
 private:
 	void LoadAndCreateShaders(std::vector<String>& shaderNames);
-	std::vector<String> CreateShadersSourceCode();
-	void CreateShaders();
-	void CreateProgram();
-	void FindShaderNames(std::vector<String>& shaderNames);
+	
+	
+	void CreateShadersFromSrcCode(const std::vector<String>& SourceCodes);
+	void CreateGPUProgram();
 	void FindAttibInfos();
 	void FindUniformInfos();
 	void LinkLocation();
-	uint32 CreateShaderGPUObjFromSrcCode(String & Code, ShaderType type);
 
 
 	void SaveShaderSourceCode(String* OutData, ShaderType Type, const String& SourceCode);
 	void LoadBaseInfo(const String& SourceCode);
 	std::vector<String> LoadShaderSourceCode(const String& SourceCode);
+
+
+	void ReCreate();
+	std::vector<String> CreateShadersSourceCode();
+	void CreateGPUShaders(const std::vector<String>& SrcCodes);
+	uint32 CreateShaderGPUObjFromSrcCode(const String& Code, ShaderType type);
 };
 
