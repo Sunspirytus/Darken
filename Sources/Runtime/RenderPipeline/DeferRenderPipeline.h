@@ -68,13 +68,13 @@ struct ShadowDepthMaterialDataIDs
 {
 	int32 LightSpaceVPMatrixID;
 	int32 LightCamera_ZBufferParamsID;
-	int32 bDirectLightID;
+	int32 LightTypeID;
 	
 	ShadowDepthMaterialDataIDs()
 	{
 		LightSpaceVPMatrixID = MaterialInstance::GetID("LightSpaceVPMatrix");
 		LightCamera_ZBufferParamsID = MaterialInstance::GetID("LightCamera_ZBufferParams");
-		bDirectLightID = MaterialInstance::GetID("bDirectLight");
+		LightTypeID = MaterialInstance::GetID("LightType");
 	}
 };
 

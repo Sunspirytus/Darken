@@ -172,9 +172,6 @@ public:
 
 	std::shared_ptr<Program> ProgramGPU;
 
-	void CreateFromShaders(const std::vector<String>& shaderNames);
-	void BindNewShaders(const std::vector<String>& shaderNames);
-
 	void Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 Offset = 0, GLDrawType drawType = GLDrawType::OGL_ELEMENT);
 	void BindProgram();
 	void UnBindProgram();
@@ -186,14 +183,6 @@ public:
 
 private:
 	void LoadAndCreateShaders(std::vector<String>& shaderNames);
-	
-	
-	void CreateShadersFromSrcCode(const std::vector<String>& SourceCodes);
-	void CreateGPUProgram();
-	void FindAttibInfos();
-	void FindUniformInfos();
-	void LinkLocation();
-
 
 	void SaveShaderSourceCode(String* OutData, ShaderType Type, const String& SourceCode);
 	void LoadBaseInfo(const String& SourceCode);
@@ -201,8 +190,14 @@ private:
 
 
 	void ReCreate();
+	
+	void InitShaderInfo();
 	std::vector<String> CreateShadersSourceCode();
 	void CreateGPUShaders(const std::vector<String>& SrcCodes);
 	uint32 CreateShaderGPUObjFromSrcCode(const String& Code, ShaderType type);
+	void CreateGPUProgram();
+	void FindAttibInfos();
+	void FindUniformInfos();
+	void LinkLocation();
 };
 

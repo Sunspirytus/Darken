@@ -149,21 +149,21 @@ void MaterialManager::Save(const String& Name)
 	}*/
 }
 
-void MaterialManager::Load(const String& Name)
+std::shared_ptr<Material> MaterialManager::LoadMaterial(const String& Name)
 {
-	String PathWithouExtension = GetNameFromPathExceptSuffix(Name);
+	if (Materials_User.find(Name) != Materials_User.end())
+		return Materials_User[Name];
+
 	FileIO FIO;
 	String Data;
 	FIO.LoadFile(Name, &Data);
-	switch (FIO.Type)
-	{
-	case F_Material:
-	{
-		std::shared_ptr<Material> NewMaterial = std::shared_ptr<Material>(new Material());
-		NewMaterial->Load(Data);
-	}
-	case F_MaterialInstance:
-	default:
-		break;
-	}
+	std::shared_ptr<Material> NewMaterial = std::shared_ptr<Material>(new Material());
+	NewMaterial->Load(Data);
+	Materials_User.insert(std::pair<String, std::shared_ptr<Material>>(Name, NewMaterial));
+	return NewMaterial;
+}
+
+std::shared_ptr<MaterialInstance> MaterialManager::LoadMaterialInstance(const String& Name)
+{
+	return nullptr;
 }

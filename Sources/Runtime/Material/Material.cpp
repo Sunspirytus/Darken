@@ -19,20 +19,6 @@ MaterialBase::MaterialBase()
 	AddPropertyArray("Shaders", STRING, &ShaderNames);
 };
 
-//MaterialBase::MaterialBase(const String& path, const std::vector<String>& shaderNames)
-//	: Path(path)
-//	, ShaderNames(shaderNames)
-//{
-//	AddProperty("Path", STRING, &Path);
-//	ShaderCount = (int32)ShaderNames.size();
-//	AddProperty("ShaderCount", INT_32, &ShaderCount);
-//	for(int32 Index = 0; Index < ShaderCount; Index++)
-//	{
-//		ShaderNames[Index] = ShaderNames[Index];
-//		AddProperty("Shader" + DataToString(Index), STRING, &ShaderNames[Index]);
-//	}
-//};
-
 MaterialBase::~MaterialBase() 
 {
 };
@@ -50,7 +36,7 @@ void MaterialBase::Save(String* Data)
 Material::Material()
 	: MaterialBase()
 {
-
+	ProgramGPU = std::shared_ptr<Program>(new Program);
 }
 
 Material::Material(const String& name)
@@ -72,12 +58,12 @@ Material::Material(const String& name, const std::vector<String>& shaderNames)
 	ShaderNames = shaderNames;
 
 	ProgramGPU = std::shared_ptr<Program>(new Program);
-
-	LoadAndCreateShaders(ShaderNames);
+	ReCreate();
+	/*LoadAndCreateShaders(ShaderNames);
 	CreateGPUProgram();
 	FindAttibInfos();
 	FindUniformInfos();
-	LinkLocation();
+	LinkLocation();*/
 }
 
 Material::~Material()
@@ -86,8 +72,13 @@ Material::~Material()
 
 void Material::ReCreate()
 {
+	InitShaderInfo();
 	std::vector<String> SourceCodes = CreateShadersSourceCode();
-
+	CreateGPUShaders(SourceCodes);
+	CreateGPUProgram();
+	FindAttibInfos();
+	FindUniformInfos();
+	LinkLocation();
 }
 
 void Material::CreateGPUShaders(const std::vector<String>& SrcCodes)
@@ -95,32 +86,6 @@ void Material::CreateGPUShaders(const std::vector<String>& SrcCodes)
 	for(int32 Index = 0; Index < ProgramGPU->Shaders.size(); Index++)
 	{
 		ProgramGPU->Shaders[Index].Id = CreateShaderGPUObjFromSrcCode(SrcCodes[Index], ProgramGPU->Shaders[Index].Type);
-	}
-}
-
-void Material::CreateFromShaders(const std::vector<String>& shaderNames)
-{
-	ShaderNames = shaderNames;
-
-	BindNewShaders(ShaderNames);
-	ReCreate();
-
-	std::vector<String> SourceCodes = CreateShadersSourceCode();
-
-	CreateGPUProgram();
-	FindAttibInfos();
-	FindUniformInfos();
-	LinkLocation();
-}
-
-void Material::BindNewShaders(const std::vector<String>& shaderNames)
-{
-	ShaderNames = shaderNames;
-	ProgramGPU->Shaders.clear();
-	ProgramGPU->Shaders.resize(shaderNames.size());
-	for (int32 Index = 0; Index < ShaderNames.size(); Index++)
-	{
-		ProgramGPU->Shaders[Index].Type = ShaderHelper::GetShaderType(ShaderNames[Index]);
 	}
 }
 
@@ -278,6 +243,16 @@ void Material::LoadAndCreateShaders(std::vector<String>& shaderNames)
 	}
 }
 
+void Material::InitShaderInfo()
+{
+	ProgramGPU->Shaders.resize(ShaderNames.size());
+	for (int32 Index = 0; Index < ShaderNames.size(); Index++)
+	{
+		ShaderType Type = ShaderHelper::GetShaderType(ShaderNames[Index]);
+		ProgramGPU->Shaders[Index].Type = Type;
+	}
+}
+
 std::vector<String> Material::CreateShadersSourceCode()
 {
 	std::vector<String> ShadersCode;
@@ -301,16 +276,6 @@ std::vector<String> Material::CreateShadersSourceCode()
 		ShadersCode.push_back(SourceCode);
 	}
 	return ShadersCode;
-}
-
-void Material::CreateShadersFromSrcCode(const std::vector<String>& SourceCodes)
-{
-	for(int32 Index = 0 ; Index < ShaderNames.size(); Index++)
-	{
-		ShaderType Type = ShaderHelper::GetShaderType(ShaderNames[Index]);
-		ProgramGPU->Shaders[Index].Type = Type;
-		ProgramGPU->Shaders[Index].Id = CreateShaderGPUObjFromSrcCode(SourceCodes[Index], Type);
-	}
 }
 
 void Material::CreateGPUProgram()
@@ -548,11 +513,10 @@ void Material::Save(String* Data)
 void Material::Load(const String& Data)
 {
 	LoadBaseInfo(Data);
-	ProgramGPU->Shaders.resize(ShaderNames.size());
-	std::vector<String> SourceCodes = LoadShaderSourceCode(Data);
-	assert(ShaderNames.size() == SourceCodes.size());
 
-	CreateShadersFromSrcCode(SourceCodes);
+	InitShaderInfo();
+	std::vector<String> SourceCodes = LoadShaderSourceCode(Data);
+	CreateGPUShaders(SourceCodes);
 	CreateGPUProgram();
 	FindAttibInfos();
 	FindUniformInfos();

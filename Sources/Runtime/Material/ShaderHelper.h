@@ -23,6 +23,7 @@ public:
 	static void InsertIncludeCode(String* SourceCode);
 	static void GetIncludeFileName(String* SourceCode, std::vector<String>* ExternalShaders, std::vector<String>* InternalShaders);
 	static ShaderType GetShaderType(const String& ShaderName);
+	static void ExpandUniformProperty(String* SourceCode);
 private:
 	
 	

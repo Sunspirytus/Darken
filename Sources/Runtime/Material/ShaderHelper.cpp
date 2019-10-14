@@ -56,6 +56,11 @@ void ShaderHelper::InsertIncludeCode(String* SourceCode)
 	ShaderHelper::InsertIncludeCode(SourceCode);
 }
 
+void ShaderHelper::ExpandUniformProperty(String* SourceCode)
+{
+
+}
+
 void ShaderHelper::GetIncludeFileName(String* SourceCode, std::vector<String>* ExternalShaders, std::vector<String>* InternalShaders)
 {
 	const String Tag = "#include";

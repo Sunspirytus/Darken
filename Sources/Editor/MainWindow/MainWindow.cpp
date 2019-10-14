@@ -97,7 +97,7 @@ void MW_MainWindow::SaveMaterials()
 
 void MW_MainWindow::LoadMaterials()
 {
-	DKEngine::GetInstance().GetMaterialManager()->Load("../Assets/SimpleObjectMaterial00.dkMat");
+	DKEngine::GetInstance().GetMaterialManager()->LoadMaterial("../Assets/SimpleObjectMaterial00.dkMat");
 }
 
 

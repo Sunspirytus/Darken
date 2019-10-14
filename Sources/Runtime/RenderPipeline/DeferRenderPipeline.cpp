@@ -282,7 +282,7 @@ void ShadowDepth::RenderDirectLightDepth(int32 LightIndex, const std::vector<std
 		StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 		ShadowDepthMaterialInst = Modelptr->GetRenderMaterial();
 
-		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.bDirectLightID, 1);
+		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.LightTypeID, LightType::Direct);
 		ShadowDepthMaterialInst->SetUniform<Mat4f>(MaterialDataIDs.LightSpaceVPMatrixID, LCamera->GetVPMatrix());
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, ShadowDepthFrameBuffers[LightIndex]);
@@ -307,7 +307,7 @@ void ShadowDepth::RenderPointLightDepth(int32 LightIndex, const std::vector<std:
 			StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 			ShadowDepthMaterialInst = Modelptr->GetRenderMaterial();
 
-			ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.bDirectLightID, 0);
+			ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.LightTypeID, LightType::Point);
 			ShadowDepthMaterialInst->SetUniform<Mat4f>(MaterialDataIDs.LightSpaceVPMatrixID, LCamera->GetVPMatrix());
 			ShadowDepthMaterialInst->SetUniform<Vector4f>(MaterialDataIDs.LightCamera_ZBufferParamsID, Vector4f(LCamera->GetNearClipPlaneDis(), LCamera->GetFarClipPlaneDis(), LCamera->GetFOVinRadians(), LCamera->GetAspect()));
 		}
@@ -334,7 +334,7 @@ void ShadowDepth::RenderSpotLightDepth(int32 LightIndex, const std::vector<std::
 		StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 		ShadowDepthMaterialInst = Modelptr->GetRenderMaterial();
 
-		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.bDirectLightID, 0);
+		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.LightTypeID, LightType::Spot);
 		ShadowDepthMaterialInst->SetUniform<Mat4f>(MaterialDataIDs.LightSpaceVPMatrixID, LCamera->GetVPMatrix());
 		ShadowDepthMaterialInst->SetUniform<Vector4f>(MaterialDataIDs.LightCamera_ZBufferParamsID, Vector4f(LCamera->GetNearClipPlaneDis(), LCamera->GetFarClipPlaneDis(), LCamera->GetFOVinRadians(), LCamera->GetAspect()));
 	}
