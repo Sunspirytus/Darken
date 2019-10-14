@@ -103,6 +103,7 @@ struct UniformItem_WithinBlock
 
 struct UniformItem_Block
 {
+	String Name;
 	int32 Id;
 	uint32 DataSize_Byte;
 	void * DataPtr;

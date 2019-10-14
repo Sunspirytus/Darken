@@ -57,7 +57,7 @@ public:
 	int32 GetUniformBlockBindingPoint(const String & BlockName);
 	int32 CreateUniformBuffer(const String& BufferName, std::shared_ptr<UniformItem_Block> UniformBlockInfo);
 	void MarkBufferDirty(int32 BufferNameID);
-	void UpdateViewBuffer(Camera * camera); //View uniform buffer need update befer Render main view port
+	void UpdateViewBuffer(Camera * camera); //View uniform buffer need update before Render main view port
 	void UpdateModelBuffer(const Mat4f &ModelMatrix,
 							const Mat4f &Model_ITMatrix,
 							const Mat4f &Model_PreMatrix,
