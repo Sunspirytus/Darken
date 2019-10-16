@@ -23,27 +23,27 @@ int32 BufferManager::GetUniformBlockBindingPoint(const String & BlockName)
 	else return UNIFORM_BLOCK_BINGDING_POINT_COMMEN_BEGIN + (int32)UniformBufferNameID_InfoPtrMap.size();
 }
 
-int32 BufferManager::CreateUniformBuffer(const String& BufferName, std::shared_ptr<UniformItem_Block> UniformBlockInfo)
+int32 BufferManager::CreateUniformBuffer(std::shared_ptr<UniformItem_Block> UniformBlockInfo)
 {
-	if(BufferName == VIEW_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(VIEW_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
+	if(UniformBlockInfo->Name == VIEW_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(VIEW_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
 	{
 		return UniformBufferName_GPUIDMap.find(VIEW_UNIFORM_BLOCK_NAME)->second;
-	}else if(BufferName == LIGHT_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(LIGHT_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
+	}else if(UniformBlockInfo->Name == LIGHT_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(LIGHT_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
 	{
 		return UniformBufferName_GPUIDMap.find(LIGHT_UNIFORM_BLOCK_NAME)->second;
 	}
-	else if (BufferName == MODEL_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(MODEL_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
+	else if (UniformBlockInfo->Name == MODEL_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(MODEL_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
 	{
 		return UniformBufferName_GPUIDMap.find(MODEL_UNIFORM_BLOCK_NAME)->second;
 	}
-	else if (BufferName == SHADOWMAPPING_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
+	else if (UniformBlockInfo->Name == SHADOWMAPPING_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
 	{
 		return UniformBufferName_GPUIDMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME)->second;
 	}
 
-	if(UniformBufferName_GPUIDMap.find(BufferName) != UniformBufferName_GPUIDMap.end())
+	if(UniformBufferName_GPUIDMap.find(UniformBlockInfo->Name) != UniformBufferName_GPUIDMap.end())
 	{
-		std::cout << "Warning: Several shader all have Uniform Buffer: " << BufferName << ". It will influence efficiency." << std::endl;
+		std::cout << "Warning: Several shader all have Uniform Buffer: " << UniformBlockInfo->Name << ". It will influence efficiency." << std::endl;
 	}
 	   
 	uint32 UBO;
@@ -52,9 +52,9 @@ int32 BufferManager::CreateUniformBuffer(const String& BufferName, std::shared_p
 	glBufferData(GL_UNIFORM_BUFFER, UniformBlockInfo->DataSize_Byte, NULL, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	UniformBufferName_GPUIDMap.insert(std::pair<String, int32>(BufferName, UBO));
+	UniformBufferName_GPUIDMap.insert(std::pair<String, int32>(UniformBlockInfo->Name, UBO));
 	std::hash<String> hs;
-	int32 BufferNameID = (int32)hs(BufferName);
+	int32 BufferNameID = (int32)hs(UniformBlockInfo->Name);
 	UniformBufferNameID_InfoPtrMap.insert(std::pair<int32, std::shared_ptr<UniformItem_Block>>(BufferNameID, UniformBlockInfo));
 	UniformBufferNameID_DirtyMap.insert(std::pair<int32, bool>(BufferNameID, false));
 
@@ -100,7 +100,7 @@ void BufferManager::UpdateModelBuffer(const Mat4f &ModelMatrix,
 	const Mat4f &Model_ITPreMatrix)
 {
 	Address BlockDataPtr = (Address)UniformBufferNameID_InfoPtrMap.find(MODEL_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
-	std::map<uint32, UniformItem_WithinBlock>::iterator it = UniformBufferNameID_InfoPtrMap.find(MODEL_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
+	std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator it = UniformBufferNameID_InfoPtrMap.find(MODEL_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
 
 	memcpy((void*)(BlockDataPtr + it->first), &ModelMatrix, sizeof(Mat4f));				it++;
 	memcpy((void*)(BlockDataPtr + it->first), &Model_ITMatrix, sizeof(Mat4f));			it++;
@@ -125,7 +125,7 @@ void BufferManager::UpdateViewBuffer(Camera * camera)
 	Vector2f ScreenSize = Vector2f(camera->GetViewPortSize());
 
 	Address BlockDataPtr = (Address) UniformBufferNameID_InfoPtrMap.find(VIEW_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
-	std::map<uint32, UniformItem_WithinBlock>::iterator it = UniformBufferNameID_InfoPtrMap.find(VIEW_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
+	std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator it = UniformBufferNameID_InfoPtrMap.find(VIEW_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
 
 	memcpy((void*)(BlockDataPtr + it->first), &ViewMatrix, sizeof(Mat4f));				it++;
 	memcpy((void*)(BlockDataPtr + it->first), &ProjectMatrix, sizeof(Mat4f));			it++;
@@ -144,7 +144,7 @@ void BufferManager::UpdateViewBuffer(Camera * camera)
 void BufferManager::UpdateShadowBuffer(ShadowData &shadowBuffer)
 {
 	Address BlockDataPtr = (Address)UniformBufferNameID_InfoPtrMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
-	std::map<uint32, UniformItem_WithinBlock>::iterator it = UniformBufferNameID_InfoPtrMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
+	std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator it = UniformBufferNameID_InfoPtrMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
 
 	memcpy((void*)(BlockDataPtr + it->first), &shadowBuffer.LightSpaceVPMatrix, sizeof(Mat4f));					it++;
 	memcpy((void*)(BlockDataPtr + it->first), &shadowBuffer.ShadowBufferSize, sizeof(Vector4f));					it++;
@@ -163,7 +163,7 @@ void BufferManager::UpdateShadowBuffer(ShadowData &shadowBuffer)
 void BufferManager::UpdateLightBuffer(LightData &lightBuffer)
 {
 	Address BlockDataPtr = (Address)UniformBufferNameID_InfoPtrMap.find(LIGHT_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
-	std::map<uint32, UniformItem_WithinBlock>::iterator it = UniformBufferNameID_InfoPtrMap.find(LIGHT_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
+	std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator it = UniformBufferNameID_InfoPtrMap.find(LIGHT_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
 
 	memcpy((void*)(BlockDataPtr + it->first), &lightBuffer.LightPosition, sizeof(Vector3f));				it++;
 	memcpy((void*)(BlockDataPtr + it->first), &lightBuffer.LightInvRadius, sizeof(float32));					it++;

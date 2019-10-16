@@ -41,9 +41,9 @@ MaterialInstance::~MaterialInstance()
 		delete it->second->IDPtr;
 	}
 	
-	for (std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator ItBlock = ParentMaterial->ProgramGPU->Uniforms_Block.begin(); ItBlock != ParentMaterial->ProgramGPU->Uniforms_Block.end(); ItBlock++)
+	for (std::set<std::shared_ptr<UniformItem_Block>>::iterator ItBlock = ParentMaterial->ProgramGPU->Uniforms_Block.begin(); ItBlock != ParentMaterial->ProgramGPU->Uniforms_Block.end(); ItBlock++)
 	{
-		free(ItBlock->second->DataPtr);
+		free((*ItBlock)->DataPtr);
 	}
 }
 
@@ -52,58 +52,61 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 	ParentMaterial = parentMaterial;
 
 	void* BlockData;
-	for(std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator ItBlock = ParentMaterial->ProgramGPU->Uniforms_Block.begin(); ItBlock != ParentMaterial->ProgramGPU->Uniforms_Block.end(); ItBlock++)
+	for(std::set<std::shared_ptr<UniformItem_Block>>::iterator ItBlock = ParentMaterial->ProgramGPU->Uniforms_Block.begin(); ItBlock != ParentMaterial->ProgramGPU->Uniforms_Block.end(); ItBlock++)
 	{
+		std::shared_ptr<UniformItem_Block> Block = *ItBlock;
 		std::hash<String> hs;
-		BlockData = malloc(ItBlock->second->DataSize_Byte);
-		ItBlock->second->DataPtr = BlockData;
-		int32 BlockID = (int32) hs(ItBlock->first);
+		BlockData = malloc(Block->DataSize_Byte);
+		Block->DataPtr = BlockData;
+		int32 BlockID = (int32) hs(Block->Name);
 		std::map<int32, std::shared_ptr<BlockUniformData>> UniformID_PtrMap;
-		for(std::map<uint32, UniformItem_WithinBlock>::iterator ItUniform = ItBlock->second->Uniforms.begin(); ItUniform != ItBlock->second->Uniforms.end(); ItUniform++)
+		for(std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator ItUniform = Block->Uniforms.begin(); ItUniform != Block->Uniforms.end(); ItUniform++)
 		{
-			int32 UniformID = (int32) hs(ItUniform->second.Name);
+			int32 UniformID = (int32) hs(ItUniform->second->Name);
 			std::shared_ptr<BlockUniformData> UniformPtr = std::shared_ptr<BlockUniformData>(new BlockUniformData());
-			UniformPtr->Data = (void*)((Address)BlockData + ItUniform->second.Offset_Byte);
-			UniformPtr->BlockName = ItBlock->first;
-			UniformPtr->UniformName = ItUniform->second.Name;
+			UniformPtr->Data = (void*)((Address)BlockData + ItUniform->second->Offset_Byte);
+			UniformPtr->BlockName = Block->Name;
+			UniformPtr->UniformName = ItUniform->second->Name;
 			UniformID_PtrMap.insert(std::pair<int32, std::shared_ptr<BlockUniformData>>(UniformID, UniformPtr));
 		}
 		BlockID_UniformID_DataPtrMap.insert(std::pair<int32, std::map<int32, std::shared_ptr<BlockUniformData>>>(BlockID, UniformID_PtrMap));
 	}
 
-	for (std::unordered_map<String, UniformItem_Basic>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Basic.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Basic.end(); it++)
+	for (std::set<std::shared_ptr<UniformItem_Basic>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Basic.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Basic.end(); it++)
 	{
+		std::shared_ptr<UniformItem_Basic> Uniform = *it;
 		std::hash<String> hs;
-		int32 ID = (int32) hs(it->first);
+		int32 ID = (int32) hs(Uniform->Name);
 		std::shared_ptr<BasicUniformData> UniformData = std::shared_ptr<BasicUniformData>(new BasicUniformData());
-		switch (it->second.DataType)
+		switch (Uniform->DataType)
 		{
-		case GLSL_INT: UniformData->Data = malloc(sizeof(int32) * it->second.Size); break;
-		case GLSL_FLOAT: UniformData->Data = malloc(sizeof(float32) * it->second.Size); break;
-		case GLSL_VEC2: UniformData->Data = malloc(sizeof(Vector2f) * it->second.Size);	break;
-		case GLSL_VEC3:	UniformData->Data = malloc(sizeof(Vector3f) * it->second.Size);	break;
-		case GLSL_VEC4:	UniformData->Data = malloc(sizeof(Vector4f) * it->second.Size);	break;
-		case GLSL_IVEC2: UniformData->Data = malloc(sizeof(Vector2i) * it->second.Size); break;
-		case GLSL_IVEC3: UniformData->Data = malloc(sizeof(Vector3i) * it->second.Size); break;
-		case GLSL_IVEC4: UniformData->Data = malloc(sizeof(Vector4i) * it->second.Size); break;
-		case GLSL_MAT3:	UniformData->Data = malloc(sizeof(Mat3f) * it->second.Size);	break;
-		case GLSL_MAT4: UniformData->Data = malloc(sizeof(Mat4f) * it->second.Size); break;
+		case GLSL_INT: UniformData->Data = malloc(sizeof(int32) * Uniform->Size); break;
+		case GLSL_FLOAT: UniformData->Data = malloc(sizeof(float32) * Uniform->Size); break;
+		case GLSL_VEC2: UniformData->Data = malloc(sizeof(Vector2f) * Uniform->Size);	break;
+		case GLSL_VEC3:	UniformData->Data = malloc(sizeof(Vector3f) * Uniform->Size);	break;
+		case GLSL_VEC4:	UniformData->Data = malloc(sizeof(Vector4f) * Uniform->Size);	break;
+		case GLSL_IVEC2: UniformData->Data = malloc(sizeof(Vector2i) * Uniform->Size); break;
+		case GLSL_IVEC3: UniformData->Data = malloc(sizeof(Vector3i) * Uniform->Size); break;
+		case GLSL_IVEC4: UniformData->Data = malloc(sizeof(Vector4i) * Uniform->Size); break;
+		case GLSL_MAT3:	UniformData->Data = malloc(sizeof(Mat3f) * Uniform->Size);	break;
+		case GLSL_MAT4: UniformData->Data = malloc(sizeof(Mat4f) * Uniform->Size); break;
 		default:
 			UniformData->Data = nullptr;
 			break;
 		}
-		UniformData->Name = it->first;
-		it->second.DataPtr = UniformData->Data;
+		UniformData->Name = Uniform->Name;
+		Uniform->DataPtr = UniformData->Data;
 		BasicUniformID_DataPtrMap.insert(std::pair<int32, std::shared_ptr<BasicUniformData>>(ID, UniformData));
 	}
-	for (std::unordered_map<String, UniformItem_Texture>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Texture.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Texture.end(); it++)
+	for (std::set<std::shared_ptr<UniformItem_Texture>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Texture.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Texture.end(); it++)
 	{
+		std::shared_ptr<UniformItem_Texture> TexUniform = *it;
 		std::hash<String> hs;
-		int32 ID = (int32)hs(it->first);
+		int32 ID = (int32)hs(TexUniform->Name);
 		std::shared_ptr<TextureUniformData> TextureData = std::shared_ptr<TextureUniformData>(new TextureUniformData());
-		TextureData->Name = it->first;
+		TextureData->Name = TexUniform->Name;
 		TextureData->IDPtr = new uint32;
-		it->second.IDPtr = TextureData->IDPtr;
+		TexUniform->IDPtr = TextureData->IDPtr;
 		TextureData->Tex = std::shared_ptr<Texture>(new Texture());
 		TextureUniformID_DataPtrMap.insert(std::pair<int32, std::shared_ptr<TextureUniformData>>(ID, TextureData));
 	}
@@ -181,34 +184,37 @@ void MaterialInstance::WriteInstanceData(String* Data, DataGroup type)
 	{
 	case MaterialInstance::UNIFORM:
 	{
-		for (std::unordered_map<String, UniformItem_Basic>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Basic.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Basic.end(); it++)
+		for (std::set<std::shared_ptr<UniformItem_Basic>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Basic.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Basic.end(); it++)
 		{
+			std::shared_ptr<UniformItem_Basic> Uniform = *it;
 			PropertyBase::AddTab(Data);
-			Data->append(PropertyToString(it->first, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[it->second.DataType], it->second.DataPtr))));
+			Data->append(PropertyToString(Uniform->Name, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[Uniform->DataType], Uniform->DataPtr))));
 		}
 		break;
 	}
 	case MaterialInstance::TEXTURE:
-		for (std::unordered_map<String, UniformItem_Texture>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Texture.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Texture.end(); it++)
+		for (std::set<std::shared_ptr<UniformItem_Texture>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Texture.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Texture.end(); it++)
 		{
+			std::shared_ptr<UniformItem_Texture> TexUniform = *it;
 			PropertyBase::AddTab(Data);
 			std::hash<String> hs;
-			int32 TextureID = hs(it->first);
+			int32 TextureID = hs(TexUniform->Name);
 			std::shared_ptr<Texture> Tex = TextureUniformID_DataPtrMap.find(TextureID)->second->Tex;
-			Data->append(PropertyToString(it->first, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[it->second.DataType], &Tex->GetPath()))));
+			Data->append(PropertyToString(TexUniform->Name, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[TexUniform->DataType], &Tex->GetPath()))));
 ;		}
 		break;
 	case MaterialInstance::UNIFORMBUFFER:
-		for (std::unordered_map<String, std::shared_ptr<UniformItem_Block>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Block.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Block.end(); it++)
+		for (std::set<std::shared_ptr<UniformItem_Block>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Block.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Block.end(); it++)
 		{
-			String BlockName = it->first;
+			std::shared_ptr<UniformItem_Block> Block = *it;
+			String BlockName = Block->Name;
 			std::map<uint32, UniformItem_WithinBlock> Uniforms;
-			for(std::map<uint32, UniformItem_WithinBlock>::iterator UniformsIt = it->second->Uniforms.begin(); UniformsIt != it->second->Uniforms.end(); UniformsIt++)
+			for(std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator UniformsIt = Block->Uniforms.begin(); UniformsIt != Block->Uniforms.end(); UniformsIt++)
 			{
-				String UniformName = UniformsIt->second.Name;
+				String UniformName = UniformsIt->second->Name;
 				PropertyBase::AddTab(Data);
 				String PropertyName = BlockName + "," + UniformName;
-				Data->append(PropertyToString(PropertyName, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[UniformsIt->second.DataType], (void*) ((Address)it->second->DataPtr + UniformsIt->second.Offset_Byte)))));
+				Data->append(PropertyToString(PropertyName, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[UniformsIt->second->DataType], (void*) ((Address)Block->DataPtr + UniformsIt->second->Offset_Byte)))));
 			}
 		}
 		break;

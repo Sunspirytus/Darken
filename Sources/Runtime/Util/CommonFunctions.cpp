@@ -4,11 +4,11 @@
 std::vector<String> split(const String& str, const String& delim) {
 	std::vector<String> res;
 	if ("" == str) return res;
-	char* strs = new char[str.length() + 1];  
-	strcpy_s(strs, strlen(strs), str.c_str());
+	int8* strs = new int8[str.length() + 1];
+	strcpy_s(strs, str.length() + 1, str.c_str());
 
-	char* d = new char[delim.length() + 1];
-	strcpy_s(d, strlen(d), delim.c_str());
+	int8* d = new int8[delim.length() + 1];
+	strcpy_s(d, delim.length() + 1, delim.c_str());
 
 	char* p = strtok_s(strs, d, &strs);
 	while (p) {
@@ -16,6 +16,10 @@ std::vector<String> split(const String& str, const String& delim) {
 		res.push_back(s);
 		p = strtok_s(nullptr, d, &strs);
 	}
+
+	strs = nullptr;
+	delete [] d;
+	d = nullptr;
 
 	return res;
 }

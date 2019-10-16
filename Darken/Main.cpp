@@ -20,9 +20,9 @@ inline void EnableMemLeakCheck()
 
 int32 main(int argc, char* argv[])
 {
-	EnableMemLeakCheck();
-	//_CrtSetBreakAlloc(260703);
-
+	//EnableMemLeakCheck();
+	//_CrtSetBreakAlloc(335417);
+	
 	dkApplication& App = dkApplication::GetInstance();
 	App.exec();
 	return 0;

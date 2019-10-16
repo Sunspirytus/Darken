@@ -10,6 +10,7 @@
 #include <typeinfo>
 #include <memory>
 #include <map>
+#include <set>
 
 
 static String DefaultVertShaderName = "DefaultVertShader.vsh";
@@ -88,6 +89,7 @@ static std::unordered_map<UniformType, VariableType> GPU_CPU_TypeMap =
 
 struct AttribItem
 {
+	String Name;
 	int32 Location;
 	AttribItem() {}
 };
@@ -108,11 +110,12 @@ struct UniformItem_Block
 	uint32 DataSize_Byte;
 	void * DataPtr;
 	uint32 Index;
-	std::map<uint32, UniformItem_WithinBlock> Uniforms;
+	std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>> Uniforms;
 };
 
 struct UniformItem_Basic
 {
+	String Name;
 	int32 Location;
 	UniformType DataType;
 	uint32 Size;
@@ -122,6 +125,7 @@ struct UniformItem_Basic
 
 struct UniformItem_Texture
 {
+	String Name;
 	int32 Location;
 	uint32* IDPtr;
 	UniformType DataType;
@@ -140,11 +144,11 @@ public:
 struct Program
 {
 	uint32 Id;
-	std::vector<Shader> Shaders;
-	std::unordered_map<String, AttribItem> Attribs;
-	std::unordered_map<String, std::shared_ptr<UniformItem_Block>> Uniforms_Block;
-	std::unordered_map<String, UniformItem_Basic> Uniforms_Basic;
-	std::unordered_map<String, UniformItem_Texture> Uniforms_Texture;
+	std::set<std::shared_ptr<Shader>> Shaders;
+	std::set<std::shared_ptr<AttribItem>> Attribs;
+	std::set<std::shared_ptr<UniformItem_Block>> Uniforms_Block;
+	std::set<std::shared_ptr<UniformItem_Basic>> Uniforms_Basic;
+	std::set<std::shared_ptr<UniformItem_Texture>> Uniforms_Texture;
 };
 
 class MaterialBase : public PropertyBase
@@ -183,18 +187,18 @@ public:
 	virtual void Load(const String& Data);
 
 private:
-	void LoadAndCreateShaders(std::vector<String>& shaderNames);
+	//void LoadAndCreateShaders(std::vector<String>& shaderNames);
 
 	void SaveShaderSourceCode(String* OutData, ShaderType Type, const String& SourceCode);
 	void LoadBaseInfo(const String& SourceCode);
-	std::vector<String> LoadShaderSourceCode(const String& SourceCode);
+	std::map<ShaderType, String> LoadShaderSourceCode(const String& SourceCode);
 
 
 	void ReCreate();
 	
 	void InitShaderInfo();
-	std::vector<String> CreateShadersSourceCode();
-	void CreateGPUShaders(const std::vector<String>& SrcCodes);
+	std::map<ShaderType, String> CreateShadersSourceCode();
+	void CreateGPUShaders(std::map<ShaderType, String>& SrcCodes);
 	uint32 CreateShaderGPUObjFromSrcCode(const String& Code, ShaderType type);
 	void CreateGPUProgram();
 	void FindAttibInfos();
