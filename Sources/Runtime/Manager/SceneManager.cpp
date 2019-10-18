@@ -15,7 +15,7 @@ SceneManager::~SceneManager()
 
 void SceneManager::Start()
 {
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
+	for (std::multimap<int32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
 		ObjectIterator->second->Start();
 	}
@@ -23,24 +23,24 @@ void SceneManager::Start()
 
 void SceneManager::InternalUpdate()
 {
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
+	for (std::multimap<int32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
 		ObjectIterator->second->InternalUpdate();;
 	}
 }
 void SceneManager::Update()
 {
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
+	for (std::multimap<int32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
 		ObjectIterator->second->Update();
 	}
 }
 
-void SceneManager::Render(std::shared_ptr<Camera> camera, uint32 typeFlags)
+void SceneManager::Render(std::shared_ptr<Camera> camera, int32 typeFlags)
 {
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
+	for (std::multimap<int32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
-		if(typeFlags != Default && !(ObjectIterator->first & typeFlags))
+		if(typeFlags != (int32)ObjectType::Default && !(ObjectIterator->first & typeFlags))
 		{
 			continue;
 		}
@@ -58,12 +58,12 @@ void SceneManager::Render(std::shared_ptr<Camera> camera, uint32 typeFlags)
 
 void SceneManager::AddObj(ObjectType type, std::shared_ptr<Object> obj)
 {
-	SceneObjects.insert(std::pair<ObjectType, std::shared_ptr<Object>>(type, obj));
+	SceneObjects.insert(std::pair<uint32, std::shared_ptr<Object>>((uint32)type, obj));
 }
 
 void SceneManager::RemoveObj(std::shared_ptr<Object> obj)
 {
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator it = SceneObjects.begin(); it != SceneObjects.end(); it++)
+	for (std::multimap<int32, std::shared_ptr<Object>>::iterator it = SceneObjects.begin(); it != SceneObjects.end(); it++)
 	{
 		if (it->second == obj)
 		{
@@ -101,7 +101,7 @@ std::vector<std::shared_ptr<Light>> SceneManager::GetAllLights()
 std::vector<std::shared_ptr<Object>> SceneManager::GetObjects(uint32 typeFlag)
 {
 	std::vector<std::shared_ptr<Object>> Objs;
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator it = SceneObjects.begin(); it != SceneObjects.end(); it++)
+	for (std::multimap<int32, std::shared_ptr<Object>>::iterator it = SceneObjects.begin(); it != SceneObjects.end(); it++)
 	{
 		if (it->first & typeFlag)
 		{
@@ -134,21 +134,21 @@ ModeState::ViewMode SceneManager::GetCurrentViewMode()
 
 void SceneManager::UpdatePreFrameData()
 {
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
+	for (std::multimap<int32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
-		if (ObjectIterator->first != ObjectType::StaticMeshActor && ObjectIterator->first != ObjectType::DynamicMeshActor) continue;
+		if (ObjectIterator->first != (int32)ObjectType::StaticMeshActor && ObjectIterator->first != (uint32)ObjectType::DynamicMeshActor) continue;
 		StaticMesh* M = dynamic_cast<StaticMesh*>(ObjectIterator->second.get());
 		M->UpdatePreFrameModelMatrix();
 	}
-	GetCamera(CameraIndex::MainCamera)->SetViewMatrix_PreFrame(GetCamera(CameraIndex::MainCamera)->GetViewMatrix());
-	GetCamera(CameraIndex::MainCamera)->SetProjectMatrix_PreFrame(GetCamera(CameraIndex::MainCamera)->GetProjectMatrix());
+	GetCamera((uint32)CameraIndex::MainCamera)->SetViewMatrix_PreFrame(GetCamera((uint32)CameraIndex::MainCamera)->GetViewMatrix());
+	GetCamera((uint32)CameraIndex::MainCamera)->SetProjectMatrix_PreFrame(GetCamera((uint32)CameraIndex::MainCamera)->GetProjectMatrix());
 }
 
 void SceneManager::PrepareShadowDepthMaterial()
 {
-	for(std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
+	for(std::multimap<int32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
-		if (ObjectIterator->first != ObjectType::StaticMeshActor && ObjectIterator->first != ObjectType::DynamicMeshActor) continue;
+		if (ObjectIterator->first != (int32)ObjectType::StaticMeshActor && ObjectIterator->first != (uint32)ObjectType::DynamicMeshActor) continue;
 		StaticMesh* M = dynamic_cast<StaticMesh*>(ObjectIterator->second.get());
 		M->BindShadowDepthMaterial();
 	}
@@ -156,9 +156,9 @@ void SceneManager::PrepareShadowDepthMaterial()
 
 void SceneManager::PrepareLightingMaterial()
 {
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
+	for (std::multimap<int32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
-		if (ObjectIterator->first != ObjectType::StaticMeshActor && ObjectIterator->first != ObjectType::DynamicMeshActor) continue;
+		if (ObjectIterator->first != (int32)ObjectType::StaticMeshActor && ObjectIterator->first != (uint32)ObjectType::DynamicMeshActor) continue;
 		StaticMesh* M = dynamic_cast<StaticMesh*>(ObjectIterator->second.get());
 		M->BindLightingMaterial();
 	}

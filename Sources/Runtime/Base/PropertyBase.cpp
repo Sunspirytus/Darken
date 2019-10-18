@@ -75,83 +75,83 @@ String PropertyBase::PropertyToString(const String& name, std::shared_ptr<Proper
 	String DataString;
 	switch (Type)
 	{
-	case STRING:
+	case VariableType::STRING:
 		DataString = *(String*)Data;
 		break;
-	case BOOL_1:
+	case VariableType::BOOL_1:
 	{
 		Bool* D = (Bool*)Data;
 		DataString = *D ? TO_String(true) : TO_String(false);
 		break;
 	}
-	case FLOAT_16:
+	case VariableType::FLOAT_16:
 	{
 		float16* D = (float16*)Data;
 		float32 D32 = (float32)* D;
 		DataString = DataToString(D32);
 		break;
 	}
-	case FLOAT_32:
+	case VariableType::FLOAT_32:
 	{
 		float32* D = (float32*)Data;
 		DataString = DataToString(*D);
 		break;
 	}
-	case FLOAT_64:
+	case VariableType::FLOAT_64:
 	{
 		float64* D = (float64*)Data;
 		DataString = DataToString(*D);
 		break;
 	}
-	case INT_8:
+	case VariableType::INT_8:
 	{
 		int8* D = (int8*)Data;
 		DataString = DataToString(*D);
 		break;
 	}
-	case INT_16:
+	case VariableType::INT_16:
 	{
 		int16* D = (int16*)Data;
 		DataString = DataToString(*D);
 		break;
 	}
-	case ENUM:
+	case VariableType::ENUM:
 	{
 		int32* D = (int32*)Data;
 		DataString = property->DatasInString[*D];
 		break;
 	}
-	case INT_32:
+	case VariableType::INT_32:
 	{
 		int32* D = (int32*)Data;
 		DataString = DataToString(*D);
 		break;
 	}
-	case INT_64:
+	case VariableType::INT_64:
 	{
 		int64* D = (int64*)Data;
 		DataString = DataToString(*D);
 		break;
 	}
-	case UINT_8:
+	case VariableType::UINT_8:
 	{
 		uint8* D = (uint8*)Data;
 		DataString = DataToString(*D);
 		break;
 	}
-	case UINT_16:
+	case VariableType::UINT_16:
 	{
 		uint16* D = (uint16*)Data;
 		DataString = DataToString(*D);
 		break;
 	}
-	case UINT_32:
+	case VariableType::UINT_32:
 	{
 		uint32* D = (uint32*)Data;
 		DataString = DataToString(*D);
 		break;
 	}
-	case UINT_64:
+	case VariableType::UINT_64:
 	{
 		uint64* D = (uint64*)Data;
 		char str[256];
@@ -159,61 +159,61 @@ String PropertyBase::PropertyToString(const String& name, std::shared_ptr<Proper
 		DataString = String(str);
 		break;
 	}
-	case VECTOR2_F:
+	case VariableType::VECTOR2_F:
 	{
 		Vector2f* D = (Vector2f*)Data;
 		DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + ")";
 		break;
 	}
-	case VECTOR3_F:
+	case VariableType::VECTOR3_F:
 	{
 		Vector3f* D = (Vector3f*)Data;
 		DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + ")";
 		break;
 	}
-	case VECTOR4_F:
+	case VariableType::VECTOR4_F:
 	{
 		Vector4f* D = (Vector4f*)Data;
 		DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + "," + DataToString(D->w) + ")";
 		break;
 	}
-	case VECTOR2_D:
+	case VariableType::VECTOR2_D:
 	{
 		Vector2d* D = (Vector2d*)Data;
 		DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + ")";
 		break;
 	}
-	case VECTOR3_D:
+	case VariableType::VECTOR3_D:
 	{
 		Vector3d* D = (Vector3d*)Data;
 		DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + ")";
 		break;
 	}
-	case VECTOR4_D:
+	case VariableType::VECTOR4_D:
 	{
 		Vector4d* D = (Vector4d*)Data;
 		DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + "," + DataToString(D->w) + ")";
 		break;
 	}
-	case VECTOR2_I:
+	case VariableType::VECTOR2_I:
 	{
 		Vector2i* D = (Vector2i*)Data;
 		DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + ")";
 		break;
 	}
-	case VECTOR3_I:
+	case VariableType::VECTOR3_I:
 	{
 		Vector3i* D = (Vector3i*)Data;
 		DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + ")";
 		break;
 	}
-	case VECTOR4_I:
+	case VariableType::VECTOR4_I:
 	{
 		Vector4i* D = (Vector4i*)Data;
 		DataString = "(" + DataToString(D->x) + "," + DataToString(D->y) + "," + DataToString(D->z) + "," + DataToString(D->w) + ")";
 		break;
 	}
-	case MAT2_F:
+	case VariableType::MAT2_F:
 	{
 		Mat2f* D = (Mat2f*)Data;
 		DataString.append("\n");
@@ -235,7 +235,7 @@ String PropertyBase::PropertyToString(const String& name, std::shared_ptr<Proper
 		}
 		break;
 	}
-	case MAT3_F:
+	case VariableType::MAT3_F:
 	{
 		Mat3f* D = (Mat3f*)Data;
 		DataString.append("\n");
@@ -257,7 +257,7 @@ String PropertyBase::PropertyToString(const String& name, std::shared_ptr<Proper
 		}
 		break;
 	}
-	case MAT4_F:
+	case VariableType::MAT4_F:
 	{
 		Mat4f* D = (Mat4f*)Data;
 		DataString.append("\n");
@@ -279,7 +279,7 @@ String PropertyBase::PropertyToString(const String& name, std::shared_ptr<Proper
 		}
 		break;
 	}
-	case MAT2_D:
+	case VariableType::MAT2_D:
 	{
 		Mat2d* D = (Mat2d*)Data;
 		DataString.append("\n");
@@ -301,7 +301,7 @@ String PropertyBase::PropertyToString(const String& name, std::shared_ptr<Proper
 		}
 		break;
 	}
-	case MAT3_D:
+	case VariableType::MAT3_D:
 	{
 		Mat3d* D = (Mat3d*)Data;
 		DataString.append("\n");
@@ -323,7 +323,7 @@ String PropertyBase::PropertyToString(const String& name, std::shared_ptr<Proper
 		}
 		break;
 	}
-	case MAT4_D:
+	case VariableType::MAT4_D:
 	{
 		Mat4d* D = (Mat4d*)Data;
 		DataString.append("\n");
@@ -360,7 +360,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 	String DataString;
 	switch (SourceType)
 	{
-	case STRING:
+	case VariableType::STRING:
 	{
 		std::vector<String>* Data = (std::vector<String>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -373,7 +373,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break; 
 	}
-	case BOOL_1:
+	case VariableType::BOOL_1:
 	{
 		std::vector<Bool>* Data = (std::vector<Bool>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -387,7 +387,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break; 
 	}
-	case FLOAT_16:
+	case VariableType::FLOAT_16:
 	{
 		std::vector<float16>* Data = (std::vector<float16>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -400,7 +400,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case FLOAT_32:
+	case VariableType::FLOAT_32:
 	{
 		std::vector<float32>* Data = (std::vector<float32>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -413,7 +413,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case FLOAT_64:
+	case VariableType::FLOAT_64:
 	{
 		std::vector<float64>* Data = (std::vector<float64>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -426,7 +426,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case INT_8:
+	case VariableType::INT_8:
 	{
 		std::vector<int8>* Data = (std::vector<int8>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -439,7 +439,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case INT_16:
+	case VariableType::INT_16:
 	{
 		std::vector<int16>* Data = (std::vector<int16>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -452,7 +452,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case ENUM:
+	case VariableType::ENUM:
 	{
 		std::vector<int32>* Data = (std::vector<int32>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -466,7 +466,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case INT_32:
+	case VariableType::INT_32:
 	{
 		std::vector<int32>* Data = (std::vector<int32>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -479,7 +479,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case INT_64:
+	case VariableType::INT_64:
 	{
 		std::vector<int64>* Data = (std::vector<int64>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -492,7 +492,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case UINT_8:
+	case VariableType::UINT_8:
 	{
 		std::vector<uint8>* Data = (std::vector<uint8>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -505,7 +505,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case UINT_16:
+	case VariableType::UINT_16:
 	{
 		std::vector<uint16>* Data = (std::vector<uint16>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -518,7 +518,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case UINT_32:
+	case VariableType::UINT_32:
 	{
 		std::vector<uint32>* Data = (std::vector<uint32>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -531,7 +531,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case UINT_64:
+	case VariableType::UINT_64:
 	{
 		std::vector<uint64>* Data = (std::vector<uint64>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -544,7 +544,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case VECTOR2_F:
+	case VariableType::VECTOR2_F:
 	{
 		std::vector<Vector2f>* Data = (std::vector<Vector2f>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -558,7 +558,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case VECTOR3_F:
+	case VariableType::VECTOR3_F:
 	{
 		std::vector<Vector3f>* Data = (std::vector<Vector3f>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -572,7 +572,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case VECTOR4_F:
+	case VariableType::VECTOR4_F:
 	{
 		std::vector<Vector4f>* Data = (std::vector<Vector4f>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -586,7 +586,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case VECTOR2_D:
+	case VariableType::VECTOR2_D:
 	{
 		std::vector<Vector2d>* Data = (std::vector<Vector2d>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -600,7 +600,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case VECTOR3_D:
+	case VariableType::VECTOR3_D:
 	{
 		std::vector<Vector3d>* Data = (std::vector<Vector3d>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -614,7 +614,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case VECTOR4_D:
+	case VariableType::VECTOR4_D:
 	{
 		std::vector<Vector4d>* Data = (std::vector<Vector4d>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -628,7 +628,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case VECTOR2_I:
+	case VariableType::VECTOR2_I:
 	{
 		std::vector<Vector2i>* Data = (std::vector<Vector2i>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -642,7 +642,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case VECTOR3_I:
+	case VariableType::VECTOR3_I:
 	{
 		std::vector<Vector3i>* Data = (std::vector<Vector3i>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -656,7 +656,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case VECTOR4_I:
+	case VariableType::VECTOR4_I:
 	{
 		std::vector<Vector4i>* Data = (std::vector<Vector4i>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")");
@@ -670,7 +670,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case MAT2_F:
+	case VariableType::MAT2_F:
 	{
 		std::vector<Mat2f>* Data = (std::vector<Mat2f>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")\n");
@@ -699,7 +699,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case MAT3_F:
+	case VariableType::MAT3_F:
 	{
 		std::vector<Mat3f>* Data = (std::vector<Mat3f>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")\n");
@@ -728,7 +728,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case MAT4_F:
+	case VariableType::MAT4_F:
 	{
 		std::vector<Mat4f>* Data = (std::vector<Mat4f>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")\n");
@@ -757,7 +757,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case MAT2_D:
+	case VariableType::MAT2_D:
 	{
 		std::vector<Mat2d>* Data = (std::vector<Mat2d>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")\n");
@@ -786,7 +786,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case MAT3_D:
+	case VariableType::MAT3_D:
 	{
 		std::vector<Mat3d>* Data = (std::vector<Mat3d>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")\n");
@@ -815,7 +815,7 @@ String PropertyBase::PropertyArrayToString(const String& name, std::shared_ptr<P
 		}
 		break;
 	}
-	case MAT4_D:
+	case VariableType::MAT4_D:
 	{
 		std::vector<Mat4d>* Data = (std::vector<Mat4d>*)SourceData;
 		DataString.append("(" + DataToString(Data->size()) + ")\n");
@@ -858,47 +858,47 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 
 	switch (Type)
 	{
-	case STRING:
+	case VariableType::STRING:
 		*(String*)Data = StrData;
 		break;
-	case BOOL_1:
+	case VariableType::BOOL_1:
 	{
 		Bool D = StrData == TO_String(true)? true : false;
 		*(Bool*)Data = D;
 		break;
 	}
-	case FLOAT_16:
+	case VariableType::FLOAT_16:
 	{
 		float32 D32 = StringToData<float32>(StrData);
 		float16 D = (float16)D32;
 		*(float16*)Data = D;
 		break;
 	}
-	case FLOAT_32:
+	case VariableType::FLOAT_32:
 	{
 		float32 D = StringToData<float32>(StrData);
 		*(float32*)Data = D;
 		break;
 	}
-	case FLOAT_64:
+	case VariableType::FLOAT_64:
 	{
 		float64 D = StringToData<float64>(StrData);
 		*(float64*)Data = D;
 		break;
 	}
-	case INT_8:
+	case VariableType::INT_8:
 	{
 		int8 D = StringToData<int8>(StrData);
 		*(int8*)Data = D;
 		break;
 	}
-	case INT_16:
+	case VariableType::INT_16:
 	{
 		int16 D = StringToData<int16>(StrData);
 		*(int16*)Data = D;
 		break;
 	}
-	case ENUM:
+	case VariableType::ENUM:
 	{
 		for(std::map<int32, String>::iterator it = property->DatasInString.begin(); it != property->DatasInString.end(); it++)
 		{
@@ -910,43 +910,43 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		}
 		break;
 	}
-	case INT_32:
+	case VariableType::INT_32:
 	{
 		int32 D = StringToData<int32>(StrData);
 		*(int32*)Data = D;
 		break;
 	}
-	case INT_64:
+	case VariableType::INT_64:
 	{
 		int64 D = StringToData<int64>(StrData);
 		*(int64*)Data = D;
 		break;
 	}
-	case UINT_8:
+	case VariableType::UINT_8:
 	{
 		uint8 D = StringToData<uint8>(StrData);
 		*(uint8*)Data = D;
 		break;
 	}
-	case UINT_16:
+	case VariableType::UINT_16:
 	{
 		uint16 D = StringToData<uint16>(StrData);
 		*(uint16*)Data = D;
 		break;
 	}
-	case UINT_32:
+	case VariableType::UINT_32:
 	{
 		uint32 D = StringToData<uint32>(StrData);
 		*(uint32*)Data = D;
 		break;
 	}
-	case UINT_64:
+	case VariableType::UINT_64:
 	{
 		uint64 D = StringToData<uint64>(StrData);
 		*(uint64*)Data = D;
 		break;
 	}
-	case VECTOR2_F:
+	case VariableType::VECTOR2_F:
 	{
 		String D = StrData.substr(1, StrData.length() - 2);
 		std::vector<String> VectorD = split(D, ",");
@@ -955,7 +955,7 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		*(Vector2f*)Data = Vector2f(X, Y);
 		break;
 	}
-	case VECTOR3_F:
+	case VariableType::VECTOR3_F:
 	{
 		String D = StrData.substr(1, StrData.length() - 2);
 		std::vector<String> VectorD = split(D, ",");
@@ -965,7 +965,7 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		*(Vector3f*)Data = Vector3f(X, Y, Z);
 		break;
 	}
-	case VECTOR4_F:
+	case VariableType::VECTOR4_F:
 	{
 		String D = StrData.substr(1, StrData.length() - 2);
 		std::vector<String> VectorD = split(D, ",");
@@ -976,7 +976,7 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		*(Vector4f*)Data = Vector4f(X, Y, Z, W);
 		break;
 	}
-	case VECTOR2_D:
+	case VariableType::VECTOR2_D:
 	{
 		String D = StrData.substr(1, StrData.length() - 2);
 		std::vector<String> VectorD = split(D, ",");
@@ -985,7 +985,7 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		*(Vector2d*)Data = Vector2d(X, Y);
 		break;
 	}
-	case VECTOR3_D:
+	case VariableType::VECTOR3_D:
 	{
 		String D = StrData.substr(1, StrData.length() - 2);
 		std::vector<String> VectorD = split(D, ",");
@@ -995,7 +995,7 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		*(Vector3d*)Data = Vector3d(X, Y, Z);
 		break;
 	}
-	case VECTOR4_D:
+	case VariableType::VECTOR4_D:
 	{
 		String D = StrData.substr(1, StrData.length() - 2);
 		std::vector<String> VectorD = split(D, ",");
@@ -1006,7 +1006,7 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		*(Vector4d*)Data = Vector4d(X, Y, Z, W);
 		break;
 	}
-	case VECTOR2_I:
+	case VariableType::VECTOR2_I:
 	{
 		String D = StrData.substr(1, StrData.length() - 2);
 		std::vector<String> VectorD = split(D, ",");
@@ -1015,7 +1015,7 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		*(Vector2i*)Data = Vector2i(X, Y);
 		break;
 	}
-	case VECTOR3_I:
+	case VariableType::VECTOR3_I:
 	{
 		String D = StrData.substr(1, StrData.length() - 2);
 		std::vector<String> VectorD = split(D, ",");
@@ -1025,7 +1025,7 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		*(Vector3i*)Data = Vector3i(X, Y, Z);
 		break;
 	}
-	case VECTOR4_I:
+	case VariableType::VECTOR4_I:
 	{
 		String D = StrData.substr(1, StrData.length() - 2);
 		std::vector<String> VectorD = split(D, ",");
@@ -1036,12 +1036,12 @@ void PropertyBase::StringToProperty(const String& StrData, std::shared_ptr<Prope
 		*(Vector4i*)Data = Vector4i(X, Y, Z, W);
 		break;
 	}
-	case MAT2_F:
-	case MAT3_F:
-	case MAT4_F:
-	case MAT2_D:
-	case MAT3_D:
-	case MAT4_D:
+	case VariableType::MAT2_F:
+	case VariableType::MAT3_F:
+	case VariableType::MAT4_F:
+	case VariableType::MAT2_D:
+	case VariableType::MAT3_D:
+	case VariableType::MAT4_D:
 		std::cout << "do not support load mat now" << std::endl;
 		break;
 	default:
@@ -1064,7 +1064,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 
 	switch (Type)
 	{
-	case STRING:
+	case VariableType::STRING:
 	{
 		std::vector<String>* D = (std::vector<String>*)Data;
 		D->resize(Size);
@@ -1077,7 +1077,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break; 
 	}
-	case BOOL_1:
+	case VariableType::BOOL_1:
 	{
 		std::vector<Bool>* D = (std::vector<Bool>*)Data;
 		D->resize(Size);
@@ -1090,7 +1090,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case FLOAT_16:
+	case VariableType::FLOAT_16:
 	{
 		std::vector<float16>* D = (std::vector<float16>*)Data;
 		D->resize(Size);
@@ -1106,7 +1106,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case FLOAT_32:
+	case VariableType::FLOAT_32:
 	{
 		std::vector<float32>* D = (std::vector<float32>*)Data;
 		D->resize(Size);
@@ -1120,7 +1120,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case FLOAT_64:
+	case VariableType::FLOAT_64:
 	{
 		std::vector<float64>* D = (std::vector<float64>*)Data;
 		D->resize(Size);
@@ -1134,7 +1134,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case INT_8:
+	case VariableType::INT_8:
 	{
 		std::vector<int8>* D = (std::vector<int8>*)Data;
 		D->resize(Size);
@@ -1148,7 +1148,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case INT_16:
+	case VariableType::INT_16:
 	{
 		std::vector<int16>* D = (std::vector<int16>*)Data;
 		D->resize(Size);
@@ -1162,7 +1162,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case ENUM:
+	case VariableType::ENUM:
 	{
 		std::vector<int8>* D = (std::vector<int8>*)Data;
 		D->resize(Size);
@@ -1183,7 +1183,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case INT_32:
+	case VariableType::INT_32:
 	{
 		std::vector<int32>* D = (std::vector<int32>*)Data;
 		D->resize(Size);
@@ -1197,7 +1197,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case INT_64:
+	case VariableType::INT_64:
 	{
 		std::vector<int64>* D = (std::vector<int64>*)Data;
 		D->resize(Size);
@@ -1211,7 +1211,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case UINT_8:
+	case VariableType::UINT_8:
 	{
 		std::vector<uint8>* D = (std::vector<uint8>*)Data;
 		D->resize(Size);
@@ -1225,7 +1225,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case UINT_16:
+	case VariableType::UINT_16:
 	{
 		std::vector<uint16>* D = (std::vector<uint16>*)Data;
 		D->resize(Size);
@@ -1239,7 +1239,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case UINT_32:
+	case VariableType::UINT_32:
 	{
 		std::vector<uint32>* D = (std::vector<uint32>*)Data;
 		D->resize(Size);
@@ -1253,7 +1253,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case UINT_64:
+	case VariableType::UINT_64:
 	{
 		std::vector<uint64>* D = (std::vector<uint64>*)Data;
 		D->resize(Size);
@@ -1267,7 +1267,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case VECTOR2_F:
+	case VariableType::VECTOR2_F:
 	{
 		std::vector<Vector2f>* D = (std::vector<Vector2f>*)Data;
 		D->resize(Size);
@@ -1284,7 +1284,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case VECTOR3_F:
+	case VariableType::VECTOR3_F:
 	{
 		std::vector<Vector3f>* D = (std::vector<Vector3f>*)Data;
 		D->resize(Size);
@@ -1302,7 +1302,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case VECTOR4_F:
+	case VariableType::VECTOR4_F:
 	{
 		std::vector<Vector4f>* D = (std::vector<Vector4f>*)Data;
 		D->resize(Size);
@@ -1321,7 +1321,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case VECTOR2_D:
+	case VariableType::VECTOR2_D:
 	{
 		std::vector<Vector2d>* D = (std::vector<Vector2d>*)Data;
 		D->resize(Size);
@@ -1338,7 +1338,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case VECTOR3_D:
+	case VariableType::VECTOR3_D:
 	{
 		std::vector<Vector3d>* D = (std::vector<Vector3d>*)Data;
 		D->resize(Size);
@@ -1356,7 +1356,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case VECTOR4_D:
+	case VariableType::VECTOR4_D:
 	{
 		std::vector<Vector4d>* D = (std::vector<Vector4d>*)Data;
 		D->resize(Size);
@@ -1375,7 +1375,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case VECTOR2_I:
+	case VariableType::VECTOR2_I:
 	{
 		std::vector<Vector2i>* D = (std::vector<Vector2i>*)Data;
 		D->resize(Size);
@@ -1392,7 +1392,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case VECTOR3_I:
+	case VariableType::VECTOR3_I:
 	{
 		std::vector<Vector3i>* D = (std::vector<Vector3i>*)Data;
 		D->resize(Size);
@@ -1410,7 +1410,7 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case VECTOR4_I:
+	case VariableType::VECTOR4_I:
 	{
 		std::vector<Vector4i>* D = (std::vector<Vector4i>*)Data;
 		D->resize(Size);
@@ -1429,12 +1429,12 @@ void PropertyBase::StringToPropertyArray(const String& StrData, std::shared_ptr<
 		}
 		break;
 	}
-	case MAT2_F:
-	case MAT3_F:
-	case MAT4_F:
-	case MAT2_D:
-	case MAT3_D:
-	case MAT4_D:
+	case VariableType::MAT2_F:
+	case VariableType::MAT3_F:
+	case VariableType::MAT4_F:
+	case VariableType::MAT2_D:
+	case VariableType::MAT3_D:
+	case VariableType::MAT4_D:
 		std::cout << "do not support load mat now" << std::endl;
 		break;
 	default:
@@ -1464,15 +1464,15 @@ void PropertyBase::BeginWriteProperty(String* Data, PropertyType type)
 {
 	switch (type)
 	{
-	case BaseInfo:
-		TabCount = BaseInfo;
+	case PropertyType::BaseInfo:
+		TabCount = (int32)PropertyType::BaseInfo;
 		break;
-	case ComponentInfo:
+	case PropertyType::ComponentInfo:
 	{
-		TabCount = ComponentInfo - 1;
+		TabCount = (int32)PropertyType::ComponentInfo - 1;
 		AddTab(Data);
 		Data->append("[\n");
-		TabCount = ComponentInfo;
+		TabCount = (int32)PropertyType::ComponentInfo;
 		break;
 	}
 	default:
@@ -1484,12 +1484,12 @@ void PropertyBase::EndWriteProperty(String* Data, PropertyType type)
 {
 	switch (type)
 	{
-	case BaseInfo:
+	case PropertyType::BaseInfo:
 		TabCount = 0;
 		break;
-	case ComponentInfo:
+	case PropertyType::ComponentInfo:
 	{
-		TabCount = ComponentInfo - 1;
+		TabCount = (int32)PropertyType::ComponentInfo - 1;
 		AddTab(Data);
 		Data->append("]\n");
 		TabCount = 0;
@@ -1505,7 +1505,7 @@ void PropertyBase::BeginReadProperty(String* OutDataToProcess, const String& Dat
 {
 	switch (type)
 	{
-	case BaseInfo:
+	case PropertyType::BaseInfo:
 	{
 		int32 BeginPos, EndPos = -1;
 		String BeginTag = "{\n";
@@ -1515,7 +1515,7 @@ void PropertyBase::BeginReadProperty(String* OutDataToProcess, const String& Dat
 		*OutDataToProcess = Data.substr(BeginPos + BeginTag.length(), EndPos - BeginPos - BeginTag.length());
 		break;
 	}
-	case ComponentInfo:
+	case PropertyType::ComponentInfo:
 	{
 		int32 BeginPos, EndPos = -1;
 		String BeginTag = "[\n";
@@ -1534,7 +1534,7 @@ void PropertyBase::EndReadProperty(String* OutDataToProcess, PropertyType type)
 {
 	switch (type)
 	{
-	case BaseInfo:
+	case PropertyType::BaseInfo:
 	{
 		int32 BeginPos = -1;
 		String BeginTag = "[\n";
@@ -1542,7 +1542,7 @@ void PropertyBase::EndReadProperty(String* OutDataToProcess, PropertyType type)
 		*OutDataToProcess = OutDataToProcess->substr(BeginPos, OutDataToProcess->length() - BeginPos);
 		break;
 	}
-	case ComponentInfo:
+	case PropertyType::ComponentInfo:
 	{
 		int32 BeginPos = -1;
 		String BeginTag = "]\n";

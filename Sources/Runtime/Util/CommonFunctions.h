@@ -73,5 +73,6 @@ String GetSuperPathFromPath(const String& Path);
 String GetNameFromPathExceptSuffix(const String& Path);
 String GetNameExceptSuffix(const String& FullName);
 String GetSuffixFromPath(const String& Path);
+void DeleteStringSpaces(String* Path);
 
 //String SearchFileFromPath(const String& Path);

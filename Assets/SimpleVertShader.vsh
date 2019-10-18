@@ -10,24 +10,27 @@ layout (location = 4) in vec2 inUV0;
 layout (location = 5) in vec2 inUV1;
 layout (location = 6) in vec2 inUV2;
 
-layout(std140) uniform Model
+#UNIFORM(vec3, PPPP, Internal)
+#UNIFORM_TEXTURE(sampler2D, Tex, Internal)
+
+#UNIFORM_BUFFER(Model, Shared, Internal) 
 {
-    uniform    mat4 ModelMatrix;
-    uniform    mat4 ModelMatrix_IT;
-    uniform    mat4 ModelMatrix_PreFrame;
-    uniform    mat4 ModelMatrix_IT_PreFrame;
+    mat4 ModelMatrix;
+    mat4 ModelMatrix_IT;
+    mat4 ModelMatrix_PreFrame;
+    mat4 ModelMatrix_IT_PreFrame;
 };
 
-layout(std140) uniform View
+#UNIFORMBUFFER(View, Shared, Internal) 
 {
-    uniform    mat4 ViewMatrix;
-    uniform    mat4 ProjectMatrix;
+    mat4 ViewMatrix;
+    mat4 ProjectMatrix;
     
-    uniform    mat4 ViewMatrix_PreFrame;
-    uniform    mat4 ProjectMatrix_PreFrame;
+    mat4 ViewMatrix_PreFrame;
+    mat4 ProjectMatrix_PreFrame;
     
-    uniform    vec3 ViewPosition;
-    uniform    vec2 ScreenSize;
+    vec3 ViewPosition;
+    vec2 ScreenSize;
 };
 
 

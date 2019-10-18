@@ -15,8 +15,8 @@ Shader::~Shader()
 
 MaterialBase::MaterialBase()
 {
-	AddProperty("Path", STRING, &Path);
-	AddPropertyArray("Shaders", STRING, &ShaderNames);
+	AddProperty("Path", VariableType::STRING, &Path);
+	AddPropertyArray("Shaders", VariableType::STRING, &ShaderNames);
 };
 
 MaterialBase::~MaterialBase() 
@@ -116,16 +116,16 @@ void Material::BindUniforms()
 			uint32 Size = Uniform->Size;
 			switch (Uniform->DataType)
 			{
-			case UniformType::GLSL_VEC2: glUniform2fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformType::GLSL_VEC3: glUniform3fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformType::GLSL_VEC4: glUniform4fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformType::GLSL_IVEC2: glUniform2iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
-			case UniformType::GLSL_IVEC3: glUniform3iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
-			case UniformType::GLSL_IVEC4: glUniform4iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
-			case UniformType::GLSL_MAT3: glUniformMatrix3fv(Location, Size, GL_FALSE, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformType::GLSL_MAT4: glUniformMatrix4fv(Location, Size, GL_FALSE, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformType::GLSL_FLOAT: glUniform1fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformType::GLSL_INT:	glUniform1iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_VEC2: glUniform2fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_VEC3: glUniform3fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_VEC4: glUniform4fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_IVEC2: glUniform2iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_IVEC3: glUniform3iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_IVEC4: glUniform4iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_MAT3: glUniformMatrix3fv(Location, Size, GL_FALSE, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_MAT4: glUniformMatrix4fv(Location, Size, GL_FALSE, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_FLOAT: glUniform1fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_INT:	glUniform1iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
 			default:
 				break;
 			}
@@ -143,16 +143,16 @@ void Material::BindSamplers()
 		glActiveTexture(GL_TEXTURE0 + Location);
 		switch (Tex->DataType)
 		{
-		case UniformType::GLSL_TEXTURE2D:
+		case UniformVariableType::GLSL_TEXTURE2D:
 			glBindTexture(GL_TEXTURE_2D, *((uint32*)IDPtr));
 			break;
-		case UniformType::GLSL_TEXTURECUBE:
+		case UniformVariableType::GLSL_TEXTURECUBE:
 			glBindTexture(GL_TEXTURE_CUBE_MAP, *((uint32*)IDPtr));
 			break;
-		case UniformType::GLSL_TEXTURE3D:
+		case UniformVariableType::GLSL_TEXTURE3D:
 			glBindTexture(GL_TEXTURE_3D, *((uint32*)IDPtr));
 			break;
-		case UniformType::GLSL_TEXTURE_2D_ARRAY:
+		case UniformVariableType::GLSL_TEXTURE_2D_ARRAY:
 			glBindTexture(GL_TEXTURE_2D_ARRAY, *((uint32*)IDPtr));
 			break;
 		default:
@@ -170,11 +170,11 @@ void Material::Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 O
 	int32 GL_IndexType = 0;
 	switch (indexSize)
 	{
-	case Index16Bits:
+	case IndexSizeType::Index16Bits:
 		IndexSize = 2;
 		GL_IndexType = GL_UNSIGNED_SHORT;
 		break;
-	case Index32Bits:
+	case IndexSizeType::Index32Bits:
 		IndexSize = 4;
 		GL_IndexType = GL_UNSIGNED_INT;
 		break;
@@ -185,12 +185,12 @@ void Material::Draw(uint32 VAO, int32 NumFaces, IndexSizeType indexSize, int32 O
 	//glPolygonOffset
 	switch (drawType)
 	{
-	case Unkown:
+	case GLDrawType::Unkown:
 		break;
-	case OGL_ELEMENT:
+	case GLDrawType::OGL_ELEMENT:
 		glDrawElements(GL_TRIANGLES, NumFaces * 3, GL_IndexType, reinterpret_cast<void*>((int64)Offset * IndexSize));
 		break;
-	case OGL_LINE_STRIP: glDrawElements(GL_LINE_STRIP, NumFaces * 3, GL_IndexType, reinterpret_cast<void*>((int64)Offset * IndexSize));
+	case GLDrawType::OGL_LINE_STRIP: glDrawElements(GL_LINE_STRIP, NumFaces * 3, GL_IndexType, reinterpret_cast<void*>((int64)Offset * IndexSize));
 		break;
 	default:
 		break;
@@ -281,6 +281,8 @@ std::map<ShaderType, String> Material::CreateShadersSourceCode()
 
 		ShaderHelper::InsertIncludeCode(&SourceCode);
 		ShaderType Type = ShaderHelper::GetShaderType(ShaderName);
+
+		ShaderHelper::ExpandUniformProperty(&SourceCode);
 		
 		ShadersCode.insert(std::pair<ShaderType, String>(Type, SourceCode));
 	}
@@ -418,8 +420,8 @@ void Material::FindUniformInfos()
 
 		if (-1 == glGetUniformLocation(ProgramGPU->Id, UniformName)) continue;	//Uniform is in uniform block	
 
-		UniformType T = UniformTypeMap[Type];
-		if (T < UniformType::GLSL_TEXTURE2D)
+		UniformVariableType T = UniformTypeMap[Type];
+		if (T < UniformVariableType::GLSL_TEXTURE2D)
 		{
 			std::shared_ptr<UniformItem_Basic> UniformBasic = std::shared_ptr<UniformItem_Basic>(new UniformItem_Basic());
 			UniformBasic->Name = UniformName;
@@ -507,7 +509,7 @@ uint32 Material::CreateShaderGPUObjFromSrcCode(const String & srcCode, ShaderTyp
 	if (!success)
 	{
 		glGetShaderInfoLog(outShader, 1024, NULL, infoLog);
-		std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+		std::cout << "ERROR::SHADER_COMPILATION_ERROR: " << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
 	}
 
 	return outShader;
@@ -521,7 +523,7 @@ void Material::Save(String* Data)
 	{
 		for (std::map<ShaderType, String>::iterator it1 = SourceCodes.begin(); it1 != SourceCodes.end(); it++)
 		{
-			if ((*it)->Type = it1->first)
+			if ((*it)->Type == it1->first)
 			{
 				SaveShaderSourceCode(Data, it1->first, it1->second);
 				break;
@@ -550,12 +552,12 @@ void Material::SaveShaderSourceCode(String* OutData, ShaderType Type, const Stri
 	OutData->append(SplitTag);
 	switch (Type)
 	{
-	case VertexShader: OutData->append(TO_String(VertexShader)); break;
-	case FragmentShader: OutData->append(TO_String(FragmentShader)); break;
-	case GeometryShader: OutData->append(TO_String(GeometryShader)); break;
-	case TessEvaluationShader: OutData->append(TO_String(TessEvaluationShader)); break;
-	case TessControlShader: OutData->append(TO_String(TessControlShader)); break;
-	case ComputeShader: OutData->append(TO_String(ComputeShader)); break;
+	case ShaderType::VertexShader: OutData->append(TO_String(VertexShader)); break;
+	case ShaderType::FragmentShader: OutData->append(TO_String(FragmentShader)); break;
+	case ShaderType::GeometryShader: OutData->append(TO_String(GeometryShader)); break;
+	case ShaderType::TessEvaluationShader: OutData->append(TO_String(TessEvaluationShader)); break;
+	case ShaderType::TessControlShader: OutData->append(TO_String(TessControlShader)); break;
+	case ShaderType::ComputeShader: OutData->append(TO_String(ComputeShader)); break;
 	default:
 		break;
 	}
@@ -581,12 +583,12 @@ std::map<ShaderType, String> Material::LoadShaderSourceCode(const String& Source
 		String ShaderSourceCode = SubCode.substr(Pos1 + SplitTag.length(), (int64)Pos2 - Pos1 - SplitTag.length());
 
 		static std::map<String, ShaderType> StrTypeMap = {
-			{TO_String(VertexShader), VertexShader},
-			{TO_String(FragmentShader), FragmentShader},
-			{TO_String(GeometryShader), GeometryShader},
-			{TO_String(TessEvaluationShader), TessEvaluationShader},
-			{TO_String(TessControlShader), TessControlShader},
-			{TO_String(ComputeShader), ComputeShader},
+			{TO_String(VertexShader), ShaderType::VertexShader},
+			{TO_String(FragmentShader), ShaderType::FragmentShader},
+			{TO_String(GeometryShader), ShaderType::GeometryShader},
+			{TO_String(TessEvaluationShader), ShaderType::TessEvaluationShader},
+			{TO_String(TessControlShader), ShaderType::TessControlShader},
+			{TO_String(ComputeShader), ShaderType::ComputeShader},
 		};
 
 

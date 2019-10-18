@@ -4,7 +4,7 @@
 #include <fstream>
 #include <map>
 
-enum FileType
+enum class FileType
 {
 	F_Material,
 	F_MaterialInstance,

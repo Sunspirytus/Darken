@@ -5,7 +5,7 @@
 
 void CameraRotateLeftPlus(std::shared_ptr<SceneManager> _Scene)
 {
-	std::shared_ptr<Camera> camera = _Scene->GetCamera(CameraIndex::MainCamera);
+	std::shared_ptr<Camera> camera = _Scene->GetCamera((uint32)CameraIndex::MainCamera);
 	Vector3f angles = camera->GetEulerAngle();
 	angles.z -= 1.0f;
 	camera->SetEulerAngle(angles);
@@ -13,14 +13,14 @@ void CameraRotateLeftPlus(std::shared_ptr<SceneManager> _Scene)
 
 void CameraRotateLeftMinus(std::shared_ptr<SceneManager> _Scene)
 {
-	std::shared_ptr<Camera> camera = _Scene->GetCamera(CameraIndex::MainCamera);
+	std::shared_ptr<Camera> camera = _Scene->GetCamera((uint32)CameraIndex::MainCamera);
 	Vector3f angles = camera->GetEulerAngle();
 	angles.z += 1.0f;
 	camera->SetEulerAngle(angles);
 }
 void CameraRotateUpPlus(std::shared_ptr<SceneManager> _Scene)
 {
-	std::shared_ptr<Camera> camera = _Scene->GetCamera(CameraIndex::MainCamera);
+	std::shared_ptr<Camera> camera = _Scene->GetCamera((uint32)CameraIndex::MainCamera);
 	Vector3f angles = camera->GetEulerAngle();
 	angles.y += 1.0f;
 	camera->SetEulerAngle(angles);
@@ -28,7 +28,7 @@ void CameraRotateUpPlus(std::shared_ptr<SceneManager> _Scene)
 
 void CameraRotateUpMinus(std::shared_ptr<SceneManager> _Scene)
 {
-	std::shared_ptr<Camera> camera = _Scene->GetCamera(CameraIndex::MainCamera);
+	std::shared_ptr<Camera> camera = _Scene->GetCamera((uint32)CameraIndex::MainCamera);
 	Vector3f angles = camera->GetEulerAngle();
 	angles.y -= 1.0f;
 	camera->SetEulerAngle(angles);
@@ -36,14 +36,14 @@ void CameraRotateUpMinus(std::shared_ptr<SceneManager> _Scene)
 
 void CameraTranslateLeftPlus(std::shared_ptr<SceneManager> _Scene)
 {
-	std::shared_ptr<Camera> camera = _Scene->GetCamera(CameraIndex::MainCamera);
+	std::shared_ptr<Camera> camera = _Scene->GetCamera((uint32)CameraIndex::MainCamera);
 	Vector3f left = camera->GetLeftward();
 	Vector3f position = camera->GetPosition();
 	camera->SetPosition(position + left * 0.2f);
 }
 void CameraTranslateLeftMinus(std::shared_ptr<SceneManager> _Scene)
 {
-	std::shared_ptr<Camera> camera = _Scene->GetCamera(CameraIndex::MainCamera);
+	std::shared_ptr<Camera> camera = _Scene->GetCamera((uint32)CameraIndex::MainCamera);
 	Vector3f left = camera->GetLeftward();
 	Vector3f position = camera->GetPosition();
 	camera->SetPosition(position - left * 0.2f);
@@ -51,7 +51,7 @@ void CameraTranslateLeftMinus(std::shared_ptr<SceneManager> _Scene)
 
 void CameraTranslateForwardPlus(std::shared_ptr<SceneManager> _Scene)
 {
-	std::shared_ptr<Camera> camera = _Scene->GetCamera(CameraIndex::MainCamera);
+	std::shared_ptr<Camera> camera = _Scene->GetCamera((uint32)CameraIndex::MainCamera);
 	Vector3f forward = camera->GetForward();
 	//forward.z = 0.0f;
 	Vector3f position = camera->GetPosition();
@@ -60,7 +60,7 @@ void CameraTranslateForwardPlus(std::shared_ptr<SceneManager> _Scene)
 
 void CameraTranslateForwardMinus(std::shared_ptr<SceneManager> _Scene)
 {
-	std::shared_ptr<Camera> camera = _Scene->GetCamera(CameraIndex::MainCamera);
+	std::shared_ptr<Camera> camera = _Scene->GetCamera((uint32)CameraIndex::MainCamera);
 	Vector3f forward = camera->GetForward();
 	//forward.z = 0.0f;
 	Vector3f position = camera->GetPosition();

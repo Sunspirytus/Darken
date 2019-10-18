@@ -2,8 +2,8 @@
 
 ObjectBase::ObjectBase()
 {
-	AddProperty("Path", STRING, &Path);
-	AddProperty("Type", ENUM, &Type, std::map<int32, String>{ {Default, TO_String(Default)}, { StaticMeshActor,TO_String(StaticMeshActor) }, { DynamicMeshActor,TO_String(DynamicMeshActor) }, { CameraActor,TO_String(CameraActor) }, { LandscapeMeshActor,TO_String(LandscapeMeshActor) }, { AbstractActor,TO_String(AbstractActor) }, { NavigationSystemActor,TO_String(NavigationSystemActor) }});
+	AddProperty("Path", VariableType::STRING, &Path);
+	AddProperty("Type", VariableType::ENUM, &Type, std::map<int32, String>{ {(int32)ObjectType::Default, TO_String(Default)}, { (int32)ObjectType::StaticMeshActor,TO_String(StaticMeshActor) }, { (int32)ObjectType::DynamicMeshActor,TO_String(DynamicMeshActor) }, { (int32)ObjectType::CameraActor,TO_String(CameraActor) }, { (int32)ObjectType::LandscapeMeshActor,TO_String(LandscapeMeshActor) }, { (int32)ObjectType::AbstractActor,TO_String(AbstractActor) }, { (int32)ObjectType::NavigationSystemActor,TO_String(NavigationSystemActor) }});
 }
 
 ObjectBase::~ObjectBase()
@@ -26,13 +26,13 @@ void Object::Save(String* Data)
 {
 	PropertyBase::PrepareToWrite(Data);
 
-	PropertyBase::BeginWriteProperty(Data, BaseInfo);
+	PropertyBase::BeginWriteProperty(Data, PropertyType::BaseInfo);
 	PropertyBase::Save(Data);
-	PropertyBase::EndWriteProperty(Data, BaseInfo);
+	PropertyBase::EndWriteProperty(Data, PropertyType::BaseInfo);
 
-	PropertyBase::BeginWriteProperty(Data, ComponentInfo);
+	PropertyBase::BeginWriteProperty(Data, PropertyType::ComponentInfo);
 	Transform->Save(Data);
-	PropertyBase::EndWriteProperty(Data, ComponentInfo);
+	PropertyBase::EndWriteProperty(Data, PropertyType::ComponentInfo);
 
 	PropertyBase::FinishWrite(Data);
 }
@@ -41,13 +41,13 @@ void Object::Load(const String& Data)
 {
 	String ReserveData = Data;
 	String DataWaitProcess;
-	BeginReadProperty(&DataWaitProcess, ReserveData, BaseInfo);
+	BeginReadProperty(&DataWaitProcess, ReserveData, PropertyType::BaseInfo);
 	PropertyBase::Load(DataWaitProcess);
-	EndReadProperty(&ReserveData, BaseInfo);
+	EndReadProperty(&ReserveData, PropertyType::BaseInfo);
 
-	BeginReadProperty(&DataWaitProcess, ReserveData,ComponentInfo);
+	BeginReadProperty(&DataWaitProcess, ReserveData, PropertyType::ComponentInfo);
 	Transform->Load(DataWaitProcess);
-	EndReadProperty(&ReserveData, ComponentInfo);
+	EndReadProperty(&ReserveData, PropertyType::ComponentInfo);
 }
 
 ObjectType Object::GetType(const String& ObjectInfo)
@@ -59,33 +59,33 @@ ObjectType Object::GetType(const String& ObjectInfo)
 	String Type = ObjectInfo.substr(Begin + BeginTag.length(), End - Begin - BeginTag.length());
 	if(Type == TO_String(Default))
 	{
-		return Default;
+		return ObjectType::Default;
 	}else if(Type == TO_String(StaticMeshActor))
 	{
-		return StaticMeshActor;
+		return ObjectType::StaticMeshActor;
 	}
 	else if (Type == TO_String(DynamicMeshActor))
 	{
-		return DynamicMeshActor;
+		return ObjectType::DynamicMeshActor;
 	}
 	else if (Type == TO_String(CameraActor))
 	{
-		return CameraActor;
+		return ObjectType::CameraActor;
 	}
 	else if (Type == TO_String(LandscapeMeshActor))
 	{
-		return LandscapeMeshActor;
+		return ObjectType::LandscapeMeshActor;
 	}
 	else if (Type == TO_String(AbstractActor))
 	{
-		return AbstractActor;
+		return ObjectType::AbstractActor;
 	}
 	else if (Type == TO_String(NavigationSystemActor))
 	{
-		return NavigationSystemActor;
+		return ObjectType::NavigationSystemActor;
 	}
 
-	return Default;
+	return ObjectType::Default;
 }
 
 

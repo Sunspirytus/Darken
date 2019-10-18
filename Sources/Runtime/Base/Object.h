@@ -6,9 +6,9 @@
 #include "PropertyBase.h"
 #include <map>
 
-enum ObjectType
+enum class ObjectType
 {
-	Default = 0xFFFFFFFF,
+	Default = 0x7FFFFFFF,
 	StaticMeshActor = 1 << 1,
 	DynamicMeshActor = 1 << 2,
 	CameraActor = 1 << 3,

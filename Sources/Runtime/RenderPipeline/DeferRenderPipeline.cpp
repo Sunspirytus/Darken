@@ -26,7 +26,7 @@ void DeferRenderPipeline::Init(std::shared_ptr<World> scene)
 	LightingPass->ShadowMappingPass = ShadowMappingPass;
 
 	//SubSurfaceShading
-	SSSPass = std::shared_ptr<SubSurfaceShading>(new SubSurfaceShading(SceneWaitRender->GetCamera(CameraIndex::MainCamera)));
+	SSSPass = std::shared_ptr<SubSurfaceShading>(new SubSurfaceShading(SceneWaitRender->GetCamera((uint32)CameraIndex::MainCamera)));
 	SSSPass->SSSSetupMaterialInst->SetTextureID("PostprocessInput0", LightingPass->Lighting_Tex);
 	SSSPass->SSSSetupMaterialInst->SetTextureID("PostprocessInput1", LightingPass->CustomData_Tex);
 	SSSPass->SSSSetupMaterialInst->SetTextureID("PostprocessInput2", LightingPass->ScreenDepthZ_Tex);
@@ -39,7 +39,7 @@ void DeferRenderPipeline::Init(std::shared_ptr<World> scene)
 	SSSPass->SSSRecombineMaterialInst->SetTextureID("PostprocessInput3", LightingPass->CustomData_Tex);
 
 	//TAAPass
-	TAAPass = std::shared_ptr<UE4TemporalAA>(new UE4TemporalAA(SceneWaitRender->GetCamera(CameraIndex::MainCamera)));
+	TAAPass = std::shared_ptr<UE4TemporalAA>(new UE4TemporalAA(SceneWaitRender->GetCamera((uint32)CameraIndex::MainCamera)));
 	TAAPass->TAAPassMaterialInst->SetTextureID("DepthTex", LightingPass->ScreenDepthZ_Tex);
 	TAAPass->TAAPassMaterialInst->SetTextureID("CurrentFrame", SSSPass->SSSRecombine_TexOut);
 	//TAAPass->TAAPassMaterialInst->SetTextureID("CurrentFrame", LightingPass->Lighting_Tex);
@@ -67,14 +67,14 @@ void DeferRenderPipeline::Render(std::shared_ptr<Camera> camera)
 {
 	TAAPass->UpdateJitter();
 
-	DKEngine::GetInstance().GetGPUBufferManager()->UpdateViewBuffer(SceneWaitRender->GetCamera(CameraIndex::MainCamera).get());
+	DKEngine::GetInstance().GetGPUBufferManager()->UpdateViewBuffer(SceneWaitRender->GetCamera((uint32)CameraIndex::MainCamera).get());
 	DKEngine::GetInstance().GetGPUBufferManager()->UpdateCustomBufferData();
 
 	SceneWaitRender->PrepareShadowDepthMaterial();
-	RenderShadowDepthPass(StaticMeshActor | DynamicMeshActor);
+	RenderShadowDepthPass((int32)ObjectType::StaticMeshActor | (int32)ObjectType::DynamicMeshActor);
 
 	SceneWaitRender->PrepareLightingMaterial();
-	RenderLightingPass(camera, StaticMeshActor | DynamicMeshActor);
+	RenderLightingPass(camera, (int32)ObjectType::StaticMeshActor | (int32)ObjectType::DynamicMeshActor);
 
 	RenderSSSPass();
 
@@ -227,7 +227,7 @@ void ShadowDepth::CalculateLightsVPMatrix()
 		{
 			DirectLight* DL = dynamic_cast<DirectLight*>(Lights[LightIndex]);
 			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(DL->GetTransform()->GetPosition(), DL->GetTransform()->GetEulerAngle(), 180.0f, 1.0f, 0.1f, 100.0f, Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
-			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
+			Scene->AddCamera((uint32)CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
 		}
 		else if (Lights[LightIndex]->Type == LightType::Point)
 		{
@@ -245,13 +245,13 @@ void ShadowDepth::CalculateLightsVPMatrix()
 			LCamera2->SetNextCamera(LCamera3);
 			LCamera3->SetNextCamera(LCamera4);
 			LCamera4->SetNextCamera(LCamera5);
-			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera0);			
+			Scene->AddCamera((uint32)CameraIndex::ShadowDepthCamera + LightIndex, LCamera0);
 		}
 		else if (Lights[LightIndex]->Type == LightType::Spot)
 		{
 			SpotLight* SL = dynamic_cast<SpotLight*>(Lights[LightIndex]);
 			std::shared_ptr<Camera> LCamera = std::shared_ptr<Camera>(new Camera(SL->GetTransform()->GetPosition(), SL->GetTransform()->GetEulerAngle(), Math::Radians(SL->GetOutConeAngle() / 2.0f), 1.0f, 2.0f, SL->GetAttenuationRadius(), Vector2i(ShadowDepthTexWidth, ShadowDepthTexHeight)));
-			Scene->AddCamera(CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
+			Scene->AddCamera((uint32)CameraIndex::ShadowDepthCamera + LightIndex, LCamera);
 		}
 	}
 }
@@ -271,18 +271,18 @@ void ShadowDepth::Render(unsigned typeFlags)
 			break;
 		}
 	}
-	Scene->GetCamera(MainCamera)->ActiveViewPort();
+	Scene->GetCamera((uint32)CameraIndex::MainCamera)->ActiveViewPort();
 }
 
 void ShadowDepth::RenderDirectLightDepth(int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects)
 {
-	std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
+	std::shared_ptr<Camera> LCamera = Scene->GetCamera((uint32)CameraIndex::ShadowDepthCamera + LightIndex);
 	for (uint32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
 	{
 		StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 		ShadowDepthMaterialInst = Modelptr->GetRenderMaterial();
 
-		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.LightTypeID, LightType::Direct);
+		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.LightTypeID, (int32)LightType::Direct);
 		ShadowDepthMaterialInst->SetUniform<Mat4f>(MaterialDataIDs.LightSpaceVPMatrixID, LCamera->GetVPMatrix());
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, ShadowDepthFrameBuffers[LightIndex]);
@@ -299,7 +299,7 @@ void ShadowDepth::RenderPointLightDepth(int32 LightIndex, const std::vector<std:
 	glBindFramebuffer(GL_FRAMEBUFFER, ShadowDepthFrameBuffers[LightIndex]);
 
 	glEnable(GL_DEPTH_TEST);
-	std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
+	std::shared_ptr<Camera> LCamera = Scene->GetCamera((uint32)CameraIndex::ShadowDepthCamera + LightIndex);
 	for (int32 FaceIndex = 0; FaceIndex < 6; FaceIndex++)
 	{
 		for (uint32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
@@ -307,7 +307,7 @@ void ShadowDepth::RenderPointLightDepth(int32 LightIndex, const std::vector<std:
 			StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 			ShadowDepthMaterialInst = Modelptr->GetRenderMaterial();
 
-			ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.LightTypeID, LightType::Point);
+			ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.LightTypeID, (int32)LightType::Point);
 			ShadowDepthMaterialInst->SetUniform<Mat4f>(MaterialDataIDs.LightSpaceVPMatrixID, LCamera->GetVPMatrix());
 			ShadowDepthMaterialInst->SetUniform<Vector4f>(MaterialDataIDs.LightCamera_ZBufferParamsID, Vector4f(LCamera->GetNearClipPlaneDis(), LCamera->GetFarClipPlaneDis(), LCamera->GetFOVinRadians(), LCamera->GetAspect()));
 		}
@@ -328,13 +328,13 @@ void ShadowDepth::RenderPointLightDepth(int32 LightIndex, const std::vector<std:
 
 void ShadowDepth::RenderSpotLightDepth(int32 LightIndex, const std::vector<std::shared_ptr<Object>> &Objects)
 {
-	std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
+	std::shared_ptr<Camera> LCamera = Scene->GetCamera((uint32)CameraIndex::ShadowDepthCamera + LightIndex);
 	for (uint32 ObjectIndex = 0; ObjectIndex < Objects.size(); ObjectIndex++)
 	{
 		StaticMesh* Modelptr = dynamic_cast<StaticMesh*>(Objects[ObjectIndex].get());
 		ShadowDepthMaterialInst = Modelptr->GetRenderMaterial();
 
-		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.LightTypeID, LightType::Spot);
+		ShadowDepthMaterialInst->SetUniform<int32>(MaterialDataIDs.LightTypeID, (int32)LightType::Spot);
 		ShadowDepthMaterialInst->SetUniform<Mat4f>(MaterialDataIDs.LightSpaceVPMatrixID, LCamera->GetVPMatrix());
 		ShadowDepthMaterialInst->SetUniform<Vector4f>(MaterialDataIDs.LightCamera_ZBufferParamsID, Vector4f(LCamera->GetNearClipPlaneDis(), LCamera->GetFarClipPlaneDis(), LCamera->GetFOVinRadians(), LCamera->GetAspect()));
 	}
@@ -500,10 +500,10 @@ void Lighting::Render(std::shared_ptr<Camera> camera, uint32 typeFlags)
 
 		ShadowData ShadowBuffer;
 
-		ShadowBuffer.LightSpaceVPMatrix = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex)->GetVPMatrix();// ShadowMappingPass->LightCameras[LightIndex]->VPMatrix[0];
+		ShadowBuffer.LightSpaceVPMatrix = Scene->GetCamera((uint32)CameraIndex::ShadowDepthCamera + LightIndex)->GetVPMatrix();// ShadowMappingPass->LightCameras[LightIndex]->VPMatrix[0];
 		ShadowBuffer.ShadowBufferSize = Vector4f(ShadowMappingPass->ShadowDepthTexWidth, ShadowMappingPass->ShadowDepthTexHeight, 1.0f / ShadowMappingPass->ShadowDepthTexWidth, 1.0f / ShadowMappingPass->ShadowDepthTexHeight);
 
-		std::shared_ptr<Camera> LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex);
+		std::shared_ptr<Camera> LCamera = Scene->GetCamera((uint32)CameraIndex::ShadowDepthCamera + LightIndex);
 		//const ObjectProperty& P = LCamera->GetProperty();
 		float32 Near = LCamera->GetNearClipPlaneDis();
 		float32 Far = LCamera->GetFarClipPlaneDis();
@@ -549,7 +549,7 @@ void Lighting::Render(std::shared_ptr<Camera> camera, uint32 typeFlags)
 			if (Lights[LightIndex]->Type == LightType::Point)
 			{
 				LightingPassMaterialInst->SetTextureID(MaterialDataIDs->ShadowDepth_TexCubeID, ShadowMappingPass->ShadowDepth_TexsCube[LightIndex]);
-				Camera * LCamera = Scene->GetCamera(CameraIndex::ShadowDepthCamera + LightIndex).get();
+				Camera * LCamera = Scene->GetCamera((uint32)CameraIndex::ShadowDepthCamera + LightIndex).get();
 				Mat4f PL_VPMarixes[6] = { LCamera[0].GetVPMatrix(), 
 					LCamera[1].GetVPMatrix(), 
 					LCamera[2].GetVPMatrix(), 
@@ -579,14 +579,14 @@ SubSurfaceShading::SubSurfaceShading(std::shared_ptr<Camera> camera)
 	CreateResources();
 	InitSubsurfaceProfileEntries();
 
-	std::shared_ptr<Material> SSSSetupMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("SSSSetupMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceSetup.fsh"}, Internal);
-	SSSSetupMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("SSSSetupMaterialInst", SSSSetupMaterial, Internal);
+	std::shared_ptr<Material> SSSSetupMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("SSSSetupMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceSetup.fsh"}, MaterialBelong::Engine);
+	SSSSetupMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("SSSSetupMaterialInst", SSSSetupMaterial, MaterialBelong::Engine);
 
-	std::shared_ptr<Material> SSSScateringMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("SSSScateringMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceScatering.fsh"}, Internal);
-	SSSScateringMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("SSSScateringMaterialInst", SSSScateringMaterial, Internal);
+	std::shared_ptr<Material> SSSScateringMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("SSSScateringMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceScatering.fsh"}, MaterialBelong::Engine);
+	SSSScateringMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("SSSScateringMaterialInst", SSSScateringMaterial, MaterialBelong::Engine);
 
-	std::shared_ptr<Material> SSSRecombineMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("SSSRecombineMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceRecombine.fsh"}, Internal);
-	SSSRecombineMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("SSSRecombineMaterialInst", SSSRecombineMaterial, Internal);
+	std::shared_ptr<Material> SSSRecombineMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("SSSRecombineMaterial", std::vector<String> {"DrawRectVertShader.vsh", "SubsurfaceRecombine.fsh"}, MaterialBelong::Engine);
+	SSSRecombineMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("SSSRecombineMaterialInst", SSSRecombineMaterial, MaterialBelong::Engine);
 
 	SSSSetupMaterialInst->SetUniform<Vector2f>("CameraNearFar", Vector2f(ViewCamera->GetNearClipPlaneDis(), ViewCamera->GetFarClipPlaneDis()));
 
@@ -1103,8 +1103,8 @@ void UE4TemporalAA::Execute(uint32 VAO, int32 NumFaces, IndexSizeType indexType)
 
 void UE4TemporalAA::CreateTAAPassMaterial()
 {
-	std::shared_ptr<Material> TAAMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("TAAMaterial", std::vector<String> {"DrawRectVertShader.vsh", "UE4TemporalAAFragShader.fsh"}, Internal);
-	TAAPassMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("TAAMaterialInst", TAAMaterial, Internal);
+	std::shared_ptr<Material> TAAMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("TAAMaterial", std::vector<String> {"DrawRectVertShader.vsh", "UE4TemporalAAFragShader.fsh"}, MaterialBelong::Engine);
+	TAAPassMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("TAAMaterialInst", TAAMaterial, MaterialBelong::Engine);
 	TAAPassMaterialInst->SetBlockUniform<Vector2f>("TestBlock", "Color2", Vector4f(1.0, 1.0, 0.0, 1.0));
 }
 
@@ -1269,15 +1269,15 @@ ToneMapping::~ToneMapping()
 
 void ToneMapping::CreateToneMappingPassMaterial()
 {
-	std::shared_ptr<Material> ToneMappingMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("ToneMappingMaterial", std::vector<String> {"ToneMappingVertShader.vsh", "ToneMappingFragShader.fsh"}, Internal);
-	ToneMappingMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("ToneMappingMaterialInst", ToneMappingMaterial, Internal);
+	std::shared_ptr<Material> ToneMappingMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("ToneMappingMaterial", std::vector<String> {"ToneMappingVertShader.vsh", "ToneMappingFragShader.fsh"}, MaterialBelong::Engine);
+	ToneMappingMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("ToneMappingMaterialInst", ToneMappingMaterial, MaterialBelong::Engine);
 }
 
 void ToneMapping::GenerateLUTTexture(std::shared_ptr<RectBufferObject> pPObj)
 {
 	//Prepare LUT render Material
-	std::shared_ptr<Material> LUTMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("LUTMaterial", std::vector<String> {"LUTVertShader.vsh", "LUTFragShader.fsh"}, Internal);
-	std::shared_ptr<MaterialInstance> LUTMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("LUTMaterialInst", LUTMaterial, Internal);
+	std::shared_ptr<Material> LUTMaterial = DKEngine::GetInstance().GetMaterialManager()->CreateMaterial("LUTMaterial", std::vector<String> {"LUTVertShader.vsh", "LUTFragShader.fsh"}, MaterialBelong::Engine);
+	std::shared_ptr<MaterialInstance> LUTMaterialInst = DKEngine::GetInstance().GetMaterialManager()->CreateMaterialInstance("LUTMaterialInst", LUTMaterial, MaterialBelong::Engine);
 
 	//Prepare LUT Texture
 	static const int32 LUT_TEX_Size = 32;

@@ -1,9 +1,9 @@
 #pragma once
 #include "MaterialInstance.h"
 
-enum MaterialBelong
+enum class MaterialBelong
 {
-	Internal,
+	Engine,
 	UserDefine
 };
 

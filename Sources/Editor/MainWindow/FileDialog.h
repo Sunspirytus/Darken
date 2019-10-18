@@ -9,7 +9,7 @@ class FileDialog : public QFileDialog
 {
 	Q_OBJECT
 public:
-	enum SelectMode
+	enum class SelectMode
 	{
 		Single,
 		Multi

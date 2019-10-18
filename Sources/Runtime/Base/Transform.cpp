@@ -7,14 +7,14 @@
 TransformComponentBase::TransformComponentBase(const Vector3f& position,
 	const Vector3f& eulerAngle,
 	const Vector3f& scale)
-	:	ComponentBase(CPT_Transform)
+	:	ComponentBase(ComponentType::CPT_Transform)
 	,	Position(position)
 	,	EulerAngle(eulerAngle)
 	,	Scale(scale)
 {
-	AddProperty("Position", VECTOR3_F, &Position);
-	AddProperty("EulerAngle", VECTOR3_F, &EulerAngle);
-	AddProperty("Scale", VECTOR3_F, &Scale);
+	AddProperty("Position", VariableType::VECTOR3_F, &Position);
+	AddProperty("EulerAngle", VariableType::VECTOR3_F, &EulerAngle);
+	AddProperty("Scale", VariableType::VECTOR3_F, &Scale);
 }
 
 TransformComponentBase::~TransformComponentBase()

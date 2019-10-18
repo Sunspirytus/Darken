@@ -6,7 +6,7 @@
 TextureBase::TextureBase()
 	:	Path("UnSpecific")
 {
-	AddProperty("Path", STRING, &Path);
+	AddProperty("Path", VariableType::STRING, &Path);
 }
 
 TextureBase::~TextureBase()
@@ -71,7 +71,7 @@ Texture::Texture(String file, TextureParameter minParm, TextureParameter magParm
 	//#define GL_RGB16F_ARB 0x881B
 	//#define GL_ALPHA16F_ARB 0x881C
 	//#define GL_UNSIGNED_INT_24_8_EXT 0x84FA
-	//		static enum Format
+	//		static enum class Format
 	//		{
 	//			TF_NONE,
 	//
@@ -437,7 +437,7 @@ Texture::~Texture()
 }
 
 
-static GLuint gOGLTextureInternalFormat[TF_QUANTITY] =
+static GLuint gOGLTextureInternalFormat[(GLuint)TextureDataTypeFormat::TF_QUANTITY] =
 {
 	0,                                  // TF_NONE
 
@@ -479,7 +479,7 @@ static GLuint gOGLTextureInternalFormat[TF_QUANTITY] =
 	GL_R32UI                            //TF_R32UI
 };
 
-static GLuint gOGLTextureFormat[TF_QUANTITY] =
+static GLuint gOGLTextureFormat[(GLuint)TextureDataTypeFormat::TF_QUANTITY] =
 {
 	0,                                  // TF_NONE
 
@@ -520,7 +520,7 @@ static GLuint gOGLTextureFormat[TF_QUANTITY] =
 	GL_RED_INTEGER
 };
 
-static GLuint gOGLTextureType[TF_QUANTITY] =
+static GLuint gOGLTextureType[(GLuint)TextureDataTypeFormat::TF_QUANTITY] =
 {
 	0,                              // TF_NONE
 
@@ -564,9 +564,9 @@ static GLuint gOGLTextureType[TF_QUANTITY] =
 
 void Texture::CreateGPUObject(TextureParameter mipParm, TextureParameter magParm, TextureParameter wrapParmU, TextureParameter wrapParmV)
 {
-	uint32 GL_PixelStorageFormat = gOGLTextureInternalFormat[TypeFormat];
-	uint32 GL_PixelDataFormat = gOGLTextureFormat[TypeFormat];
-	uint32 GL_PixelDataType = gOGLTextureType[TypeFormat];
+	uint32 GL_PixelStorageFormat = gOGLTextureInternalFormat[(GLuint)TypeFormat];
+	uint32 GL_PixelDataFormat = gOGLTextureFormat[(GLuint)TypeFormat];
+	uint32 GL_PixelDataType = gOGLTextureType[(GLuint)TypeFormat];
 
 	/*switch (TypeFormat)
 	{
@@ -605,13 +605,13 @@ void Texture::CreateGPUObject(TextureParameter mipParm, TextureParameter magParm
 	{
 		switch (mipParm)
 		{
-		case Linear_Mip_Nearest:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		case TextureParameter::Linear_Mip_Nearest:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 			break;
-		case Nearest_Mip_Nearest:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+		case TextureParameter::Nearest_Mip_Nearest:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 			break;
-		case Linear_Mip_Linear:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		case TextureParameter::Linear_Mip_Linear:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			break;
-		case Nearest_Mip_Linear:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+		case TextureParameter::Nearest_Mip_Linear:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			break;
 		default:
 			break;
@@ -621,9 +621,9 @@ void Texture::CreateGPUObject(TextureParameter mipParm, TextureParameter magParm
 	{
 		switch (mipParm)
 		{
-		case Linear:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		case TextureParameter::Linear:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			break;
-		case Nearest:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		case TextureParameter::Nearest:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			break;
 		default:
 			break;
@@ -632,9 +632,9 @@ void Texture::CreateGPUObject(TextureParameter mipParm, TextureParameter magParm
 
 	switch (magParm)
 	{
-	case Linear:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	case TextureParameter::Linear:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		break;
-	case Nearest:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	case TextureParameter::Nearest:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		break;
 	default:
 		break;
@@ -642,13 +642,13 @@ void Texture::CreateGPUObject(TextureParameter mipParm, TextureParameter magParm
 
 	switch (wrapParmU)
 	{
-	case Repeat:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	case TextureParameter::Repeat:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		break;
-	case Clamp_To_Edge:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	case TextureParameter::Clamp_To_Edge:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		break;
-	case Clamp_To_Border:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	case TextureParameter::Clamp_To_Border:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 		break;
-	case Mirrored_Repeat:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	case TextureParameter::Mirrored_Repeat:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 		break;
 	default:
 		break;
@@ -656,13 +656,13 @@ void Texture::CreateGPUObject(TextureParameter mipParm, TextureParameter magParm
 
 	switch (wrapParmV)
 	{
-	case Repeat:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	case TextureParameter::Repeat:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		break;
-	case Clamp_To_Edge:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	case TextureParameter::Clamp_To_Edge:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		break;
-	case Clamp_To_Border:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	case TextureParameter::Clamp_To_Border:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		break;
-	case Mirrored_Repeat:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	case TextureParameter::Mirrored_Repeat:glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 		break;
 	default:
 		break;
@@ -672,9 +672,9 @@ void Texture::CreateGPUObject(TextureParameter mipParm, TextureParameter magParm
 
 void Texture::UpdateGPUObjectData()
 {
-	uint32 GL_PixelStorageFormat = gOGLTextureInternalFormat[TypeFormat];
-	uint32 GL_PixelDataFormat = gOGLTextureFormat[TypeFormat];
-	uint32 GL_PixelDataType = gOGLTextureType[TypeFormat];
+	uint32 GL_PixelStorageFormat = gOGLTextureInternalFormat[(GLuint)TypeFormat];
+	uint32 GL_PixelDataFormat = gOGLTextureFormat[(GLuint)TypeFormat];
+	uint32 GL_PixelDataType = gOGLTextureType[(GLuint)TypeFormat];
 
 	/*switch (TypeFormat)
 	{
@@ -807,43 +807,43 @@ TextureDataTypeFormat Texture::GetTextureType(FIBITMAP *dib)
 
 	{
 		if (numBitsPerPixel / 8 == 1) {
-			pformat = TF_UL8;
+			pformat = TextureDataTypeFormat::TF_UL8;
 		}
 		else if (imatype == 2) {
-			pformat = TF_UL16;
+			pformat = TextureDataTypeFormat::TF_UL16;
 		}
 		else if (imatype == 3) {
-			pformat = TF_L16_SNORM;
+			pformat = TextureDataTypeFormat::TF_L16_SNORM;
 		}
 
 		else if (imatype == 4) {
-			pformat = TF_G16R16;
+			pformat = TextureDataTypeFormat::TF_G16R16;
 		}
 		else if (imatype == 5) {
-			pformat = TF_R16G16_SNORM;
+			pformat = TextureDataTypeFormat::TF_R16G16_SNORM;
 		}
 		else if (imatype == 9) {
-			pformat = TF_RGB16;
+			pformat = TextureDataTypeFormat::TF_RGB16;
 		}
 		else if (imatype == 10) {
-			pformat = TF_A16B16G16R16;
+			pformat = TextureDataTypeFormat::TF_A16B16G16R16;
 		}
 		else if (imatype == 11) {
-			pformat = TF_B32G32R32F;
+			pformat = TextureDataTypeFormat::TF_B32G32R32F;
 		}
 		else if (imatype == 6) {
-			pformat = TF_R32F;
+			pformat = TextureDataTypeFormat::TF_R32F;
 		}
 		else if (imatype == 12) {
-			pformat = TF_A32B32G32R32F;
+			pformat = TextureDataTypeFormat::TF_A32B32G32R32F;
 		}
 		else if (numBitsPerPixel / 8 == 3 || numBitsPerPixel / 16 == 3)
 		{
-			pformat = TF_R8G8B8; // BGR
+			pformat = TextureDataTypeFormat::TF_R8G8B8; // BGR
 		}
 		else if (numBitsPerPixel / 8 == 4 || numBitsPerPixel / 16 == 4)
 		{
-			pformat = TF_A8R8G8B8; // BGRA
+			pformat = TextureDataTypeFormat::TF_A8R8G8B8; // BGRA
 		}
 		else
 		{

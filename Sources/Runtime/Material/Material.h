@@ -16,13 +16,13 @@
 static String DefaultVertShaderName = "DefaultVertShader.vsh";
 static String DefaultFragShaderName = "DefaultFragShader.fsh";
 
-enum IndexSizeType
+enum class IndexSizeType
 {
 	Index16Bits,
 	Index32Bits
 };
 
-enum UniformType
+enum class UniformVariableType
 {
 	Unknown,
 	GLSL_INT,
@@ -42,65 +42,94 @@ enum UniformType
 	GLSL_TEXTURE_2D_ARRAY
 };
 
-enum GLDrawType
+enum class GLDrawType
 {
 	Unkown,
 	OGL_ELEMENT,
 	OGL_LINE_STRIP
 };
 
-static std::unordered_map<uint32, UniformType> UniformTypeMap = 
+static std::unordered_map<uint32, UniformVariableType> UniformTypeMap = 
 {
-	{ GL_INT,   UniformType::GLSL_INT },
-	{ GL_UNSIGNED_INT, UniformType::GLSL_UINT},
-	{ GL_FLOAT, UniformType::GLSL_FLOAT},
-	{ GL_FLOAT_VEC2,  UniformType::GLSL_VEC2 },
-	{ GL_FLOAT_VEC3,  UniformType::GLSL_VEC3 },
-	{ GL_FLOAT_VEC4,  UniformType::GLSL_VEC4 },
-	{ GL_INT_VEC2, UniformType::GLSL_IVEC2 },
-	{ GL_INT_VEC3, UniformType::GLSL_IVEC3 },
-	{ GL_INT_VEC4, UniformType::GLSL_IVEC4 },
-	{ GL_FLOAT_MAT3,  UniformType::GLSL_MAT3 },
-	{ GL_FLOAT_MAT4,  UniformType::GLSL_MAT4 },
-	{ GL_SAMPLER_2D, UniformType::GLSL_TEXTURE2D },
-	{ GL_SAMPLER_CUBE, UniformType::GLSL_TEXTURECUBE },
-	{ GL_SAMPLER_3D, UniformType::GLSL_TEXTURE3D },
-	{ GL_SAMPLER_2D_ARRAY, UniformType::GLSL_TEXTURE_2D_ARRAY }
+	{ GL_INT,   UniformVariableType::GLSL_INT },
+	{ GL_UNSIGNED_INT, UniformVariableType::GLSL_UINT},
+	{ GL_FLOAT, UniformVariableType::GLSL_FLOAT},
+	{ GL_FLOAT_VEC2,  UniformVariableType::GLSL_VEC2 },
+	{ GL_FLOAT_VEC3,  UniformVariableType::GLSL_VEC3 },
+	{ GL_FLOAT_VEC4,  UniformVariableType::GLSL_VEC4 },
+	{ GL_INT_VEC2, UniformVariableType::GLSL_IVEC2 },
+	{ GL_INT_VEC3, UniformVariableType::GLSL_IVEC3 },
+	{ GL_INT_VEC4, UniformVariableType::GLSL_IVEC4 },
+	{ GL_FLOAT_MAT3,  UniformVariableType::GLSL_MAT3 },
+	{ GL_FLOAT_MAT4,  UniformVariableType::GLSL_MAT4 },
+	{ GL_SAMPLER_2D, UniformVariableType::GLSL_TEXTURE2D },
+	{ GL_SAMPLER_CUBE, UniformVariableType::GLSL_TEXTURECUBE },
+	{ GL_SAMPLER_3D, UniformVariableType::GLSL_TEXTURE3D },
+	{ GL_SAMPLER_2D_ARRAY, UniformVariableType::GLSL_TEXTURE_2D_ARRAY }
 };
 
-static std::unordered_map<UniformType, VariableType> GPU_CPU_TypeMap =
+static std::unordered_map<UniformVariableType, VariableType> GPU_CPU_TypeMap =
 {
-	{ UniformType::GLSL_INT, VariableType::INT_32 },
-	{ UniformType::GLSL_UINT, VariableType::UINT_32 },
-	{ UniformType::GLSL_FLOAT, VariableType::FLOAT_32 },
-	{ UniformType::GLSL_VEC2, VariableType:: VECTOR2_F },
-	{ UniformType::GLSL_VEC3, VariableType::VECTOR3_F },
-	{ UniformType::GLSL_VEC4, VariableType::VECTOR4_F },
-	{ UniformType::GLSL_IVEC2, VariableType::VECTOR2_I },
-	{ UniformType::GLSL_IVEC3, VariableType::VECTOR3_I },
-	{ UniformType::GLSL_IVEC4, VariableType::VECTOR4_I },
-	{ UniformType::GLSL_MAT3, VariableType::MAT3_F },
-	{ UniformType::GLSL_MAT4, VariableType::MAT4_F },
-	{ UniformType::GLSL_TEXTURE2D, VariableType::STRING },
-	{ UniformType::GLSL_TEXTURECUBE, VariableType::STRING },
-	{ UniformType::GLSL_TEXTURE3D, VariableType::STRING },
-	{ UniformType::GLSL_TEXTURE_2D_ARRAY, VariableType::STRING }
+	{ UniformVariableType::GLSL_INT, VariableType::INT_32 },
+	{ UniformVariableType::GLSL_UINT, VariableType::UINT_32 },
+	{ UniformVariableType::GLSL_FLOAT, VariableType::FLOAT_32 },
+	{ UniformVariableType::GLSL_VEC2, VariableType:: VECTOR2_F },
+	{ UniformVariableType::GLSL_VEC3, VariableType::VECTOR3_F },
+	{ UniformVariableType::GLSL_VEC4, VariableType::VECTOR4_F },
+	{ UniformVariableType::GLSL_IVEC2, VariableType::VECTOR2_I },
+	{ UniformVariableType::GLSL_IVEC3, VariableType::VECTOR3_I },
+	{ UniformVariableType::GLSL_IVEC4, VariableType::VECTOR4_I },
+	{ UniformVariableType::GLSL_MAT3, VariableType::MAT3_F },
+	{ UniformVariableType::GLSL_MAT4, VariableType::MAT4_F },
+	{ UniformVariableType::GLSL_TEXTURE2D, VariableType::STRING },
+	{ UniformVariableType::GLSL_TEXTURECUBE, VariableType::STRING },
+	{ UniformVariableType::GLSL_TEXTURE3D, VariableType::STRING },
+	{ UniformVariableType::GLSL_TEXTURE_2D_ARRAY, VariableType::STRING }
+};
+
+enum class UniformBlockMemoryAllocType
+{
+	Shared,
+	Separate
+};
+
+static std::map<String, UniformBlockMemoryAllocType> String_BlockMemoryAllocType_Map =
+{
+	{ "Shared", UniformBlockMemoryAllocType::Shared },
+	{ "Separate", UniformBlockMemoryAllocType::Separate }
+};
+
+enum class UniformBelong
+{
+	Engine,
+	External
+};
+
+static std::map<String, UniformBelong> String_UniformBelong_Map =
+{
+	{ "Internal", UniformBelong::Engine },
+	{ "External", UniformBelong::External }
+};
+
+enum class UniformType
+{
+	Block,
+	Basic,
+	Texture
 };
 
 struct AttribItem
 {
 	String Name;
 	int32 Location;
-	AttribItem() {}
 };
 
 struct UniformItem_WithinBlock
 {
 	String Name;
-	UniformType DataType;
+	UniformVariableType DataType;
 	uint32 Size;
 	int32 Offset_Byte;
-	UniformItem_WithinBlock() {}
 };
 
 struct UniformItem_Block
@@ -117,19 +146,50 @@ struct UniformItem_Basic
 {
 	String Name;
 	int32 Location;
-	UniformType DataType;
+	UniformVariableType DataType;
 	uint32 Size;
 	void* DataPtr;
-	UniformItem_Basic() {}
 };
 
 struct UniformItem_Texture
 {
 	String Name;
-	int32 Location;
+	int32 Location = -1;
 	uint32* IDPtr;
-	UniformType DataType;
-	UniformItem_Texture() : Location(-1) {}
+	UniformVariableType DataType;
+};
+
+class UniformProxy
+{
+public:
+	UniformProxy() {}
+	~UniformProxy() {}
+protected:
+	UniformType Type;
+	UniformBelong Belong;
+};
+
+class UniformBlockProxy : public UniformProxy
+{
+public:
+	UniformBlockProxy() 
+		: UniformProxy()
+	{
+		Type = UniformType::Block;
+	}
+protected:
+	UniformBlockMemoryAllocType AllocType;
+	std::shared_ptr<UniformItem_Block> UniformPtr;
+};
+
+struct UniformBasicProxy
+{
+	std::shared_ptr<UniformItem_Basic> UniformPtr;
+};
+
+struct UniformTextureProxy
+{
+	std::shared_ptr<UniformItem_Texture> UniformPtr;
 };
 
 class Shader

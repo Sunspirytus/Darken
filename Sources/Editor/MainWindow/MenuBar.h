@@ -24,7 +24,7 @@ class MenuBarItem
 {
 public:
 
-	enum ItemType
+	enum class ItemType
 	{
 		Menu,
 		Action,

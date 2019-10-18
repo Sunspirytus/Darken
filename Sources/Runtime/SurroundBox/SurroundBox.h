@@ -3,7 +3,7 @@
 #include <float.h>
 #include "TypeDefine.h"
 
-enum HitState
+enum class HitState
 {
 	NoHit,
 	Cross,

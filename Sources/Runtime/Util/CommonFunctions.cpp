@@ -60,3 +60,13 @@ String GetSuffixFromPath(const String& Path)
 	return Path.substr(Pos, Path.length() - Pos);
 }
 
+void DeleteStringSpaces(String* Path)
+{
+	while (true)
+	{
+		int32 Pos = Path->find(" ");
+		if (Pos == -1) return;;
+		Path->erase(Pos, 1);
+	}
+}
+

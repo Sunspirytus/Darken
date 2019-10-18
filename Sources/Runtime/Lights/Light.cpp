@@ -4,7 +4,7 @@
 Light::Light()
 {
 	LightTransform = TransformComponent();
-	Type = Unknow;
+	Type = LightType::Unknow;
 	ShadowBias = 0.0;
 }
 
@@ -124,7 +124,7 @@ void PointLight::GetShaderData(LightData &lightBuffer)
 	lightBuffer.LightDistanceFadeMAD = Vector2f(0.0f);
 	lightBuffer.LightShadowMapChannelMask = Vector4f(0.0f);
 	lightBuffer.LightShadowedBits = 3;
-	lightBuffer.LightType = Type;
+	lightBuffer.LightType = (int32)Type;
 }
 
 SpotLight::SpotLight()
@@ -163,7 +163,7 @@ void SpotLight::GetShaderData(LightData &lightBuffer)
 	lightBuffer.LightDistanceFadeMAD = Vector2f(0.0f);
 	lightBuffer.LightShadowMapChannelMask = Vector4f(0.0f);
 	lightBuffer.LightShadowedBits = 3;
-	lightBuffer.LightType = Type;
+	lightBuffer.LightType = (int32)Type;
 }
 
 void SpotLight::SetInnerConeAngle(float32 Degree)

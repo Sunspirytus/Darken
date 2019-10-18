@@ -8,7 +8,7 @@
 #ifndef PI
 #define PI 3.1415926535897932384626433832795028841968f
 #endif
-enum TextureDataTypeFormat
+enum class TextureDataTypeFormat
 {
 	/*RGBA8,
 	R8,
@@ -74,7 +74,7 @@ struct RawTextureData
 	RawTextureData() {};
 };
 
-enum TextureParameter
+enum class TextureParameter
 {
 	Linear_Mip_Nearest,
 	Nearest_Mip_Nearest,
@@ -89,7 +89,7 @@ enum TextureParameter
 	Clamp_To_Edge,
 	Clamp_To_Border
 };
-enum Channel
+enum class Channel
 {
 	RED,
 	GREEN,

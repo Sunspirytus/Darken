@@ -4,9 +4,9 @@
 StaticMeshBase::StaticMeshBase()
 	: Object()
 {
-	Type = StaticMeshActor;
-	AddProperty("MeshPath", STRING, &MeshPath);
-	AddProperty("MaterialName", STRING, &MaterialName);
+	Type = ObjectType::StaticMeshActor;
+	AddProperty("MeshPath", VariableType::STRING, &MeshPath);
+	AddProperty("MaterialName", VariableType::STRING, &MaterialName);
 }
 
 StaticMeshBase::~StaticMeshBase()
@@ -138,7 +138,7 @@ void StaticMesh::AddNode(const aiScene* scene, aiNode* node, Mat4f parentTransfo
 				uint32 IBO;
 				glGenBuffers(1, &IBO);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, NumFaces * 3 * sizeof(uint16) * (IndexType + 1), IndexData, GL_STATIC_DRAW);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, NumFaces * 3 * sizeof(uint16) * ((uint32)IndexType + 1), IndexData, GL_STATIC_DRAW);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 				delete[] IndexData;
@@ -378,7 +378,7 @@ void StaticMesh::Draw()
 		RenderMaterial->SetBlockUniform<Mat4f>(MaterialInstData->ModelBlockID, MaterialInstData->ModelMatrix_PreID, Transform->GetModelMatrix_PreFrame() * RenderGroup[Index]->ModelMatrix);
 		RenderMaterial->SetBlockUniform<Mat4f>(MaterialInstData->ModelBlockID, MaterialInstData->ModelMatrix_ITID, Math::Inverse(Math::Transpose(Transform->GetModelMatrix() * RenderGroup[Index]->ModelMatrix)));
 
-		RenderMaterial->GetParent()->Draw(RenderGroup[Index]->VAO, RenderGroup[Index]->NumFaces, RenderGroup[Index]->IBOIndexSizeType, 0, OGL_ELEMENT);
+		RenderMaterial->GetParent()->Draw(RenderGroup[Index]->VAO, RenderGroup[Index]->NumFaces, RenderGroup[Index]->IBOIndexSizeType, 0, GLDrawType::OGL_ELEMENT);
 	}	
 }
 

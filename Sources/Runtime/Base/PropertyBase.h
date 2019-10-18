@@ -2,7 +2,7 @@
 #include "TypeDefine.h"
 #include <map>
 
-enum PropertyType
+enum class PropertyType
 {
 	BaseInfo = 1,
 	ComponentInfo

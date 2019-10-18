@@ -56,7 +56,7 @@ public:
 	
 	int32 GetUniformBlockBindingPoint(const String & BlockName);
 	int32 CreateUniformBuffer(std::shared_ptr<UniformItem_Block> UniformBlockInfo);
-	void MarkBufferDirty(int32 BufferNameID);
+	void MarkBufferDirty(std::shared_ptr<UniformItem_Block> UniformBlockInfo);
 	void UpdateViewBuffer(Camera * camera); //View uniform buffer need update before Render main view port
 	void UpdateModelBuffer(const Mat4f &ModelMatrix,
 							const Mat4f &Model_ITMatrix,
@@ -70,9 +70,9 @@ public:
 	void UpdateCustomBufferData();
 
 private:
-	std::multimap<int32, std::shared_ptr<UniformItem_Block>> UniformBufferNameID_InfoPtrMap;
-	std::multimap<String, int32> UniformBufferName_GPUIDMap;
-	std::map<int32, bool> UniformBufferNameID_DirtyMap;
+	std::multimap<int32, std::shared_ptr<UniformItem_Block>> UniformBufferNameID_PtrMap;
+	std::map<std::shared_ptr<UniformItem_Block>, int32> UniformBufferPtr_GPUIDMap;
+	std::map<std::shared_ptr<UniformItem_Block>, Bool> UniformBufferPtr_DirtyMap;
 
 	int32 MODEL_UNIFORM_BLOCK_NAME_ID;
 	int32 VIEW_UNIFORM_BLOCK_NAME_ID;

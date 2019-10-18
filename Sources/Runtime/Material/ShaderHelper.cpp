@@ -56,9 +56,27 @@ void ShaderHelper::InsertIncludeCode(String* SourceCode)
 	ShaderHelper::InsertIncludeCode(SourceCode);
 }
 
-void ShaderHelper::ExpandUniformProperty(String* SourceCode)
+std::vector<std::shared_ptr<UniformProxy>> ShaderHelper::ExpandUniformProperty(String* SourceCode)
 {
-
+	String UniformTag = "#UNIFORM";
+	String UniformBufferTag = "#UNIFORM_BUFFER";
+	String UniformTextureTag = "#UNIFORM_TEXTURE";
+	while (true)
+	{
+		int32 Pos0 = SourceCode->find(UniformBufferTag);
+		if (Pos0 == -1) break;
+		int32 Pos1 = SourceCode->find("\n", Pos0);
+		String UniformInfo = SourceCode->substr(Pos0 + UniformBufferTag.length(), Pos1 - Pos0 - UniformBufferTag.length());
+		DeleteStringSpaces(&UniformInfo);
+		UniformInfo = UniformInfo.substr(1, UniformInfo.length() - 2);
+		std::vector<String> Infos = split(UniformInfo, ",");
+		String Name = Infos[0];
+		String AllocType = Infos[1];
+		String Belong = Infos[2];
+		std::shared_ptr<UniformBlockProxy> BlockProxy = std::shared_ptr<UniformBlockProxy>(new UniformBlockProxy());
+		//BlockProxy->
+	}
+	return std::vector< std::shared_ptr<UniformProxy>>{};
 }
 
 void ShaderHelper::GetIncludeFileName(String* SourceCode, std::vector<String>* ExternalShaders, std::vector<String>* InternalShaders)
@@ -118,6 +136,6 @@ ShaderType ShaderHelper::GetShaderType(const String& ShaderName)
 		else return ShaderType::ComputeShader;
 	default:
 		std::cout << "UnSupport Shader Type: " << ShaderName << std::endl;
-		return VertexShader;
+		return ShaderType::VertexShader;
 	}
 }

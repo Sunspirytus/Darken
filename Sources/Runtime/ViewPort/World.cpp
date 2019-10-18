@@ -17,7 +17,7 @@ void World::Save()
 {
 	String FolderPath = DKEngine::GetInstance().GetAssetFolderPath();
 	String SaveData;
-	for (std::multimap<uint32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
+	for (std::multimap<int32, std::shared_ptr<Object>>::iterator ObjectIterator = SceneObjects.begin(); ObjectIterator != SceneObjects.end(); ObjectIterator++)
 	{
 		ObjectIterator->second->Save(&SaveData);
 	}
@@ -39,23 +39,23 @@ void World::Load(const String& Path)
 		ObjectType Type = Object::GetType(Data);
 		switch (Type)
 		{
-		case Default:
+		case ObjectType::Default:
 			break;
-		case StaticMeshActor:
+		case ObjectType::StaticMeshActor:
 		{
 			NewObject = std::shared_ptr<StaticMesh>(new StaticMesh());
 			NewObject->Load(Data);
 			break; 
 		}
-		case DynamicMeshActor:
+		case ObjectType::DynamicMeshActor:
 			break;
-		case CameraActor:
+		case ObjectType::CameraActor:
 			break;
-		case LandscapeMeshActor:
+		case ObjectType::LandscapeMeshActor:
 			break;
-		case AbstractActor:
+		case ObjectType::AbstractActor:
 			break;
-		case NavigationSystemActor:
+		case ObjectType::NavigationSystemActor:
 			break;
 		default:
 			break;

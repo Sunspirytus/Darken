@@ -21,9 +21,9 @@ std::vector<String> FileDialog::OpenAndGetFileName(const String& Title, const St
 		QStringList SelectedFiles = this->selectedFiles();
 		switch (FileCount)
 		{
-		case FileDialog::Single: OutFiles.push_back(QStringToString(SelectedFiles[0]));
+		case FileDialog::SelectMode::Single: OutFiles.push_back(QStringToString(SelectedFiles[0]));
 			break;
-		case FileDialog::Multi:
+		case FileDialog::SelectMode::Multi:
 		{
 			for (int32 Index = 0; Index < SelectedFiles.count(); Index++)
 			{

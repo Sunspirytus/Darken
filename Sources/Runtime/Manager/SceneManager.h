@@ -13,7 +13,7 @@ class Object;
 class StaticMesh;
 
 namespace ModeState{
-	enum EditMode
+	enum class EditMode
 	{
 		CameraRotation,
 		CameraTranslation,
@@ -23,14 +23,14 @@ namespace ModeState{
 		NumMode
 	};
 
-	enum ViewMode
+	enum class ViewMode
 	{
 		LightingMode,
 		WireframeMode
 	};
 }
 
-enum CameraIndex
+enum class CameraIndex
 {
 	MainCamera = 0,
 	ShadowDepthCamera = 1,
@@ -46,7 +46,7 @@ public:
 	void Start();
 	void InternalUpdate();
 	void Update();
-	void Render(std::shared_ptr<Camera> camera, uint32 typeFlags = Default);
+	void Render(std::shared_ptr<Camera> camera, int32 typeFlags = (int32)ObjectType::Default);
 	void AddObj(ObjectType type, std::shared_ptr<Object> obj);
 	void RemoveObj(std::shared_ptr<Object> obj);
 	void AddCamera(uint32 index, std::shared_ptr<Camera> camera);
@@ -69,7 +69,7 @@ public:
 protected:
 	std::vector<std::shared_ptr<Light>> SceneLights;
 	std::multimap<uint32, std::shared_ptr<Camera>> SceneCameras;
-	std::multimap<uint32, std::shared_ptr<Object>> SceneObjects;
+	std::multimap<int32, std::shared_ptr<Object>> SceneObjects;
 
 	ModeState::EditMode CurrentEditMode;
 	ModeState::ViewMode CurrentViewMode;

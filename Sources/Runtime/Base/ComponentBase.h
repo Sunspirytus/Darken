@@ -3,7 +3,7 @@
 #include "TypeDefine.h"
 #include "PropertyBase.h"
 
-enum ComponentType
+enum class ComponentType
 {
 	CPT_Transform
 };

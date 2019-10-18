@@ -4,7 +4,7 @@
 #include "MaterialInstance.h"
 #include "BufferManager.h"
 
-enum LightType
+enum class LightType
 {
 	Direct,
 	Point,

@@ -16,16 +16,17 @@ BufferManager::~BufferManager()
 
 int32 BufferManager::GetUniformBlockBindingPoint(const String & BlockName)
 {
-	if (BlockName == VIEW_UNIFORM_BLOCK_NAME) return VIEW_UNIFORM_BLOCK_BINDING_POINT;
+	/*if (BlockName == VIEW_UNIFORM_BLOCK_NAME) return VIEW_UNIFORM_BLOCK_BINDING_POINT;
 	else if (BlockName == LIGHT_UNIFORM_BLOCK_NAME) return LIGHT_UNIFORM_BLOCK_BINDING_POINT;
 	else if (BlockName == MODEL_UNIFORM_BLOCK_NAME) return MODEL_UNIFORM_BLOCK_BINDING_POINT;
 	else if (BlockName == SHADOWMAPPING_UNIFORM_BLOCK_NAME) return SHADOWMAPPING_UNIFORM_BLOCK_BIDING_POINT;
-	else return UNIFORM_BLOCK_BINGDING_POINT_COMMEN_BEGIN + (int32)UniformBufferNameID_InfoPtrMap.size();
+	else return UNIFORM_BLOCK_BINGDING_POINT_COMMEN_BEGIN + (int32)UniformBufferNameID_InfoPtrMap.size();*/
+	return 0;
 }
 
 int32 BufferManager::CreateUniformBuffer(std::shared_ptr<UniformItem_Block> UniformBlockInfo)
 {
-	if(UniformBlockInfo->Name == VIEW_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(VIEW_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
+	/*if(UniformBlockInfo->Name == VIEW_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(VIEW_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
 	{
 		return UniformBufferName_GPUIDMap.find(VIEW_UNIFORM_BLOCK_NAME)->second;
 	}else if(UniformBlockInfo->Name == LIGHT_UNIFORM_BLOCK_NAME && UniformBufferName_GPUIDMap.find(LIGHT_UNIFORM_BLOCK_NAME) != UniformBufferName_GPUIDMap.end())
@@ -58,38 +59,27 @@ int32 BufferManager::CreateUniformBuffer(std::shared_ptr<UniformItem_Block> Unif
 	UniformBufferNameID_InfoPtrMap.insert(std::pair<int32, std::shared_ptr<UniformItem_Block>>(BufferNameID, UniformBlockInfo));
 	UniformBufferNameID_DirtyMap.insert(std::pair<int32, bool>(BufferNameID, false));
 
-	return UBO;
+	return UBO;*/
+	return 0;
 }
 
-void BufferManager::MarkBufferDirty(int32 BufferNameID)
+void BufferManager::MarkBufferDirty(std::shared_ptr<UniformItem_Block> UniformBlockInfo)
 {
-	for(std::multimap<int32, bool>::iterator it = UniformBufferNameID_DirtyMap.begin(); it != UniformBufferNameID_DirtyMap.end(); it++)
-	{
-		if(it->first == BufferNameID)
-		{
-			it->second = true;
-		}
-	}
+	//UniformBufferPtr_DirtyMap.find(UniformBlockInfo)->second = false;	
 }
 
 void BufferManager::UpdateCustomBufferData()
 {
-	for (std::multimap<int32, bool>::iterator it = UniformBufferNameID_DirtyMap.begin(); it != UniformBufferNameID_DirtyMap.end(); it++)
+	for (std::map<std::shared_ptr<UniformItem_Block>, Bool>::iterator it = UniformBufferPtr_DirtyMap.begin(); it != UniformBufferPtr_DirtyMap.end(); it++)
 	{
 		if (it->second == true)
 		{
 			it->second = false;
 
-			for(std::multimap<int32, std::shared_ptr<UniformItem_Block>>::iterator it2 = UniformBufferNameID_InfoPtrMap.begin(); it2 != UniformBufferNameID_InfoPtrMap.end(); it2++)
-			{
-				if(it2->first == it->first)
-				{
-					UniformItem_Block* Block = it2->second.get();
-					glBindBuffer(GL_UNIFORM_BUFFER, Block->Id);
-					glBufferData(GL_UNIFORM_BUFFER, Block->DataSize_Byte, Block->DataPtr, GL_DYNAMIC_DRAW);
-					glBindBuffer(GL_UNIFORM_BUFFER, 0);
-				}
-			}			
+			std::shared_ptr<UniformItem_Block> Block = it->first;
+			glBindBuffer(GL_UNIFORM_BUFFER, Block->Id);
+			glBufferData(GL_UNIFORM_BUFFER, Block->DataSize_Byte, Block->DataPtr, GL_DYNAMIC_DRAW);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		}
 	}
 }
@@ -99,7 +89,7 @@ void BufferManager::UpdateModelBuffer(const Mat4f &ModelMatrix,
 	const Mat4f &Model_PreMatrix,
 	const Mat4f &Model_ITPreMatrix)
 {
-	Address BlockDataPtr = (Address)UniformBufferNameID_InfoPtrMap.find(MODEL_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
+	/*Address BlockDataPtr = (Address)UniformBufferNameID_InfoPtrMap.find(MODEL_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
 	std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator it = UniformBufferNameID_InfoPtrMap.find(MODEL_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
 
 	memcpy((void*)(BlockDataPtr + it->first), &ModelMatrix, sizeof(Mat4f));				it++;
@@ -111,12 +101,12 @@ void BufferManager::UpdateModelBuffer(const Mat4f &ModelMatrix,
 	UniformItem_Block* Block = UniformBufferNameID_InfoPtrMap.find(MODEL_UNIFORM_BLOCK_NAME_ID)->second.get();
 	glBindBuffer(GL_UNIFORM_BUFFER, Block->Id);
 	glBufferData(GL_UNIFORM_BUFFER, Block->DataSize_Byte, Block->DataPtr, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);*/
 }
 
 void BufferManager::UpdateViewBuffer(Camera * camera)
 {
-	if (UniformBufferNameID_InfoPtrMap.empty()) return;
+	/*if (UniformBufferNameID_InfoPtrMap.empty()) return;
 	Mat4f ViewMatrix = camera->GetViewMatrix();
 	Mat4f ProjectMatrix = camera->GetProjectMatrix();
 	Mat4f ViewMatrix_PreFrame = camera->GetViewMatrix_PreFrame();
@@ -138,12 +128,12 @@ void BufferManager::UpdateViewBuffer(Camera * camera)
 	UniformItem_Block* Block = UniformBufferNameID_InfoPtrMap.find(VIEW_UNIFORM_BLOCK_NAME_ID)->second.get();
 	glBindBuffer(GL_UNIFORM_BUFFER, Block->Id);
 	glBufferData(GL_UNIFORM_BUFFER, Block->DataSize_Byte, Block->DataPtr, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);*/
 }
 
 void BufferManager::UpdateShadowBuffer(ShadowData &shadowBuffer)
 {
-	Address BlockDataPtr = (Address)UniformBufferNameID_InfoPtrMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
+	/*Address BlockDataPtr = (Address)UniformBufferNameID_InfoPtrMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
 	std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator it = UniformBufferNameID_InfoPtrMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
 
 	memcpy((void*)(BlockDataPtr + it->first), &shadowBuffer.LightSpaceVPMatrix, sizeof(Mat4f));					it++;
@@ -157,12 +147,12 @@ void BufferManager::UpdateShadowBuffer(ShadowData &shadowBuffer)
 	UniformItem_Block* Block = UniformBufferNameID_InfoPtrMap.find(SHADOWMAPPING_UNIFORM_BLOCK_NAME_ID)->second.get();
 	glBindBuffer(GL_UNIFORM_BUFFER, Block->Id);
 	glBufferData(GL_UNIFORM_BUFFER, Block->DataSize_Byte, Block->DataPtr, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);*/
 }
 
 void BufferManager::UpdateLightBuffer(LightData &lightBuffer)
 {
-	Address BlockDataPtr = (Address)UniformBufferNameID_InfoPtrMap.find(LIGHT_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
+	/*Address BlockDataPtr = (Address)UniformBufferNameID_InfoPtrMap.find(LIGHT_UNIFORM_BLOCK_NAME_ID)->second->DataPtr;
 	std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator it = UniformBufferNameID_InfoPtrMap.find(LIGHT_UNIFORM_BLOCK_NAME_ID)->second->Uniforms.begin();
 
 	memcpy((void*)(BlockDataPtr + it->first), &lightBuffer.LightPosition, sizeof(Vector3f));				it++;
@@ -187,5 +177,5 @@ void BufferManager::UpdateLightBuffer(LightData &lightBuffer)
 	UniformItem_Block* Block = UniformBufferNameID_InfoPtrMap.find(LIGHT_UNIFORM_BLOCK_NAME_ID)->second.get();
 	glBindBuffer(GL_UNIFORM_BUFFER, Block->Id);
 	glBufferData(GL_UNIFORM_BUFFER, Block->DataSize_Byte, Block->DataPtr, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);*/
 }

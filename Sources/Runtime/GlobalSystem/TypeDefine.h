@@ -5,7 +5,7 @@
 #include "glad.h"
 #include "glfw3.h"
 
-enum VariableType
+enum class VariableType
 {
 	STRING,
 	BOOL_1,

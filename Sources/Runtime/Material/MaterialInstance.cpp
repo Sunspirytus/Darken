@@ -10,8 +10,8 @@ MaterialInstanceBase::MaterialInstanceBase(const String& path, const String& par
 		: Path(path)
 		, ParentName(parentName)
 {
-	AddProperty("Path", STRING, &Path);
-	AddProperty("ParentPath", STRING, &ParentName);
+	AddProperty("Path", VariableType::STRING, &Path);
+	AddProperty("ParentPath", VariableType::STRING, &ParentName);
 }
 
 MaterialInstanceBase::~MaterialInstanceBase() 
@@ -59,17 +59,18 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 		BlockData = malloc(Block->DataSize_Byte);
 		Block->DataPtr = BlockData;
 		int32 BlockID = (int32) hs(Block->Name);
-		std::map<int32, std::shared_ptr<BlockUniformData>> UniformID_PtrMap;
+		std::map<int32, std::shared_ptr<UniformDataInBlock>> UniformID_PtrMap;
 		for(std::map<uint32, std::shared_ptr<UniformItem_WithinBlock>>::iterator ItUniform = Block->Uniforms.begin(); ItUniform != Block->Uniforms.end(); ItUniform++)
 		{
 			int32 UniformID = (int32) hs(ItUniform->second->Name);
-			std::shared_ptr<BlockUniformData> UniformPtr = std::shared_ptr<BlockUniformData>(new BlockUniformData());
+			std::shared_ptr<UniformDataInBlock> UniformPtr = std::shared_ptr<UniformDataInBlock>(new UniformDataInBlock());
 			UniformPtr->Data = (void*)((Address)BlockData + ItUniform->second->Offset_Byte);
 			UniformPtr->BlockName = Block->Name;
 			UniformPtr->UniformName = ItUniform->second->Name;
-			UniformID_PtrMap.insert(std::pair<int32, std::shared_ptr<BlockUniformData>>(UniformID, UniformPtr));
+			UniformID_PtrMap.insert(std::pair<int32, std::shared_ptr<UniformDataInBlock>>(UniformID, UniformPtr));
 		}
-		BlockID_UniformID_DataPtrMap.insert(std::pair<int32, std::map<int32, std::shared_ptr<BlockUniformData>>>(BlockID, UniformID_PtrMap));
+		BlockID_UniformID_DataPtrMap.insert(std::pair<int32, std::map<int32, std::shared_ptr<UniformDataInBlock>>>(BlockID, UniformID_PtrMap));
+		BlockID_BufferPtrMap.insert(std::pair<int32, std::shared_ptr<UniformItem_Block>>(BlockID, Block));
 	}
 
 	for (std::set<std::shared_ptr<UniformItem_Basic>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Basic.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Basic.end(); it++)
@@ -80,16 +81,16 @@ void MaterialInstance::SetParent(std::shared_ptr<Material> parentMaterial)
 		std::shared_ptr<BasicUniformData> UniformData = std::shared_ptr<BasicUniformData>(new BasicUniformData());
 		switch (Uniform->DataType)
 		{
-		case GLSL_INT: UniformData->Data = malloc(sizeof(int32) * Uniform->Size); break;
-		case GLSL_FLOAT: UniformData->Data = malloc(sizeof(float32) * Uniform->Size); break;
-		case GLSL_VEC2: UniformData->Data = malloc(sizeof(Vector2f) * Uniform->Size);	break;
-		case GLSL_VEC3:	UniformData->Data = malloc(sizeof(Vector3f) * Uniform->Size);	break;
-		case GLSL_VEC4:	UniformData->Data = malloc(sizeof(Vector4f) * Uniform->Size);	break;
-		case GLSL_IVEC2: UniformData->Data = malloc(sizeof(Vector2i) * Uniform->Size); break;
-		case GLSL_IVEC3: UniformData->Data = malloc(sizeof(Vector3i) * Uniform->Size); break;
-		case GLSL_IVEC4: UniformData->Data = malloc(sizeof(Vector4i) * Uniform->Size); break;
-		case GLSL_MAT3:	UniformData->Data = malloc(sizeof(Mat3f) * Uniform->Size);	break;
-		case GLSL_MAT4: UniformData->Data = malloc(sizeof(Mat4f) * Uniform->Size); break;
+		case UniformVariableType::GLSL_INT: UniformData->Data = malloc(sizeof(int32) * Uniform->Size); break;
+		case UniformVariableType::GLSL_FLOAT: UniformData->Data = malloc(sizeof(float32) * Uniform->Size); break;
+		case UniformVariableType::GLSL_VEC2: UniformData->Data = malloc(sizeof(Vector2f) * Uniform->Size);	break;
+		case UniformVariableType::GLSL_VEC3:	UniformData->Data = malloc(sizeof(Vector3f) * Uniform->Size);	break;
+		case UniformVariableType::GLSL_VEC4:	UniformData->Data = malloc(sizeof(Vector4f) * Uniform->Size);	break;
+		case UniformVariableType::GLSL_IVEC2: UniformData->Data = malloc(sizeof(Vector2i) * Uniform->Size); break;
+		case UniformVariableType::GLSL_IVEC3: UniformData->Data = malloc(sizeof(Vector3i) * Uniform->Size); break;
+		case UniformVariableType::GLSL_IVEC4: UniformData->Data = malloc(sizeof(Vector4i) * Uniform->Size); break;
+		case UniformVariableType::GLSL_MAT3:	UniformData->Data = malloc(sizeof(Mat3f) * Uniform->Size);	break;
+		case UniformVariableType::GLSL_MAT4: UniformData->Data = malloc(sizeof(Mat4f) * Uniform->Size); break;
 		default:
 			UniformData->Data = nullptr;
 			break;
@@ -149,30 +150,30 @@ int32 MaterialInstance::GetID(const String& ParameterName)
 	return (int32) hs(ParameterName);
 }
 
-void MaterialInstance::MarkDirty(int32 BlockID)
+void MaterialInstance::MarkDirty(std::shared_ptr<UniformItem_Block> BlockPtr)
 {
-	DKEngine::GetInstance().GetGPUBufferManager()->MarkBufferDirty(BlockID);
+	DKEngine::GetInstance().GetGPUBufferManager()->MarkBufferDirty(BlockPtr);
 }
 
 void MaterialInstance::Save(String* Data)
 {
 	PropertyBase::PrepareToWrite(Data);
 
-	PropertyBase::BeginWriteProperty(Data, BaseInfo);
+	PropertyBase::BeginWriteProperty(Data, PropertyType::BaseInfo);
 	MaterialInstanceBase::Save(Data);
-	PropertyBase::EndWriteProperty(Data, BaseInfo);
+	PropertyBase::EndWriteProperty(Data, PropertyType::BaseInfo);
 
-	PropertyBase::BeginWriteProperty(Data, ComponentInfo);
-	WriteInstanceData(Data, UNIFORM);
-	PropertyBase::EndWriteProperty(Data, ComponentInfo);
+	PropertyBase::BeginWriteProperty(Data, PropertyType::ComponentInfo);
+	WriteInstanceData(Data, DataGroup::UNIFORM);
+	PropertyBase::EndWriteProperty(Data, PropertyType::ComponentInfo);
 
-	PropertyBase::BeginWriteProperty(Data, ComponentInfo);
-	WriteInstanceData(Data, TEXTURE);
-	PropertyBase::EndWriteProperty(Data, ComponentInfo);
+	PropertyBase::BeginWriteProperty(Data, PropertyType::ComponentInfo);
+	WriteInstanceData(Data, DataGroup::TEXTURE);
+	PropertyBase::EndWriteProperty(Data, PropertyType::ComponentInfo);
 
-	PropertyBase::BeginWriteProperty(Data, ComponentInfo);
-	WriteInstanceData(Data, UNIFORMBUFFER);
-	PropertyBase::EndWriteProperty(Data, ComponentInfo);
+	PropertyBase::BeginWriteProperty(Data, PropertyType::ComponentInfo);
+	WriteInstanceData(Data, DataGroup::UNIFORMBUFFER);
+	PropertyBase::EndWriteProperty(Data, PropertyType::ComponentInfo);
 	
 
 	PropertyBase::FinishWrite(Data);
@@ -182,7 +183,7 @@ void MaterialInstance::WriteInstanceData(String* Data, DataGroup type)
 {
 	switch (type)
 	{
-	case MaterialInstance::UNIFORM:
+	case MaterialInstance::DataGroup::UNIFORM:
 	{
 		for (std::set<std::shared_ptr<UniformItem_Basic>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Basic.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Basic.end(); it++)
 		{
@@ -192,7 +193,7 @@ void MaterialInstance::WriteInstanceData(String* Data, DataGroup type)
 		}
 		break;
 	}
-	case MaterialInstance::TEXTURE:
+	case MaterialInstance::DataGroup::TEXTURE:
 		for (std::set<std::shared_ptr<UniformItem_Texture>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Texture.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Texture.end(); it++)
 		{
 			std::shared_ptr<UniformItem_Texture> TexUniform = *it;
@@ -203,7 +204,7 @@ void MaterialInstance::WriteInstanceData(String* Data, DataGroup type)
 			Data->append(PropertyToString(TexUniform->Name, std::shared_ptr<PropertyData>(new PropertyData(GPU_CPU_TypeMap[TexUniform->DataType], &Tex->GetPath()))));
 ;		}
 		break;
-	case MaterialInstance::UNIFORMBUFFER:
+	case MaterialInstance::DataGroup::UNIFORMBUFFER:
 		for (std::set<std::shared_ptr<UniformItem_Block>>::iterator it = ParentMaterial->ProgramGPU->Uniforms_Block.begin(); it != ParentMaterial->ProgramGPU->Uniforms_Block.end(); it++)
 		{
 			std::shared_ptr<UniformItem_Block> Block = *it;

@@ -17,13 +17,13 @@ std::shared_ptr<Material> MaterialManager::CreateMaterial(const String& name, st
 
 	switch (belong)
 	{
-	case Internal:
+	case MaterialBelong::Engine:
 		if(Materials_Internal.find(name) != Materials_Internal.end())
 		{
 			Mat = it->second;
 		}
 		break;
-	case UserDefine:
+	case MaterialBelong::UserDefine:
 		if (Materials_User.find(name) != Materials_User.end())
 		{
 			Mat = it->second;
@@ -38,10 +38,10 @@ std::shared_ptr<Material> MaterialManager::CreateMaterial(const String& name, st
 		String FolderPath;
 		switch (belong)
 		{
-		case Internal:
+		case MaterialBelong::Engine:
 			FolderPath = DKEngine::GetInstance().GetInternalShaderPath();
 			break;
-		case UserDefine:
+		case MaterialBelong::UserDefine:
 			FolderPath = DKEngine::GetInstance().GetAssetFolderPath();
 			break;
 		default:
@@ -56,10 +56,10 @@ std::shared_ptr<Material> MaterialManager::CreateMaterial(const String& name, st
 		Mat = std::shared_ptr<Material>(new Material(name, shaderNames));
 		switch (belong)
 		{
-		case Internal:
+		case MaterialBelong::Engine:
 			Materials_Internal.insert(std::pair<String, std::shared_ptr<Material>>(name, Mat));
 			break;
-		case UserDefine:
+		case MaterialBelong::UserDefine:
 			Materials_User.insert(std::pair<String, std::shared_ptr<Material>>(name, Mat));
 			break;
 		default:
@@ -76,13 +76,13 @@ std::shared_ptr<MaterialInstance> MaterialManager::CreateMaterialInstance(const 
 
 	switch (belong)
 	{
-	case Internal:
+	case MaterialBelong::Engine:
 		if (MaterialInsts_Internal.find(name) != MaterialInsts_Internal.end())
 		{
 			MatInst = it->second;
 		}
 		break;
-	case UserDefine:
+	case MaterialBelong::UserDefine:
 		if (MaterialInsts_User.find(name) != MaterialInsts_User.end())
 		{
 			MatInst = it->second;
@@ -97,10 +97,10 @@ std::shared_ptr<MaterialInstance> MaterialManager::CreateMaterialInstance(const 
 		MatInst = std::shared_ptr<MaterialInstance>(new MaterialInstance(name, parentMaterial));
 		switch (belong)
 		{
-		case Internal:
+		case MaterialBelong::Engine:
 			MaterialInsts_Internal.insert(std::pair<String, std::shared_ptr<MaterialInstance>>(name, MatInst));
 			break;
-		case UserDefine:
+		case MaterialBelong::UserDefine:
 			MaterialInsts_User.insert(std::pair<String, std::shared_ptr<MaterialInstance>>(name, MatInst));
 			break;
 		default:
