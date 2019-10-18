@@ -4,6 +4,34 @@
 #include <sstream>
 #include <iostream>
 
+UniformProxyBase::UniformProxyBase()
+{
+
+}
+UniformProxyBase::~UniformProxyBase()
+{
+}
+
+UniformProxyBlock::UniformProxyBlock()
+	: UniformProxyBase()
+{
+	UniformProxyBase::Type = UniformType::Block;
+	UniformPtr = std::shared_ptr<UniformItem_Block>(new UniformItem_Block());
+}
+UniformProxyBlock::~UniformProxyBlock() 
+{
+}
+
+UniformProxyBasic::UniformProxyBasic()
+	: UniformProxyBase()
+{
+	UniformProxyBase::Type = UniformType::Basic;
+	UniformPtr = std::shared_ptr<UniformItem_Basic>(new UniformItem_Basic());
+}
+UniformProxyBasic::~UniformProxyBasic() 
+{
+}
+
 Shader::Shader()
 {
 }
@@ -107,25 +135,25 @@ void Material::UnBindProgram()
 void Material::BindUniforms()
 {
 	//for (std::unordered_map<String, UniformItem_Basic>::iterator it = MaterialProgram->Uniforms_Basic.begin(); it != MaterialProgram->Uniforms_Basic.end(); it++)
-	for (std::set<std::shared_ptr<UniformItem_Basic>>::iterator it = ProgramGPU->Uniforms_Basic.begin(); it != ProgramGPU->Uniforms_Basic.end(); it++)
+	for (std::set<std::shared_ptr<UniformProxyBasic>>::iterator it = ProgramGPU->Uniforms_Basic.begin(); it != ProgramGPU->Uniforms_Basic.end(); it++)
 	{
-		std::shared_ptr<UniformItem_Basic> Uniform = *it;
-		if (Uniform->DataPtr)
+		std::shared_ptr<UniformProxyBasic> BasicProxy = *it;
+		if (BasicProxy->UniformPtr->DataPtr)
 		{
-			int32 Location = Uniform->Location;
-			uint32 Size = Uniform->Size;
-			switch (Uniform->DataType)
+			int32 Location = BasicProxy->UniformPtr->Location;
+			uint32 Size = BasicProxy->UniformPtr->Size;
+			switch (BasicProxy->UniformPtr->DataType)
 			{
-			case UniformVariableType::GLSL_VEC2: glUniform2fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformVariableType::GLSL_VEC3: glUniform3fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformVariableType::GLSL_VEC4: glUniform4fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformVariableType::GLSL_IVEC2: glUniform2iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
-			case UniformVariableType::GLSL_IVEC3: glUniform3iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
-			case UniformVariableType::GLSL_IVEC4: glUniform4iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
-			case UniformVariableType::GLSL_MAT3: glUniformMatrix3fv(Location, Size, GL_FALSE, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformVariableType::GLSL_MAT4: glUniformMatrix4fv(Location, Size, GL_FALSE, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformVariableType::GLSL_FLOAT: glUniform1fv(Location, Size, reinterpret_cast<GLfloat*>(Uniform->DataPtr)); break;
-			case UniformVariableType::GLSL_INT:	glUniform1iv(Location, Size, reinterpret_cast<GLint*>(Uniform->DataPtr)); break;
+			case UniformVariableType::GLSL_VEC2: glUniform2fv(Location, Size, reinterpret_cast<GLfloat*>(BasicProxy->UniformPtr->DataPtr)); break;
+			case UniformVariableType::GLSL_VEC3: glUniform3fv(Location, Size, reinterpret_cast<GLfloat*>(BasicProxy->UniformPtr->DataPtr)); break;
+			case UniformVariableType::GLSL_VEC4: glUniform4fv(Location, Size, reinterpret_cast<GLfloat*>(BasicProxy->UniformPtr->DataPtr)); break;
+			case UniformVariableType::GLSL_IVEC2: glUniform2iv(Location, Size, reinterpret_cast<GLint*>(BasicProxy->UniformPtr->DataPtr)); break;
+			case UniformVariableType::GLSL_IVEC3: glUniform3iv(Location, Size, reinterpret_cast<GLint*>(BasicProxy->UniformPtr->DataPtr)); break;
+			case UniformVariableType::GLSL_IVEC4: glUniform4iv(Location, Size, reinterpret_cast<GLint*>(BasicProxy->UniformPtr->DataPtr)); break;
+			case UniformVariableType::GLSL_MAT3: glUniformMatrix3fv(Location, Size, GL_FALSE, reinterpret_cast<GLfloat*>(BasicProxy->UniformPtr->DataPtr)); break;
+			case UniformVariableType::GLSL_MAT4: glUniformMatrix4fv(Location, Size, GL_FALSE, reinterpret_cast<GLfloat*>(BasicProxy->UniformPtr->DataPtr)); break;
+			case UniformVariableType::GLSL_FLOAT: glUniform1fv(Location, Size, reinterpret_cast<GLfloat*>(BasicProxy->UniformPtr->DataPtr)); break;
+			case UniformVariableType::GLSL_INT:	glUniform1iv(Location, Size, reinterpret_cast<GLint*>(BasicProxy->UniformPtr->DataPtr)); break;
 			default:
 				break;
 			}
@@ -135,13 +163,13 @@ void Material::BindUniforms()
 void Material::BindSamplers()
 {
 	//for (std::unordered_map<String, UniformItem_Texture>::iterator it = MaterialProgram->Uniforms_Texture.begin(); it != MaterialProgram->Uniforms_Texture.end(); it++)
-	for (std::set<std::shared_ptr<UniformItem_Texture>>::iterator it = ProgramGPU->Uniforms_Texture.begin(); it != ProgramGPU->Uniforms_Texture.end(); it++)
+	for (std::set<std::shared_ptr<UniformProxyTexture>>::iterator it = ProgramGPU->Uniforms_Texture.begin(); it != ProgramGPU->Uniforms_Texture.end(); it++)
 	{
-		std::shared_ptr<UniformItem_Texture> Tex = (*it);
-		int32 Location    = Tex->Location;
-		void* IDPtr       = Tex->IDPtr;
+		std::shared_ptr<UniformProxyTexture> TexProxy = (*it);
+		int32 Location    = TexProxy->UniformPtr->Location;
+		void* IDPtr       = TexProxy->UniformPtr->IDPtr;
 		glActiveTexture(GL_TEXTURE0 + Location);
-		switch (Tex->DataType)
+		switch (TexProxy->UniformPtr->DataType)
 		{
 		case UniformVariableType::GLSL_TEXTURE2D:
 			glBindTexture(GL_TEXTURE_2D, *((uint32*)IDPtr));
@@ -360,11 +388,11 @@ void Material::FindUniformInfos()
 			int32 DataSize;
 			glGetActiveUniformBlockiv(ProgramGPU->Id, UniformBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &DataSize);
 
-			std::shared_ptr<UniformItem_Block> Block = std::shared_ptr<UniformItem_Block>(new UniformItem_Block());
-			Block->Name = UniformBlockName;
-			Block->DataSize_Byte = DataSize;
-			Block->Index = UniformBlockIndex;
-			ProgramGPU->Uniforms_Block.insert(Block);
+			std::shared_ptr<UniformProxyBlock> BlockProxy = std::shared_ptr<UniformProxyBlock>(new UniformProxyBlock());
+			BlockProxy->Name = UniformBlockName;
+			BlockProxy->UniformPtr->DataSize_Byte = DataSize;
+			BlockProxy->UniformPtr->Index = UniformBlockIndex;
+			ProgramGPU->Uniforms_Block.insert(BlockProxy);
 
 			int8* UniformInBlockName = new int8[UniformInBlockName_MaxLength];
 			for (int32 Index = 0; Index < UniformCountInBlock; Index++)
@@ -385,21 +413,21 @@ void Material::FindUniformInfos()
 				UniformInBlock->DataType = UniformTypeMap[Type];
 				UniformInBlock->Offset_Byte = Offset;
 				UniformInBlock->Size = Size;
-				Block->Uniforms.insert(std::pair<uint32, std::shared_ptr<UniformItem_WithinBlock>>(UniformInBlock->Offset_Byte, UniformInBlock));
+				BlockProxy->UniformPtr->Uniforms.insert(std::pair<uint32, std::shared_ptr<UniformItem_WithinBlock>>(UniformInBlock->Offset_Byte, UniformInBlock));
 			}
 			delete[] UniformInBlockName;
 			delete[] InUniformIndices;
 		}
 		delete[] UniformBlockName;
 		
-		std::set<std::shared_ptr<UniformItem_Block>>::iterator it;
-		for(it = ProgramGPU->Uniforms_Block.begin(); it != ProgramGPU->Uniforms_Block.end(); it++)
+		
+		for(std::set<std::shared_ptr<UniformProxyBlock>>::iterator it = ProgramGPU->Uniforms_Block.begin(); it != ProgramGPU->Uniforms_Block.end(); it++)
 		{
-			std::shared_ptr<UniformItem_Block> Block = *it;
-			Block->Id = DKEngine::GetInstance().GetGPUBufferManager()->CreateUniformBuffer(Block);
-			glBindBuffer(GL_UNIFORM_BUFFER, Block->Id);
-			glUniformBlockBinding(ProgramGPU->Id, Block->Index, DKEngine::GetInstance().GetGPUBufferManager()->GetUniformBlockBindingPoint(Block->Name));
-			glBindBufferBase(GL_UNIFORM_BUFFER, DKEngine::GetInstance().GetGPUBufferManager()->GetUniformBlockBindingPoint(Block->Name), Block->Id);
+			std::shared_ptr<UniformProxyBlock> Block = *it;
+			Block->UniformPtr->Id = DKEngine::GetInstance().GetGPUBufferManager()->CreateUniformBuffer(Block->UniformPtr);
+			glBindBuffer(GL_UNIFORM_BUFFER, Block->UniformPtr->Id);
+			glUniformBlockBinding(ProgramGPU->Id, Block->UniformPtr->Index, DKEngine::GetInstance().GetGPUBufferManager()->GetUniformBlockBindingPoint(Block->Name));
+			glBindBufferBase(GL_UNIFORM_BUFFER, DKEngine::GetInstance().GetGPUBufferManager()->GetUniformBlockBindingPoint(Block->Name), Block->UniformPtr->Id);
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);			
 		}
 	}
@@ -423,17 +451,17 @@ void Material::FindUniformInfos()
 		UniformVariableType T = UniformTypeMap[Type];
 		if (T < UniformVariableType::GLSL_TEXTURE2D)
 		{
-			std::shared_ptr<UniformItem_Basic> UniformBasic = std::shared_ptr<UniformItem_Basic>(new UniformItem_Basic());
+			std::shared_ptr<UniformProxyBasic> UniformBasic = std::shared_ptr<UniformProxyBasic>(new UniformProxyBasic());
 			UniformBasic->Name = UniformName;
-			UniformBasic->Size = Size;
-			UniformBasic->DataType = T;
+			UniformBasic->UniformPtr->Size = Size;
+			UniformBasic->UniformPtr->DataType = T;
 			ProgramGPU->Uniforms_Basic.insert(UniformBasic);
 		}
 		else
 		{
-			std::shared_ptr<UniformItem_Texture> UniformTexture = std::shared_ptr<UniformItem_Texture>(new UniformItem_Texture());
+			std::shared_ptr<UniformProxyTexture> UniformTexture = std::shared_ptr<UniformProxyTexture>(new UniformProxyTexture());
 			UniformTexture->Name = UniformName;
-			UniformTexture->DataType = T;
+			UniformTexture->UniformPtr->DataType = T;
 			ProgramGPU->Uniforms_Texture.insert(UniformTexture);
 		}
 	}
@@ -450,22 +478,21 @@ void Material::LinkLocation()
 		(*it)->Location = loc;
 	}
 
-	for (std::set<std::shared_ptr<UniformItem_Basic>>::iterator it = ProgramGPU->Uniforms_Basic.begin(); it != ProgramGPU->Uniforms_Basic.end(); it++)
+	for (std::set<std::shared_ptr<UniformProxyBasic>>::iterator it = ProgramGPU->Uniforms_Basic.begin(); it != ProgramGPU->Uniforms_Basic.end(); it++)
 	{
 		String name = (*it)->Name;
 		GLint loc = glGetUniformLocation(ProgramGPU->Id, name.c_str());
-		(*it)->Location = loc;
+		(*it)->UniformPtr->Location = loc;
 	}
 
-	int32 newLoc;
-	std::set<std::shared_ptr<UniformItem_Texture>>::iterator it;
-	for (it = ProgramGPU->Uniforms_Texture.begin(), newLoc = 0; it != ProgramGPU->Uniforms_Texture.end(); it++, newLoc++)
+	int32 newLoc = 0;	
+	for (std::set<std::shared_ptr<UniformProxyTexture>>::iterator it = ProgramGPU->Uniforms_Texture.begin(); it != ProgramGPU->Uniforms_Texture.end(); it++, newLoc++)
 	{
 		String name = (*it)->Name;
 		GLint loc = glGetUniformLocation(ProgramGPU->Id, name.c_str());
 		if (loc == -1) continue;
 		glUniform1i(loc, newLoc);
-		(*it)->Location = newLoc;
+		(*it)->UniformPtr->Location = newLoc;
 	}
 
 	glUseProgram(0);

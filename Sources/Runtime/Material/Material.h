@@ -134,7 +134,6 @@ struct UniformItem_WithinBlock
 
 struct UniformItem_Block
 {
-	String Name;
 	int32 Id;
 	uint32 DataSize_Byte;
 	void * DataPtr;
@@ -144,7 +143,6 @@ struct UniformItem_Block
 
 struct UniformItem_Basic
 {
-	String Name;
 	int32 Location;
 	UniformVariableType DataType;
 	uint32 Size;
@@ -153,42 +151,50 @@ struct UniformItem_Basic
 
 struct UniformItem_Texture
 {
-	String Name;
 	int32 Location = -1;
 	uint32* IDPtr;
 	UniformVariableType DataType;
 };
 
-class UniformProxy
+class UniformProxyBase
 {
 public:
-	UniformProxy() {}
-	~UniformProxy() {}
-protected:
+	UniformProxyBase();
+	~UniformProxyBase();
+
+	String Name;
 	UniformType Type;
 	UniformBelong Belong;
 };
 
-class UniformBlockProxy : public UniformProxy
+class UniformProxyBlock : public UniformProxyBase
 {
 public:
-	UniformBlockProxy() 
-		: UniformProxy()
-	{
-		Type = UniformType::Block;
-	}
-protected:
+	UniformProxyBlock();
+	~UniformProxyBlock();
+
 	UniformBlockMemoryAllocType AllocType;
 	std::shared_ptr<UniformItem_Block> UniformPtr;
 };
 
-struct UniformBasicProxy
+class UniformProxyBasic : public UniformProxyBase
 {
+public:
+	UniformProxyBasic();
+	~UniformProxyBasic();
 	std::shared_ptr<UniformItem_Basic> UniformPtr;
 };
 
-struct UniformTextureProxy
+class UniformProxyTexture : public UniformProxyBase
 {
+public:
+	UniformProxyTexture()
+		: UniformProxyBase()
+	{
+		UniformProxyBase::Type = UniformType::Basic;
+		UniformPtr = std::shared_ptr<UniformItem_Texture>(new UniformItem_Texture());
+	}
+	~UniformProxyTexture() {}
 	std::shared_ptr<UniformItem_Texture> UniformPtr;
 };
 
@@ -206,9 +212,9 @@ struct Program
 	uint32 Id;
 	std::set<std::shared_ptr<Shader>> Shaders;
 	std::set<std::shared_ptr<AttribItem>> Attribs;
-	std::set<std::shared_ptr<UniformItem_Block>> Uniforms_Block;
-	std::set<std::shared_ptr<UniformItem_Basic>> Uniforms_Basic;
-	std::set<std::shared_ptr<UniformItem_Texture>> Uniforms_Texture;
+	std::set<std::shared_ptr<UniformProxyBlock>> Uniforms_Block;
+	std::set<std::shared_ptr<UniformProxyBasic>> Uniforms_Basic;
+	std::set<std::shared_ptr<UniformProxyTexture>> Uniforms_Texture;
 };
 
 class MaterialBase : public PropertyBase

@@ -2,7 +2,7 @@
 
 #include "TypeDefine.h"
 
-class UniformProxy;
+class UniformProxyBase;
 
 enum class ShaderType
 {
@@ -25,7 +25,7 @@ public:
 	static void InsertIncludeCode(String* SourceCode);
 	static void GetIncludeFileName(String* SourceCode, std::vector<String>* ExternalShaders, std::vector<String>* InternalShaders);
 	static ShaderType GetShaderType(const String& ShaderName);
-	static std::vector<std::shared_ptr<UniformProxy>> ExpandUniformProperty(String* SourceCode);
+	static std::vector<std::shared_ptr<UniformProxyBase>> ExpandUniformProperty(String* SourceCode);
 private:
 	
 	

@@ -88,7 +88,7 @@ public:
 		if (BlockID_UniformID_DataPtrMap.find(BlockID) == BlockID_UniformID_DataPtrMap.end()) return;
 		if (BlockID_UniformID_DataPtrMap[BlockID].find(UniformID) == BlockID_UniformID_DataPtrMap[BlockID].end()) return;
 		memcpy(BlockID_UniformID_DataPtrMap[BlockID][UniformID]->Data, &data, sizeof(T));
-		MarkDirty(BlockID_BufferPtrMap.find(BlockID)->second);
+		MarkDirty(BlockID_BufferPtrMap.find(BlockID)->second->UniformPtr);
 	}
 
 	template<class T>
@@ -100,7 +100,7 @@ public:
 		int32 UniformID = (int32)hs(UniformName);
 		if (BlockID_UniformID_DataPtrMap[BlockID].find(UniformID) == BlockID_UniformID_DataPtrMap[BlockID].end()) return;
 		memcpy(BlockID_UniformID_DataPtrMap[BlockID][UniformID]->Data, &data, sizeof(T));
-		MarkDirty(BlockID_BufferPtrMap.find(BlockID)->second);
+		MarkDirty(BlockID_BufferPtrMap.find(BlockID)->second->UniformPtr);
 	}
 
 	template<class T>
@@ -109,7 +109,7 @@ public:
 		if (BlockID_UniformID_DataPtrMap.find(BlockID) == BlockID_UniformID_DataPtrMap.end()) return;
 		if (BlockID_UniformID_DataPtrMap[BlockID].find(UniformID) == BlockID_UniformID_DataPtrMap[BlockID].end()) return;
 		memcpy(BlockID_UniformID_DataPtrMap[BlockID][UniformID]->Data, data, sizeof(T) * count);
-		MarkDirty(BlockID_BufferPtrMap.find(BlockID)->second);
+		MarkDirty(BlockID_BufferPtrMap.find(BlockID)->second->UniformPtr);
 	}
 
 	template<class T>
@@ -121,7 +121,7 @@ public:
 		int32 UniformID = hs(UniformName);
 		if (BlockID_UniformID_DataPtrMap[BlockID].find(UniformID) == BlockID_UniformID_DataPtrMap[BlockID].end()) return;
 		memcpy(BlockID_UniformID_DataPtrMap[BlockID][UniformID]->Data, data, sizeof(T) * count);
-		MarkDirty(BlockID_BufferPtrMap.find(BlockID)->second);
+		MarkDirty(BlockID_BufferPtrMap.find(BlockID)->second->UniformPtr);
 	}
 
 	void SetTextureID(int32 UniformID, uint32 data)
@@ -160,7 +160,7 @@ private:
 	std::map<int32, std::shared_ptr<BasicUniformData>> BasicUniformID_DataPtrMap;
 	std::map<int32, std::shared_ptr<TextureUniformData>> TextureUniformID_DataPtrMap;
 	std::map<int32, std::map<int32, std::shared_ptr<UniformDataInBlock>>> BlockID_UniformID_DataPtrMap;
-	std::map<int32, std::shared_ptr<UniformItem_Block>> BlockID_BufferPtrMap;
+	std::map<int32, std::shared_ptr<UniformProxyBlock>> BlockID_BufferPtrMap;
 	std::shared_ptr<Material> ParentMaterial;
 	void MarkDirty(std::shared_ptr<UniformItem_Block> BlockPtr);
 

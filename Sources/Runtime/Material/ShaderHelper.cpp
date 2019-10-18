@@ -56,11 +56,13 @@ void ShaderHelper::InsertIncludeCode(String* SourceCode)
 	ShaderHelper::InsertIncludeCode(SourceCode);
 }
 
-std::vector<std::shared_ptr<UniformProxy>> ShaderHelper::ExpandUniformProperty(String* SourceCode)
+std::vector<std::shared_ptr<UniformProxyBase>> ShaderHelper::ExpandUniformProperty(String* SourceCode)
 {
-	String UniformTag = "#UNIFORM";
+	String UniformBasicTag = "#UNIFORM";
 	String UniformBufferTag = "#UNIFORM_BUFFER";
 	String UniformTextureTag = "#UNIFORM_TEXTURE";
+
+	std::vector<std::shared_ptr<UniformProxyBase>> Uniforms;
 	while (true)
 	{
 		int32 Pos0 = SourceCode->find(UniformBufferTag);
@@ -73,10 +75,32 @@ std::vector<std::shared_ptr<UniformProxy>> ShaderHelper::ExpandUniformProperty(S
 		String Name = Infos[0];
 		String AllocType = Infos[1];
 		String Belong = Infos[2];
-		std::shared_ptr<UniformBlockProxy> BlockProxy = std::shared_ptr<UniformBlockProxy>(new UniformBlockProxy());
-		//BlockProxy->
+		std::shared_ptr<UniformProxyBlock> BlockProxy = std::shared_ptr<UniformProxyBlock>(new UniformProxyBlock());
+		BlockProxy->Name = Name;
+		BlockProxy->AllocType = String_BlockMemoryAllocType_Map[AllocType];
+		BlockProxy->Belong = String_UniformBelong_Map[Belong];
+		SourceCode->replace(Pos0, Pos1 - Pos0, "layout(std140) uniform " + Name);
+		Uniforms.push_back(BlockProxy);
 	}
-	return std::vector< std::shared_ptr<UniformProxy>>{};
+	while (true)
+	{
+		int32 Pos0 = SourceCode->find(UniformBasicTag);
+		if (Pos0 == -1) break;
+		int32 Pos1 = SourceCode->find("\n", Pos0);
+		String UniformInfo = SourceCode->substr(Pos0 + UniformBasicTag.length(), Pos1 - Pos0 - UniformBasicTag.length());
+		DeleteStringSpaces(&UniformInfo);
+		UniformInfo = UniformInfo.substr(1, UniformInfo.length() - 2);
+		std::vector<String> Infos = split(UniformInfo, ",");
+		String Type = Infos[0];
+		String Name = Infos[1];
+		String Belong = Infos[2];
+		std::shared_ptr<UniformProxyBasic> BasicProxy = std::shared_ptr<UniformProxyBasic>(new UniformProxyBasic());
+		BasicProxy->Name = Name;
+		BasicProxy->Belong = String_UniformBelong_Map[Belong];
+		SourceCode->replace(Pos0, Pos1 - Pos0, "uniform " + Type + " " + Name + ";");
+		Uniforms.push_back(BasicProxy);
+	}
+	return Uniforms;
 }
 
 void ShaderHelper::GetIncludeFileName(String* SourceCode, std::vector<String>* ExternalShaders, std::vector<String>* InternalShaders)
