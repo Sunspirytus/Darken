@@ -1,5 +1,5 @@
 #include "FileIO.h"
-#include "CommonFunctions.h"
+//#include "CommonFunctions.h"
 #include <string>
 
 FileIO::FileIO()
@@ -29,11 +29,11 @@ void FileIO::SaveFile(const String& path, FileType type, const String& content)
 
 void FileIO::LoadFile(const String& path, String* outData)
 {
-	String Suffix = GetSuffixFromPath(path);
+	String Suffix = "1";// GetSuffixFromPath(path);
 
 	for(std::map<FileType, String>::iterator it = FileTypeSuffixMap.begin(); it != FileTypeSuffixMap.end(); it++)
 	{
-		if (it->second == Suffix);
+		if (it->second == Suffix)
 		Type = it->first;
 		break;
 	}

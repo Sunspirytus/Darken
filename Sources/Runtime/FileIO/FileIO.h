@@ -4,7 +4,7 @@
 #include <fstream>
 #include <map>
 
-enum class FileType
+enum class ENGINEAPI FileType
 {
 	F_Material,
 	F_MaterialInstance,
@@ -20,7 +20,7 @@ static std::map<FileType, String> FileTypeSuffixMap =
 	std::pair<FileType, String>(FileType::F_WorldScene, ".dkscene")
 };
 
-class FileIO
+class ENGINEAPI FileIO
 {
 public:
 	FileIO();
